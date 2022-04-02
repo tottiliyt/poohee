@@ -19,7 +19,6 @@ struct ContentView: View {
         NavigationView{
             ScrollView{
                 
-                
                 VStack{
                     Button{
                         
@@ -58,7 +57,7 @@ struct ContentView: View {
                     
                     
                     HStack(spacing: 0){
-                        Text("If you have an account, ")
+                        Text("If already you have an account, ")
                         Text("sign in here").foregroundColor(.blue)
                     }
                     
