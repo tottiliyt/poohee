@@ -23,28 +23,10 @@ struct MessageView: View {
     
     private var topBar: some View {
         HStack (spacing: 16){
-            Image(systemName: "person.fill")
-                .font(.system(size: 36))
-            
-            VStack (alignment: .leading, spacing: 4){
-                Text("Username").font(.system(size: 24, weight: .bold))
-                HStack{
-                    Circle().foregroundColor(Color.green).frame(width:14, height: 14)
-                    Text("Online").foregroundColor(Color(.lightGray)).font(.system(size:12))
-                }
-            }
-            
-            Spacer()
-            
-            Button {
-                //need update
-            } label: {
-                Image(systemName: "gear")
-                    .foregroundColor(Color.orange)
-                    .font(.system(size: 24, weight: .bold))
-            }
-            
-        }.padding()
+            Text("No Upcmoing Meetups").font(.system(size: 24, weight: .bold))
+                .padding(.vertical, 40)
+        }
+        .padding()
     }
     
     private var messageQueue: some View {
@@ -77,6 +59,7 @@ struct MessageView: View {
                     Divider()
                         .padding(.vertical, 5)
                 }
+                .foregroundColor(Color.orange)
                 .padding(.horizontal)
             }.padding(.bottom, 50)
         }
