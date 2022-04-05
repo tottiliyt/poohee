@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>151200189841-c0qolcnhpvencsssme1du61efo1bnhhr.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.151200189841-c0qolcnhpvencsssme1du61efo1bnhhr</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAcs3B2iZLB_aJFI_O_3ep0EAMRfCJL8bs</string>
+	<key>GCM_SENDER_ID</key>
+	<string>151200189841</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>poohee.poohee</string>
+	<key>PROJECT_ID</key>
+	<string>yolk-422e0</string>
+	<key>STORAGE_BUCKET</key>
+	<string>yolk-422e0.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:151200189841:ios:9907263ace86b353279e30</string>
+</dict>
+</plist>

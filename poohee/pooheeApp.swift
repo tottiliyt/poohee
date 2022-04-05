@@ -11,7 +11,12 @@ import SwiftUI
 struct pooheeApp: App {
     var body: some Scene {
         WindowGroup {
-            CreateAccountView()
+            HomeView()
         }
     }
+}
+
+extension Color {
+    static let primaryColor = Color(red: 246/255, green: 199/255, blue: 77/255)
+    static let secondaryColor = Color(red: 121/255, green: 131/255, blue: 221/255)
 }
