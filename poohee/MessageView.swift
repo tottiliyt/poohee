@@ -10,40 +10,58 @@ import SwiftUI
 struct MessageView: View {
     var body: some View {
         
-        NavigationView {
-            VStack{
-                
+        VStack(spacing:0){
                 topBar
                 messageQueue
             }
-            .navigationBarHidden(true)
         
-        }
     }
     
     private var topBar: some View {
-        HStack (spacing: 16){
-            Text("No Upcmoing Meetups").font(.system(size: 24, weight: .bold))
-                .padding(.vertical, 40)
+        VStack{
+            ZStack{
+                RoundedRectangle(cornerRadius: 25, style: .continuous)
+                                .fill(Color.primaryColor)
+                                .frame(width: 380, height: 200)
+                Text("Tangya, You have an upcoming match!")
+                    .font(.system(size: 36, weight: .bold))
+            }
+            HStack{
+                Text("Conversations")
+                    .font(.system(size: 40, weight: .semibold))
+                    .foregroundColor(Color.chatPink)
+                    .padding(.init(top: 0, leading: 18, bottom: 5, trailing: 0))
+                Spacer()
+            }
+            Divider()
+                .background(Color.chatPink)
+                
         }
-        .padding()
+        
+        
+        
     }
     
     private var messageQueue: some View {
         ScrollView{
-            ForEach(0..<13, id:\.self) {num in
-                VStack{
+            VStack{
+                ForEach(0..<13, id:\.self) {num in
                     HStack(spacing: 16){
                         
                         Image(systemName: "person.fill")
                             .font(.system(size: 32))
+                            .foregroundColor(Color.chatPink)
                             .padding(8)
-                            .overlay(RoundedRectangle(cornerRadius: 44).stroke(lineWidth: 1))
+                            .overlay(RoundedRectangle(cornerRadius: 44)
+                                .stroke(lineWidth: 1)
+                                .foregroundColor(Color.chatPink)
+                            )
                         
                         VStack (alignment: .leading){
                             Text("Username")
-                                .font(.system(size: 16, weight:
-                                        .bold))
+                                .font(.system(size: 20, weight:
+                                        .semibold))
+                            Spacer()
                             Text("Message sent")
                                 .foregroundColor(Color(.lightGray)).font(.system(size:14))
                         }
@@ -57,11 +75,16 @@ struct MessageView: View {
                     }
                     
                     Divider()
-                        .padding(.vertical, 5)
+                        .background(Color.chatPink)
+                        .frame(height:12)
                 }
-                .foregroundColor(Color.orange)
                 .padding(.horizontal)
-            }.padding(.bottom, 50)
+                
+                Image("logo")
+                    .resizable()
+                    .frame(width: 80, height: 80)
+            }
+            .padding(.top, 15)
         }
     }
     
