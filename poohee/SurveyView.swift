@@ -8,7 +8,7 @@
 import SwiftUI
 
 
-class SurveyViewModel: ObservableObject {
+class ViewModel: ObservableObject {
     
     @Published var uid = ""
     
@@ -101,7 +101,7 @@ class SurveyViewModel: ObservableObject {
 
 struct SurveyView: View {
     
-    @ObservedObject private var vm = SurveyViewModel()
+    @ObservedObject private var vm = ViewModel()
     @State private var createProfileStage = 0
     @State private var friend = false
     @State private var career = false

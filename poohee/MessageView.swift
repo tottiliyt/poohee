@@ -8,12 +8,23 @@
 import SwiftUI
 
 struct MessageView: View {
+    
+    @Binding var isPopUp : Bool
+    @ObservedObject var vm : ViewModel
+    
+    
     var body: some View {
-        
-        VStack(spacing:0){
-                topBar
-                messageQueue
+        ZStack{
+            VStack(){
+                    topBar
+                    messageQueue
             }
+            
+            if isPopUp{
+                PopUpView(show: $isPopUp, vm: vm)
+            }
+        }
+        
         
     }
     
@@ -22,11 +33,29 @@ struct MessageView: View {
             ZStack{
                 RoundedRectangle(cornerRadius: 25, style: .continuous)
                                 .fill(Color.primaryColor)
-                                .frame(width: 380, height: 200, alignment: .center)
-                Text("Tangya, You have an upcoming match!")
-                    .font(.system(size: 36, weight: .bold))
+                                .frame(width: 380, height: 250, alignment: .center)
+                
+                VStack (alignment: .center, spacing: 20){
+                    Text("\(vm.profile?.first_name ?? ""), You have an upcoming match!")
+                        .font(.system(size: 30, weight: .bold))
+                    
+                    Button(action: {
+                        withAnimation{
+                            isPopUp.toggle()
+                        }
+                    }, label: {
+                        
+                        Text("Check")
+                            .foregroundColor(Color.black)
+                            .font(.system(size: 25, weight: .bold))
+                            .padding()
+                    })
+                    .frame(width: 175, height: 60)
+                    .background()
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                }
             }
-            .padding(.init(top: 55, leading: 20, bottom: 0, trailing: 15))
+            .padding(.horizontal)
             
             HStack{
                 Text("Conversations")
@@ -92,7 +121,7 @@ struct MessageView: View {
     
 }
 
-struct MessageView_Previews: PreviewProvider {
+/*struct MessageView_Previews: PreviewProvider {
     static var previews: some View {
         MessageView()
         
@@ -100,3 +129,4 @@ struct MessageView_Previews: PreviewProvider {
             .preferredColorScheme(.dark)
     }
 }
+*/

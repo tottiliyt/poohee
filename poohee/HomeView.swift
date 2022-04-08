@@ -7,21 +7,26 @@
 
 import SwiftUI
 
+
+
 struct HomeView: View {
+    
+    @ObservedObject var vm = ViewModel()
     @State var isMessageMode = true
+    @State var isPopUp = false
+    
+    
     var body: some View {
-        VStack(){
+        VStack(spacing:0){
             ZStack{
                 if isMessageMode {
-                    MessageView()
+                    MessageView(isPopUp: $isPopUp, vm : vm)
                 } else {
                     ProfileView()
                 }
             }
             
-            Spacer()
-            
-            HStack(spacing: 0){
+            HStack(){
                 Button(action: {
                     isMessageMode = true
                 }, label: {
@@ -29,15 +34,17 @@ struct HomeView: View {
                         Spacer()
                         if isMessageMode{
                             Image("MessageWhite")
-                                .font(.system(size: 110))
+                                .resizable()
+                                .frame(width:47, height:47)
                         } else {
                             Image("MessageGrey")
-                                .font(.system(size: 110))
+                                .resizable()
+                                .frame(width:47, height:47)
                         }
                         
                         Spacer()
                     }
-                    .padding(.vertical, 24)
+                    .padding(.vertical, 21)
                         .background(isMessageMode ? Color.primaryColor: Color.white)
                         .cornerRadius(20)
                 })
@@ -66,8 +73,7 @@ struct HomeView: View {
             }
             
         }
-        .ignoresSafeArea()
-        
+        .ignoresSafeArea(.all, edges: .bottom)
         
     }
 }
