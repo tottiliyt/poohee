@@ -8,8 +8,11 @@
 import SwiftUI
 
 struct GoalView: View {
+    
+    @State var friend = false
+    @State var career = false
+    
     var body: some View {
-        
         
         VStack(spacing:50) {
             Text("What brings you to Yolk?")
@@ -17,7 +20,7 @@ struct GoalView: View {
                 .font(.system(size: 36))
             
             Button {
-                
+                friend.toggle()
             }label: {
                 HStack{
                     
@@ -31,15 +34,22 @@ struct GoalView: View {
                     
                 }.padding(.vertical, 65)
                     .background(Color.primaryColor)
-                    .cornerRadius(24)
+                    .cornerRadius(15)
+                    .border(Color.orange, width: friend ? 5 : 0)
             }
             
-            Text("Actually both!")
-                .foregroundColor(Color.gray)
-                .font(.system(size: 36))
             
             Button {
-                
+                bothToggle()
+            }label: {
+                Text("Actually both!")
+                    .foregroundColor(Color.gray)
+                    .font(.system(size: 36))
+            }
+            
+            
+            Button {
+                career.toggle()
             }label: {
                 HStack{
                     
@@ -53,13 +63,18 @@ struct GoalView: View {
                     
                 }.padding(.vertical, 50)
                     .background(Color.secondaryColor)
-                    .cornerRadius(24)
+                    .cornerRadius(15)
+                    .border(Color.purple, width: career ? 5 : 0)
+                
             }
         }
         .padding(.horizontal, 50)
-        
-        
-        
+    }
+    
+    
+    private func bothToggle() {
+        friend = true
+        career = true
     }
 }
 

@@ -252,7 +252,7 @@ struct CreateAccountView: View {
         
         print(uid)
         
-        let userData = ["uid": uid, "email": self.email, "profileImageUrl": ""]
+        let userData = ["email": self.email, "username": self.username, "profileImageUrl": "", "profile": [:]] as [String : Any]
         
         FirebaseManager.shared.firestore.collection("users")
             .document(uid).setData(userData) { err in

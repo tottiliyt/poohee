@@ -24,6 +24,9 @@
 		B96A1C8B27F8D04D00DEBC48 /* FirebaseFunctions in Frameworks */ = {isa = PBXBuildFile; productRef = B96A1C8A27F8D04D00DEBC48 /* FirebaseFunctions */; };
 		B96A1C8D27F8D04D00DEBC48 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = B96A1C8C27F8D04D00DEBC48 /* FirebaseStorage */; };
 		B96A1C8F27F8D30400DEBC48 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96A1C8E27F8D30400DEBC48 /* WelcomeView.swift */; };
+		B99291BD27FFA2FA00774CEB /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B99291BC27FFA2FA00774CEB /* ImagePicker.swift */; };
+		B9D2ACA327FCCC4700D71ADA /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D2ACA227FCCC4700D71ADA /* UserModel.swift */; };
+		B9D2ACA527FCCCE700D71ADA /* ProfileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D2ACA427FCCCE700D71ADA /* ProfileModel.swift */; };
 		B9DBE8BC27F8FD0100F29992 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9DBE8BB27F8FD0100F29992 /* HomeView.swift */; };
 		B9DBE8C027F9370A00F29992 /* GoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9DBE8BF27F9370A00F29992 /* GoalView.swift */; };
 		B9DBE8C227F9372100F29992 /* PersonalInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9DBE8C127F9372100F29992 /* PersonalInfoView.swift */; };
@@ -45,6 +48,9 @@
 		B944F0C927F15FD300805A43 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		B9478A1B27F968360058FDFA /* pooheeRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = pooheeRelease.entitlements; sourceTree = "<group>"; };
 		B96A1C8E27F8D30400DEBC48 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
+		B99291BC27FFA2FA00774CEB /* ImagePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		B9D2ACA227FCCC4700D71ADA /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
+		B9D2ACA427FCCCE700D71ADA /* ProfileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileModel.swift; sourceTree = "<group>"; };
 		B9DBE8BB27F8FD0100F29992 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		B9DBE8BF27F9370A00F29992 /* GoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalView.swift; sourceTree = "<group>"; };
 		B9DBE8C127F9372100F29992 /* PersonalInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalInfoView.swift; sourceTree = "<group>"; };
@@ -93,6 +99,7 @@
 		B944F0C127F15FCF00805A43 /* poohee */ = {
 			isa = PBXGroup;
 			children = (
+				B9D2ACA127FCCC3900D71ADA /* Model */,
 				B9478A1B27F968360058FDFA /* pooheeRelease.entitlements */,
 				B9DBE8CB27F961F800F29992 /* Info.plist */,
 				B944F0C227F15FCF00805A43 /* pooheeApp.swift */,
@@ -110,6 +117,7 @@
 				B9DBE8C327F9376C00F29992 /* SelfIdView.swift */,
 				B9DBE8C527F937AA00F29992 /* PersonalityIntroView.swift */,
 				B9DBE8C727F937DF00F29992 /* PersonalityQuestionView.swift */,
+				B99291BC27FFA2FA00774CEB /* ImagePicker.swift */,
 				B9DBE8C927F9385B00F29992 /* ChattingTopicView.swift */,
 			);
 			path = poohee;
@@ -121,6 +129,15 @@
 				B944F0C927F15FD300805A43 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		B9D2ACA127FCCC3900D71ADA /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				B9D2ACA227FCCC4700D71ADA /* UserModel.swift */,
+				B9D2ACA427FCCCE700D71ADA /* ProfileModel.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -208,6 +225,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B9D2ACA527FCCCE700D71ADA /* ProfileModel.swift in Sources */,
 				B9DBE8C227F9372100F29992 /* PersonalInfoView.swift in Sources */,
 				B9DBE8C827F937DF00F29992 /* PersonalityQuestionView.swift in Sources */,
 				B9DBE8C627F937AA00F29992 /* PersonalityIntroView.swift in Sources */,
@@ -216,9 +234,11 @@
 				B96A1C8F27F8D30400DEBC48 /* WelcomeView.swift in Sources */,
 				B944F0C527F15FCF00805A43 /* CreateAccountView.swift in Sources */,
 				B9DBE8C427F9376C00F29992 /* SelfIdView.swift in Sources */,
+				B9D2ACA327FCCC4700D71ADA /* UserModel.swift in Sources */,
 				5100F02627F7FBA6000ABFFF /* FirebaseManager.swift in Sources */,
 				5100F02427F7F927000ABFFF /* LoginView.swift in Sources */,
 				B944F0C327F15FCF00805A43 /* pooheeApp.swift in Sources */,
+				B99291BD27FFA2FA00774CEB /* ImagePicker.swift in Sources */,
 				B9DBE8CA27F9385B00F29992 /* ChattingTopicView.swift in Sources */,
 				B9DBE8C027F9370A00F29992 /* GoalView.swift in Sources */,
 			);
