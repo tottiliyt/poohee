@@ -10,7 +10,7 @@ import SwiftUI
 struct HomeView: View {
     @State var isMessageMode = true
     var body: some View {
-        VStack(spacing: 0){
+        VStack(){
             ZStack{
                 if isMessageMode {
                     MessageView()

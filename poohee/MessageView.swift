@@ -22,10 +22,12 @@ struct MessageView: View {
             ZStack{
                 RoundedRectangle(cornerRadius: 25, style: .continuous)
                                 .fill(Color.primaryColor)
-                                .frame(width: 380, height: 200)
+                                .frame(width: 380, height: 200, alignment: .center)
                 Text("Tangya, You have an upcoming match!")
                     .font(.system(size: 36, weight: .bold))
             }
+            .padding(.init(top: 55, leading: 20, bottom: 0, trailing: 15))
+            
             HStack{
                 Text("Conversations")
                     .font(.system(size: 40, weight: .semibold))
