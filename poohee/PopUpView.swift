@@ -11,7 +11,7 @@ struct PopUpView: View {
     
     @Binding var show : Bool
     @State var accepted = false
-    @ObservedObject var vm : ViewModel
+    @ObservedObject var vm : HomeViewModel
     
     var body: some View {
         

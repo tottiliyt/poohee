@@ -8,7 +8,7 @@
 import SwiftUI
 
 
-class ViewModel: ObservableObject {
+class SurveyViewModel: ObservableObject {
     
     @Published var uid = ""
     
@@ -60,9 +60,8 @@ class ViewModel: ObservableObject {
                 return
 
             }
-            let username = data["username"] as? String ?? ""
+            
             let email = data["email"] as? String ?? ""
-            let profileImageUrl = data["profileImageUrl"] as? String ?? ""
             let profile = data["profile"] as? Dictionary<String, Any> ?? [:]
             
             
@@ -71,6 +70,7 @@ class ViewModel: ObservableObject {
                 self.isProfileFinished = false
             } else {
                 
+                let profileImageUrl = data["profileImageUrl"] as? String ?? ""
                 let first_name = profile["first_name"] as? String ?? ""
                 let gender = profile["gender"] as? String ?? ""
                 let goal = profile["goal"] as? String ?? ""
@@ -84,9 +84,9 @@ class ViewModel: ObservableObject {
                 let majors = profile["majors"] as? [String] ?? []
                 let questionnaire = profile["questionnaire"] as? [String] ?? []
                 
-                self.profile = Profile(first_name: first_name, gender: gender, goal: goal, graduation_year: graduation_year, last_name: last_name, political: political, religious: religious, career_interests: career_interests, hobbies: hobbies, majors: majors, questionnaire: questionnaire)
+                self.profile = Profile(uid: self.uid, first_name: first_name, gender: gender, goal: goal, graduation_year: graduation_year, last_name: last_name, political: political, religious: religious, profileImageUrl: profileImageUrl, career_interests: career_interests, hobbies: hobbies, majors: majors, questionnaire: questionnaire)
                 
-                self.user = User(uid: self.uid, email: email, profileImageUrl: profileImageUrl, username: username, profile: self.profile!)
+                self.user = User(uid: self.uid, email: email, profile: self.profile!)
                 
                 self.isProfileFinished = true
             }
@@ -101,7 +101,7 @@ class ViewModel: ObservableObject {
 
 struct SurveyView: View {
     
-    @ObservedObject private var vm = ViewModel()
+    @ObservedObject private var vm = SurveyViewModel()
     @State private var createProfileStage = 0
     @State private var friend = false
     @State private var career = false
@@ -209,7 +209,8 @@ struct SurveyView: View {
         
         else if (vm.isProfileFinished) {
             
-            VStack{
+            HomeView()
+            /*VStack{
                 Text(vm.error_message)
                 
                 Button {
@@ -226,7 +227,7 @@ struct SurveyView: View {
                         .background(Color.primaryColor)
                         .cornerRadius(24)
                 }.padding(.top, 130)
-            }
+            }*/
         }
         else {
 

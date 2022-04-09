@@ -9,7 +9,7 @@ import Foundation
 
 public struct User {
     
-    var uid, email, profileImageUrl, username: String
+    var uid, email: String
     var profile: Profile
     
 }

@@ -8,8 +8,11 @@
 import Foundation
 
 
-public struct Profile {
-    var first_name, gender, goal, graduation_year, last_name, political, religious: String
+public struct Profile : Identifiable{
+    
+    public var id : String {uid}
+    
+    var uid, first_name, gender, goal, graduation_year, last_name, political, religious, profileImageUrl: String
     
     var career_interests, hobbies, majors, questionnaire: [String]
 }

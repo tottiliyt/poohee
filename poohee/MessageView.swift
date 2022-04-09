@@ -10,7 +10,7 @@ import SwiftUI
 struct MessageView: View {
     
     @Binding var isPopUp : Bool
-    @ObservedObject var vm : ViewModel
+    @ObservedObject var vm : HomeViewModel
     
     
     var body: some View {
@@ -76,7 +76,7 @@ struct MessageView: View {
     private var messageQueue: some View {
         ScrollView{
             VStack{
-                ForEach(0..<13, id:\.self) {num in
+                ForEach(vm.matchedUsers) {user in
                     HStack(spacing: 16){
                         
                         Image(systemName: "person.fill")
@@ -89,7 +89,7 @@ struct MessageView: View {
                             )
                         
                         VStack (alignment: .leading){
-                            Text("Username")
+                            Text("\(user.first_name)")
                                 .font(.system(size: 20, weight:
                                         .semibold))
                             Spacer()
