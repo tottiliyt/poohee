@@ -22,4 +22,5 @@ extension Color {
     static let secondaryColor = Color(red: 121/255, green: 131/255, blue: 221/255)
     static let chatPink = Color(red: 254/255, green: 156/255, blue: 163/255)
     static let buttonGray = Color(red: 229/255, green: 229/255, blue: 229/255)
+    static let chatGray = Color(red: 243/255, green: 243/255, blue: 243/255)
 }

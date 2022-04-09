@@ -145,65 +145,73 @@ struct HomeView: View {
     
     
     var body: some View {
-        VStack(spacing:0){
-            ZStack{
-                if isMessageMode {
-                    MessageView(isPopUp: $isPopUp, vm : vm)
-                } else {
-                    ProfileView()
-                }
-            }
-            
-            HStack(){
-                Button(action: {
-                    isMessageMode = true
-                }, label: {
-                    HStack(spacing:0){
-                        Spacer()
-                        if isMessageMode{
-                            Image("MessageWhite")
-                                .resizable()
-                                .frame(width:47, height:47)
-                        } else {
-                            Image("MessageGrey")
-                                .resizable()
-                                .frame(width:47, height:47)
-                        }
-                        
-                        Spacer()
-                    }
-                    .padding(.vertical, 21)
-                        .background(isMessageMode ? Color.primaryColor: Color.white)
-                        .cornerRadius(20)
-                })
-                
-                Button(action: {
-                    isMessageMode = false
-                }, label: {
-                    HStack(spacing:0){
-                        Spacer()
-                        if isMessageMode{
-                            Image("ProfileGrey")
-                                .font(.system(size: 100))
-                        } else {
-                            Image("ProfileWhite")
-                                .font(.system(size: 100))
-                        }
+        NavigationView{
+            VStack(spacing:0){
+                ZStack{
+                    if isMessageMode {
+                        MessageView(selectUser: {user in
+                            print(user.uid)
                             
-                        Spacer()
+                        }, isPopUp: $isPopUp, vm : vm
+                        )
+                    } else {
+                        ProfileView()
                     }
-                    .padding(.vertical, 20)
-                        .background(isMessageMode ? Color.white: Color.secondaryColor)
-                        .cornerRadius(20)
+                }
+                
+                HStack(){
+                    Button(action: {
+                        isMessageMode = true
+                    }, label: {
+                        HStack(spacing:0){
+                            Spacer()
+                            if isMessageMode{
+                                Image("MessageWhite")
+                                    .resizable()
+                                    .frame(width:47, height:47)
+                            } else {
+                                Image("MessageGrey")
+                                    .resizable()
+                                    .frame(width:47, height:47)
+                            }
+                            
+                            Spacer()
+                        }
+                        .padding(.vertical, 21)
+                            .background(isMessageMode ? Color.primaryColor: Color.white)
+                            .cornerRadius(20)
+                    })
                     
-                })
-               
+                    Button(action: {
+                        isMessageMode = false
+                    }, label: {
+                        HStack(spacing:0){
+                            Spacer()
+                            if isMessageMode{
+                                Image("ProfileGrey")
+                                    .font(.system(size: 100))
+                            } else {
+                                Image("ProfileWhite")
+                                    .font(.system(size: 100))
+                            }
+                                
+                            Spacer()
+                        }
+                        .padding(.vertical, 20)
+                            .background(isMessageMode ? Color.white: Color.secondaryColor)
+                            .cornerRadius(20)
+                        
+                    })
+                   
+                }
+                
             }
-            
+            .ignoresSafeArea(.all, edges: .bottom)
+            .navigationBarHidden(true)
         }
-        .ignoresSafeArea(.all, edges: .bottom)
         
     }
+        
 }
 
 struct HomeView_Previews: PreviewProvider {

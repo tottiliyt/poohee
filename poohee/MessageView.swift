@@ -9,23 +9,24 @@ import SwiftUI
 
 struct MessageView: View {
     
+    let selectUser : (Profile) -> ()
+    @State var selectedUser : Profile?
     @Binding var isPopUp : Bool
     @ObservedObject var vm : HomeViewModel
     
     
+    
     var body: some View {
-        ZStack{
-            VStack(){
-                    topBar
-                    messageQueue
+            ZStack{
+                VStack(spacing:0){
+                        topBar
+                        messageQueue
+                }
+                
+                if isPopUp{
+                    PopUpView(show: $isPopUp, vm: vm)
+                }
             }
-            
-            if isPopUp{
-                PopUpView(show: $isPopUp, vm: vm)
-            }
-        }
-        
-        
     }
     
     private var topBar: some View {
@@ -77,33 +78,39 @@ struct MessageView: View {
         ScrollView{
             VStack{
                 ForEach(vm.matchedUsers) {user in
-                    HStack(spacing: 16){
-                        
-                        Image(systemName: "person.fill")
-                            .font(.system(size: 32))
-                            .foregroundColor(Color.chatPink)
-                            .padding(8)
-                            .overlay(RoundedRectangle(cornerRadius: 44)
-                                .stroke(lineWidth: 1)
+                    NavigationLink (destination: {
+                        ChatView(user: user)
+                    }, label: {
+                        HStack(spacing: 16){
+                            Image(systemName: "person.fill")
+                                .font(.system(size: 32))
                                 .foregroundColor(Color.chatPink)
-                            )
-                        
-                        VStack (alignment: .leading){
-                            Text("\(user.first_name)")
-                                .font(.system(size: 20, weight:
-                                        .semibold))
+                                .padding(8)
+                                .overlay(RoundedRectangle(cornerRadius: 44)
+                                    .stroke(lineWidth: 1)
+                                    .foregroundColor(Color.chatPink)
+                                )
+                            
+                            VStack (alignment: .leading){
+                                Text("\(user.first_name)")
+                                    .font(.system(size: 20, weight:
+                                            .semibold))
+                                    .foregroundColor(Color.black)
+                                Spacer()
+                                Text("Message sent")
+                                    .foregroundColor(Color(.lightGray)).font(.system(size:14))
+                            }
+                            
                             Spacer()
-                            Text("Message sent")
-                                .foregroundColor(Color(.lightGray)).font(.system(size:14))
+                            
+                            Text("22d")
+                                .font(.system(size: 14, weight:
+                                        .semibold))
+                                .foregroundColor(Color.black)
+                            
                         }
-                        
-                        Spacer()
-                        
-                        Text("22d")
-                            .font(.system(size: 14, weight:
-                                    .semibold))
-                        
-                    }
+                    })
+                     
                     
                     Divider()
                         .background(Color.chatPink)
@@ -121,12 +128,9 @@ struct MessageView: View {
     
 }
 
-/*struct MessageView_Previews: PreviewProvider {
+struct MessageView_Previews: PreviewProvider {
     static var previews: some View {
-        MessageView()
-        
-        MessageView()
-            .preferredColorScheme(.dark)
+        HomeView()
     }
 }
-*/
+

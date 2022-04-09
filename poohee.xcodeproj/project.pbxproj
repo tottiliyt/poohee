@@ -12,6 +12,8 @@
 		51418ECD27FFE43600D19CBD /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51418ECC27FFE43600D19CBD /* HomeView.swift */; };
 		51418ECF2800051A00D19CBD /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51418ECE2800051A00D19CBD /* ProfileView.swift */; };
 		51418ED328009F0A00D19CBD /* PopUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51418ED228009F0A00D19CBD /* PopUpView.swift */; };
+		51418ED528011B3E00D19CBD /* PublicUserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51418ED428011B3E00D19CBD /* PublicUserModel.swift */; };
+		51418ED7280121D500D19CBD /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51418ED6280121D500D19CBD /* ChatView.swift */; };
 		51CEC38027F7904100BA8267 /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51CEC37F27F7904100BA8267 /* MessageView.swift */; };
 		51CEC38327F7F01700BA8267 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 51CEC38227F7F01700BA8267 /* FirebaseAuth */; };
 		51CEC38527F7F01700BA8267 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 51CEC38427F7F01700BA8267 /* FirebaseFirestore */; };
@@ -45,6 +47,8 @@
 		51418ECC27FFE43600D19CBD /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		51418ECE2800051A00D19CBD /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		51418ED228009F0A00D19CBD /* PopUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpView.swift; sourceTree = "<group>"; };
+		51418ED428011B3E00D19CBD /* PublicUserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicUserModel.swift; sourceTree = "<group>"; };
+		51418ED6280121D500D19CBD /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
 		51CEC37F27F7904100BA8267 /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
 		51CEC38827F7F22900BA8267 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B944F0BF27F15FCF00805A43 /* poohee.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = poohee.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -111,6 +115,7 @@
 				B944F0C227F15FCF00805A43 /* pooheeApp.swift */,
 				B944F0C427F15FCF00805A43 /* CreateAccountView.swift */,
 				5100F02327F7F927000ABFFF /* LoginView.swift */,
+				51418ED6280121D500D19CBD /* ChatView.swift */,
 				51418ED228009F0A00D19CBD /* PopUpView.swift */,
 				51CEC37F27F7904100BA8267 /* MessageView.swift */,
 				51418ECE2800051A00D19CBD /* ProfileView.swift */,
@@ -145,6 +150,7 @@
 			children = (
 				B9D2ACA227FCCC4700D71ADA /* UserModel.swift */,
 				B9D2ACA427FCCCE700D71ADA /* ProfileModel.swift */,
+				51418ED428011B3E00D19CBD /* PublicUserModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -238,6 +244,7 @@
 				B9DBE8C227F9372100F29992 /* PersonalInfoView.swift in Sources */,
 				B9DBE8C827F937DF00F29992 /* PersonalityQuestionView.swift in Sources */,
 				B9DBE8C627F937AA00F29992 /* PersonalityIntroView.swift in Sources */,
+				51418ED7280121D500D19CBD /* ChatView.swift in Sources */,
 				51CEC38027F7904100BA8267 /* MessageView.swift in Sources */,
 				51418ECD27FFE43600D19CBD /* HomeView.swift in Sources */,
 				B9DBE8BC27F8FD0100F29992 /* SurveyView.swift in Sources */,
@@ -245,6 +252,7 @@
 				B944F0C527F15FCF00805A43 /* CreateAccountView.swift in Sources */,
 				B9DBE8C427F9376C00F29992 /* SelfIdView.swift in Sources */,
 				51418ECF2800051A00D19CBD /* ProfileView.swift in Sources */,
+				51418ED528011B3E00D19CBD /* PublicUserModel.swift in Sources */,
 				B9D2ACA327FCCC4700D71ADA /* UserModel.swift in Sources */,
 				5100F02627F7FBA6000ABFFF /* FirebaseManager.swift in Sources */,
 				5100F02427F7F927000ABFFF /* LoginView.swift in Sources */,
