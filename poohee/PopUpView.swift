@@ -10,7 +10,7 @@ import SwiftUI
 struct PopUpView: View {
     
     @Binding var show : Bool
-    @State var accepted = false
+    @Binding var accepted: Bool
     @ObservedObject var vm : HomeViewModel
     
     var body: some View {

@@ -9,11 +9,10 @@ import SwiftUI
 
 struct MessageView: View {
     
-    let selectUser : (Profile) -> ()
     @State var selectedUser : Profile?
     @Binding var isPopUp : Bool
     @ObservedObject var vm : HomeViewModel
-    
+    @Binding var accepted: Bool
     
     
     var body: some View {
@@ -24,7 +23,7 @@ struct MessageView: View {
                 }
                 
                 if isPopUp{
-                    PopUpView(show: $isPopUp, vm: vm)
+                    PopUpView(show: $isPopUp, accepted: $accepted, vm: vm)
                 }
             }
     }
@@ -79,7 +78,7 @@ struct MessageView: View {
             VStack{
                 ForEach(vm.matchedUsers) {user in
                     NavigationLink (destination: {
-                        ChatView(user: user)
+                        ChatView(recipient: user)
                     }, label: {
                         HStack(spacing: 16){
                             Image(systemName: "person.fill")

@@ -142,18 +142,14 @@ struct HomeView: View {
     @ObservedObject var vm = HomeViewModel()
     @State var isMessageMode = true
     @State var isPopUp = false
-    
+    @State var accepted = false
     
     var body: some View {
         NavigationView{
             VStack(spacing:0){
                 ZStack{
                     if isMessageMode {
-                        MessageView(selectUser: {user in
-                            print(user.uid)
-                            
-                        }, isPopUp: $isPopUp, vm : vm
-                        )
+                        MessageView(isPopUp: $isPopUp, vm : vm, accepted: $accepted)
                     } else {
                         ProfileView()
                     }
