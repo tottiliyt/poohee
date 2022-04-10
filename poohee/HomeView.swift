@@ -10,17 +10,10 @@ import SwiftUI
 class HomeViewModel: ObservableObject {
     
     @Published var uid = ""
-    
-    @Published var error_message = ""
-    
+    @Published var errorMessage = ""
     @Published var isCurrentlyLoggedOut = true
-    
     @Published var user: User?
-    
     @Published var profile: Profile?
-    
-    @Published var currentRecipient: Profile?
-    
     @Published var chats = [Chat]()
     
     init() {
@@ -38,7 +31,7 @@ class HomeViewModel: ObservableObject {
     
     public func fetchCurrentUser(){
         guard let uid = FirebaseManager.shared.auth.currentUser?.uid else {
-            self.error_message = "not logged in"
+            self.errorMessage = "not logged in"
             self.isCurrentlyLoggedOut = true
             return
         }
@@ -47,14 +40,14 @@ class HomeViewModel: ObservableObject {
         
         FirebaseManager.shared.firestore.collection("users").document(uid).getDocument { snapshot, error in
             if let error = error {
-                self.error_message = "Failed to fetch current user: \(error)"
+                self.errorMessage = "Failed to fetch current user: \(error)"
                 print("Failed to fetch current user:", error)
                 self.isCurrentlyLoggedOut = true
                 return
             }
 
             guard let data = snapshot?.data() else {
-                self.error_message = "No data found"
+                self.errorMessage = "No data found"
                 self.isCurrentlyLoggedOut = true
                 return
 
@@ -63,29 +56,9 @@ class HomeViewModel: ObservableObject {
             
             let email = data["email"] as? String ?? ""
             
-            let profile = data["profile"] as? Dictionary<String, Any> ?? [:]
+            self.profile = Profile(uid: self.uid, data: data["profile"] as? Dictionary<String, Any> ?? [:])
             
-            
-            if (!profile.isEmpty) {
-                
-                let profileImageUrl = data["profileImageUrl"] as? String ?? ""
-                let first_name = profile["first_name"] as? String ?? ""
-                let gender = profile["gender"] as? String ?? ""
-                let goal = profile["goal"] as? String ?? ""
-                let graduation_year = profile["graduation_year"] as? String ?? ""
-                let last_name = profile["last_name"] as? String ?? ""
-                let political = profile["political"] as? String ?? ""
-                let religious = profile["religious"] as? String ?? ""
-                
-                let career_interests = profile["career_interests"] as? [String] ?? []
-                let hobbies = profile["hobbies"] as? [String] ?? []
-                let majors = profile["majors"] as? [String] ?? []
-                let questionnaire = profile["questionnaire"] as? [String] ?? []
-                
-                self.profile = Profile(uid: self.uid, first_name: first_name, gender: gender, goal: goal, graduation_year: graduation_year, last_name: last_name, political: political, religious: religious, profileImageUrl: profileImageUrl, career_interests: career_interests, hobbies: hobbies, majors: majors, questionnaire: questionnaire)
-                
-                self.user = User(uid: self.uid, email: email, profile: self.profile!)
-            }
+            self.user = User(uid: self.uid, email: email, profile: self.profile!)
         }
     }
     
@@ -104,7 +77,7 @@ class HomeViewModel: ObservableObject {
             .order(by: "timestamp")
             .addSnapshotListener{ snapshot, error in
                 if let error = error{
-                    self.error_message = "failed to retrieve recent messages: \(error)"
+                    self.errorMessage = "failed to retrieve recent messages: \(error)"
                     return
                 }
                 
@@ -119,13 +92,13 @@ class HomeViewModel: ObservableObject {
                     }
                     
                     
-                    self.chats.insert(.init(documentId: change.document.documentID, data: change.document.data()), at: 0)
+                    self.chats.insert(.init(documentId: change.document.documentID,  data: change.document.data()), at: 0)
                     
                 })
                 
             }
         
-        print (self.error_message)
+        print (self.errorMessage)
     }
 }
 

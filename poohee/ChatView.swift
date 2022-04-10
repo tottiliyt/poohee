@@ -17,12 +17,14 @@ class ChatViewModel: ObservableObject {
     @Published var uid = ""
     @Published var recipientId = ""
     @Published var chat : Chat
+    @Published var recipientProfile : Profile?
+    @Published var profile: Profile?
     
     
     init(chat: Chat) {
         self.chat = chat
-        
-        fetchMessages()
+        self.fetchMessages()
+        self.fetchProfiles()
     }
     
     private func fetchMessages(){
@@ -57,6 +59,43 @@ class ChatViewModel: ObservableObject {
             }
         DispatchQueue.main.async {
             self.count += 1
+        }
+        
+    }
+    
+    private func fetchProfiles(){
+        FirebaseManager.shared.firestore.collection("users").document(self.uid).getDocument { snapshot, error in
+            if let error = error {
+                self.errorMessage = "Failed to fetch current user: \(error)"
+                print("Failed to fetch current user:", error)
+                return
+            }
+            
+            guard let data = snapshot?.data() else {
+                self.errorMessage = "No data found"
+                return
+
+            }
+            
+            self.profile = Profile(uid: self.uid, data: data["profile"] as? Dictionary<String, Any> ?? [:])
+            
+        }
+        
+        FirebaseManager.shared.firestore.collection("users").document(self.recipientId).getDocument { snapshot, error in
+            if let error = error {
+                self.errorMessage = "Failed to fetch current user: \(error)"
+                print("Failed to fetch current user:", error)
+                return
+            }
+            
+            guard let data = snapshot?.data() else {
+                self.errorMessage = "No data found"
+                return
+
+            }
+            
+            self.recipientProfile = Profile(uid: self.recipientId, data: data["profile"] as? Dictionary<String, Any> ?? [:])
+            
         }
         
     }
@@ -98,7 +137,8 @@ class ChatViewModel: ObservableObject {
     
     private func persistRecentMessage(text: String) {
         
-        let senderContent = ["fromId": self.uid, "toId": self.recipientId, "text":text, "timestamp": Timestamp(), "first_name": chat.first_name, "profileImageUrl": chat.profileImageUrl] as [String: Any]
+        
+        let senderContent = ["fromId": self.uid, "toId": self.recipientId, "text":text, "timestamp": Timestamp(), "first_name": self.recipientProfile?.first_name ?? "", "profileImageUrl": self.recipientProfile?.profileImageUrl ?? ""] as [String: Any]
         
         let document = FirebaseManager.shared.firestore.collection("recent_messages")
             .document(self.uid)
@@ -111,44 +151,20 @@ class ChatViewModel: ObservableObject {
             }
         }
         
-        FirebaseManager.shared.firestore.collection("users").document(uid).getDocument { snapshot, error in
-            if let error = error {
-                self.errorMessage = "Failed to fetch current user: \(error)"
-                print("Failed to fetch current user:", error)
-                return
+        let recipientContent = ["fromId": self.uid, "toId": self.recipientId, "text":text, "timestamp": Timestamp(), "first_name": self.profile?.first_name ?? "", "profileImageUrl": self.profile?.profileImageUrl ?? ""] as [String: Any]
+        
+        let recipientDocument = FirebaseManager.shared.firestore.collection("recent_messages")
+            .document(self.recipientId)
+            .collection("messages")
+            .document(self.uid)
+        
+        
+        
+        recipientDocument.setData(recipientContent) { error in
+            if let error = error{
+                self.errorMessage = "Failed to save message into Firebase: \(error)"
             }
-            
-            guard let data = snapshot?.data() else {
-                self.errorMessage = "No data found"
-                return
-
-            }
-            
-            let profile = data["profile"] as? Dictionary<String, Any> ?? [:]
-            
-            if (!profile.isEmpty) {
-                
-                let profileImageUrl = data["profileImageUrl"] as? String ?? ""
-                let first_name = profile["first_name"] as? String ?? ""
-                let recipientContent = ["fromId": self.uid, "toId": self.recipientId, "text":text, "timestamp": Timestamp(), "first_name": first_name, "profileImageUrl": profileImageUrl] as [String: Any]
-                
-                let recipientDocument = FirebaseManager.shared.firestore.collection("recent_messages")
-                    .document(self.recipientId)
-                    .collection("messages")
-                    .document(self.uid)
-                
-                
-                
-                recipientDocument.setData(recipientContent) { error in
-                    if let error = error{
-                        self.errorMessage = "Failed to save message into Firebase: \(error)"
-                    }
-                }
-            }
-            
         }
-        
-        
         
     }
     
@@ -207,7 +223,7 @@ struct ChatView: View {
             .padding(.horizontal)
         }
         
-        .navigationTitle(self.chat.first_name)
+        .navigationTitle(chat.firstName)
             .navigationBarTitleDisplayMode(.inline)
     }
 }

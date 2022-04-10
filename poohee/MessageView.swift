@@ -92,7 +92,7 @@ struct MessageView: View {
                                 )
                             
                             VStack (alignment: .leading){
-                                Text("\(chat.first_name)")
+                                Text("\(chat.firstName)")
                                     .font(.system(size: 20, weight:
                                             .semibold))
                                     .foregroundColor(Color.black)

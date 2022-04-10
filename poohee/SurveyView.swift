@@ -62,34 +62,12 @@ class SurveyViewModel: ObservableObject {
             }
             
             let email = data["email"] as? String ?? ""
-            let profile = data["profile"] as? Dictionary<String, Any> ?? [:]
+            self.profile = Profile(uid: self.uid, data: data["profile"] as? Dictionary<String, Any> ?? [:])
+            
+            self.user = User(uid: self.uid, email: email, profile: self.profile!)
             
             
             
-            if (profile.isEmpty) {
-                self.isProfileFinished = false
-            } else {
-                
-                let profileImageUrl = data["profileImageUrl"] as? String ?? ""
-                let first_name = profile["first_name"] as? String ?? ""
-                let gender = profile["gender"] as? String ?? ""
-                let goal = profile["goal"] as? String ?? ""
-                let graduation_year = profile["graduation_year"] as? String ?? ""
-                let last_name = profile["last_name"] as? String ?? ""
-                let political = profile["political"] as? String ?? ""
-                let religious = profile["religious"] as? String ?? ""
-                
-                let career_interests = profile["career_interests"] as? [String] ?? []
-                let hobbies = profile["hobbies"] as? [String] ?? []
-                let majors = profile["majors"] as? [String] ?? []
-                let questionnaire = profile["questionnaire"] as? [String] ?? []
-                
-                self.profile = Profile(uid: self.uid, first_name: first_name, gender: gender, goal: goal, graduation_year: graduation_year, last_name: last_name, political: political, religious: religious, profileImageUrl: profileImageUrl, career_interests: career_interests, hobbies: hobbies, majors: majors, questionnaire: questionnaire)
-                
-                self.user = User(uid: self.uid, email: email, profile: self.profile!)
-                
-                self.isProfileFinished = true
-            }
         }
     }
     
