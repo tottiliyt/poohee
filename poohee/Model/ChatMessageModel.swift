@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Firebase
 
 public struct ChatMessage : Identifiable{
     
@@ -13,10 +14,13 @@ public struct ChatMessage : Identifiable{
     
     var documentId, fromId, toId, text: String
     
+    var timestamp: Timestamp
+    
     init(documentId: String, data: [String:Any]){
         self.documentId = documentId
-        fromId = data["fromId"] as? String ?? ""
-        toId = data["toId"] as? String ?? ""
-        text = data["text"] as? String ?? ""
+        self.fromId = data["fromId"] as? String ?? ""
+        self.toId = data["toId"] as? String ?? ""
+        self.text = data["text"] as? String ?? ""
+        self.timestamp = data["timestamp"] as? Timestamp ?? Timestamp(date: Date())
     }
 }

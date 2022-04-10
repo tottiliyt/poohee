@@ -76,9 +76,10 @@ struct MessageView: View {
     private var messageQueue: some View {
         ScrollView{
             VStack{
-                ForEach(vm.matchedUsers) {user in
+                ForEach(vm.chats) {chat in
+                    
                     NavigationLink (destination: {
-                        ChatView(recipient: user)
+                        ChatView(chat: chat)
                     }, label: {
                         HStack(spacing: 16){
                             Image(systemName: "person.fill")
@@ -91,18 +92,18 @@ struct MessageView: View {
                                 )
                             
                             VStack (alignment: .leading){
-                                Text("\(user.first_name)")
+                                Text("\(chat.first_name)")
                                     .font(.system(size: 20, weight:
                                             .semibold))
                                     .foregroundColor(Color.black)
                                 Spacer()
-                                Text("Message sent")
+                                Text("\(chat.text)")
                                     .foregroundColor(Color(.lightGray)).font(.system(size:14))
                             }
                             
                             Spacer()
                             
-                            Text("22d")
+                            Text("\(chat.timeAgo)")
                                 .font(.system(size: 14, weight:
                                         .semibold))
                                 .foregroundColor(Color.black)

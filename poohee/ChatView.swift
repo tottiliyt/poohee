@@ -7,7 +7,6 @@
 
 import SwiftUI
 import Firebase
-import simd
 
 class ChatViewModel: ObservableObject {
     
@@ -15,26 +14,30 @@ class ChatViewModel: ObservableObject {
     @Published var messages = [ChatMessage]()
     @Published var count = 0
     @Published var i = 0
+    @Published var uid = ""
+    @Published var recipientId = ""
+    @Published var chat : Chat
     
-    let recipient : Profile
     
-    init(recipient: Profile) {
-        self.recipient = recipient
+    init(chat: Chat) {
+        self.chat = chat
         
         fetchMessages()
     }
     
     private func fetchMessages(){
-        guard let fromId = FirebaseManager.shared.auth.currentUser?.uid else {
+        guard let uid = FirebaseManager.shared.auth.currentUser?.uid else {
             return
         }
         
-        let toId = self.recipient.uid
+        self.uid = uid
+        
+        self.recipientId = self.uid == chat.fromId ? chat.toId : chat.fromId
         
         FirebaseManager.shared.firestore
             .collection("messages")
-            .document(fromId)
-            .collection(toId)
+            .document(self.uid)
+            .collection(self.recipientId)
             .order(by: "timestamp")
             .addSnapshotListener{snapshot, error in
                 if let error = error{
@@ -59,20 +62,15 @@ class ChatViewModel: ObservableObject {
     }
     
     func send (text: String) {
-        guard let fromId = FirebaseManager.shared.auth.currentUser?.uid else {
-            return
-        }
-        
-        let toId = self.recipient.uid
         
         let document = FirebaseManager.shared.firestore.collection("messages")
-            .document(fromId)
-            .collection(toId)
+            .document(self.uid)
+            .collection(self.recipientId)
             .document()
         
-        let messageContnet = ["fromId":fromId, "toId": toId, "text":text, "timestamp": Timestamp()] as [String: Any]
+        let messageContent = ["fromId": self.uid, "toId": self.recipientId, "text":text, "timestamp": Timestamp()] as [String: Any]
         
-        document.setData(messageContnet) { error in
+        document.setData(messageContent) { error in
             if let error = error{
                 self.errorMessage = "Failed to save message into Firebase: \(error)"
             }
@@ -81,32 +79,90 @@ class ChatViewModel: ObservableObject {
         }
         
         let recipientDocument = FirebaseManager.shared.firestore.collection("messages")
-            .document(toId)
-            .collection(fromId)
+            .document(self.recipientId)
+            .collection(self.uid)
             .document()
         
-        recipientDocument.setData(messageContnet) { error in
+        recipientDocument.setData(messageContent) { error in
             if let error = error{
                 self.errorMessage = "Failed to save message into Firebase: \(error)"
             }
             
         }
         
+        persistRecentMessage(text: text)
         print(self.errorMessage)
                 
         
     }
+    
+    private func persistRecentMessage(text: String) {
+        
+        let senderContent = ["fromId": self.uid, "toId": self.recipientId, "text":text, "timestamp": Timestamp(), "first_name": chat.first_name, "profileImageUrl": chat.profileImageUrl] as [String: Any]
+        
+        let document = FirebaseManager.shared.firestore.collection("recent_messages")
+            .document(self.uid)
+            .collection("messages")
+            .document(self.recipientId)
+        
+        document.setData(senderContent) { error in
+            if let error = error{
+                self.errorMessage = "Failed to save recent message into Firebase: \(error)"
+            }
+        }
+        
+        FirebaseManager.shared.firestore.collection("users").document(uid).getDocument { snapshot, error in
+            if let error = error {
+                self.errorMessage = "Failed to fetch current user: \(error)"
+                print("Failed to fetch current user:", error)
+                return
+            }
+            
+            guard let data = snapshot?.data() else {
+                self.errorMessage = "No data found"
+                return
+
+            }
+            
+            let profile = data["profile"] as? Dictionary<String, Any> ?? [:]
+            
+            if (!profile.isEmpty) {
+                
+                let profileImageUrl = data["profileImageUrl"] as? String ?? ""
+                let first_name = profile["first_name"] as? String ?? ""
+                let recipientContent = ["fromId": self.uid, "toId": self.recipientId, "text":text, "timestamp": Timestamp(), "first_name": first_name, "profileImageUrl": profileImageUrl] as [String: Any]
+                
+                let recipientDocument = FirebaseManager.shared.firestore.collection("recent_messages")
+                    .document(self.recipientId)
+                    .collection("messages")
+                    .document(self.uid)
+                
+                
+                
+                recipientDocument.setData(recipientContent) { error in
+                    if let error = error{
+                        self.errorMessage = "Failed to save message into Firebase: \(error)"
+                    }
+                }
+            }
+            
+        }
+        
+        
+        
+    }
+    
 }
 
 struct ChatView: View {
     
-    @State var recipient : Profile
+    @State var chat : Chat
     @State var message = ""
     @ObservedObject var vm : ChatViewModel
     
-    init(recipient: Profile){
-        self.recipient = recipient
-        vm = .init(recipient: recipient)
+    init(chat: Chat){
+        self.chat = chat
+        vm = .init(chat: chat)
     }
     
     var body: some View {
@@ -116,7 +172,7 @@ struct ChatView: View {
                 ScrollViewReader { scrollViewProxy in
                     VStack {
                         ForEach(vm.messages) { message in
-                            SingleMessageView(message: message, recipient: self.recipient)
+                            SingleMessageView(message: message, recipientId: vm.recipientId)
                         }
 
                         HStack{ Spacer() }
@@ -130,12 +186,8 @@ struct ChatView: View {
                     }
                 }
             }
-            
+        
             HStack{
-                Image(systemName: "photo.on.rectangle")
-                    .font(.system(size: 30))
-                    .foregroundColor(Color.gray)
-                
                 TextField("Message", text: $message)
                     .padding()
                     .overlay(
@@ -151,20 +203,21 @@ struct ChatView: View {
                 }
                 
             }
-            .padding(6)
+            .padding(.vertical, 6)
+            .padding(.horizontal)
         }
         
-        .navigationTitle(self.recipient.first_name)
+        .navigationTitle(self.chat.first_name)
             .navigationBarTitleDisplayMode(.inline)
     }
 }
 
 struct SingleMessageView : View{
     let message : ChatMessage
-    let recipient: Profile
+    let recipientId : String
     
     var body: some View {
-        if message.toId == self.recipient.uid{
+        if message.toId == self.recipientId{
             HStack{
                 Spacer()
                 
