@@ -20,11 +20,22 @@ class ChatViewModel: ObservableObject {
     @Published var recipientProfile : Profile?
     @Published var profile: Profile?
     
+    let date = Date()
+    let calendar = Calendar.current
+    @Published var day = 0
+    @Published var matchDay = 0
+    
     
     init(chat: Chat) {
         self.chat = chat
         self.fetchMessages()
         self.fetchProfiles()
+        self.setCurrentTime()
+    }
+    
+    private func setCurrentTime(){
+        day = calendar.component(.weekday, from: date)
+        matchDay = calendar.component(.weekday, from: self.chat.timestamp.dateValue())
     }
     
     private func fetchMessages(){
@@ -173,8 +184,8 @@ class ChatViewModel: ObservableObject {
 struct ChatView: View {
     
     @State var chat : Chat
-    @State var message = ""
     @ObservedObject var vm : ChatViewModel
+    @State var matched = false
     
     init(chat: Chat){
         self.chat = chat
@@ -183,89 +194,40 @@ struct ChatView: View {
     
     var body: some View {
         
-        VStack{
-            ScrollView {
-                ScrollViewReader { scrollViewProxy in
-                    VStack {
-                        ForEach(vm.messages) { message in
-                            SingleMessageView(message: message, recipientId: vm.recipientId)
-                        }
-
-                        HStack{ Spacer() }
-                        .id("Empty")
-                    }
-                    .onReceive(vm.$count) { _ in
-                        withAnimation(.easeOut(duration: 0.5)) {
-                            scrollViewProxy.scrollTo("Empty", anchor: .bottom)
-                            print(vm.count)
-                        }
-                    }
-                }
-            }
-        
-            HStack{
-                TextField("Message", text: $message)
-                    .padding()
-                    .overlay(
-                            RoundedRectangle(cornerRadius: 14)
-                                .stroke(Color.primaryColor, lineWidth: 2)
+        VStack (spacing: 0){
+            Button{
+                
+            } label: {
+                HStack{
+                    Image(systemName: "person.fill")
+                        .font(.system(size: 30))
+                        .foregroundColor(Color.gray)
+                        .frame(width: 40, height: 40, alignment: .center)
+                        .padding(4)
+                        .overlay(RoundedRectangle(cornerRadius: 60)
+                            .stroke(lineWidth: 2)
+                            .foregroundColor(Color.primaryColor)
                         )
-                
-                Button{
-                    vm.send(text: self.message)
-                    self.message = ""
-                } label: {
-                    Image("EggYellow")
+                    
+                    Text("\(chat.firstName)")
+                        .font(.system(size:25))
+                        .foregroundColor(Color.gray)
                 }
+                .padding(.bottom)
                 
             }
-            .padding(.vertical, 6)
-            .padding(.horizontal)
+            
+            if matched {
+                PostMatchView(vm: vm)
+                    
+            } else {
+                MatchingView(vm:vm)
+                    .background(Color.white)
+            }
         }
+        .background(Color.chatGray)
+        .navigationBarTitleDisplayMode(.inline)
         
-        .navigationTitle(chat.firstName)
-            .navigationBarTitleDisplayMode(.inline)
-    }
-}
-
-struct SingleMessageView : View{
-    let message : ChatMessage
-    let recipientId : String
-    
-    var body: some View {
-        if message.toId == self.recipientId{
-            HStack{
-                Spacer()
-                
-                HStack{
-                    Text("\(message.text)")
-                        .foregroundColor(Color.white)
-                }
-                .padding()
-                .background(Color.primaryColor)
-                .cornerRadius(10)
-                
-            }
-            .padding(.horizontal)
-            .padding(.top, 8)
-            
-        }else {
-            HStack{
-
-                HStack{
-                    Text("\(message.text)")
-                        
-                }
-                .padding()
-                .background(Color.chatGray)
-                .cornerRadius(10)
-                
-                Spacer()
-            }
-            .padding(.horizontal)
-            .padding(.top, 8)
-            
-        }
     }
 }
 

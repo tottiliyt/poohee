@@ -23,4 +23,5 @@ extension Color {
     static let chatPink = Color(red: 254/255, green: 156/255, blue: 163/255)
     static let buttonGray = Color(red: 229/255, green: 229/255, blue: 229/255)
     static let chatGray = Color(red: 243/255, green: 243/255, blue: 243/255)
+    static let lightBlack = Color(red: 56/255, green: 56/255, blue: 56/255)
 }

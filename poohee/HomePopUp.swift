@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct PopUpView: View {
+struct HomePopUp: View {
     
     @Binding var show : Bool
     @Binding var accepted: Bool
@@ -33,10 +33,11 @@ struct PopUpView: View {
                             .font(.system(size: 35, weight: .semibold))
                             .foregroundColor(Color.white)
                             .padding()
+                            .frame(width: 200, height: 80)
+                            .background(Color.primaryColor)
+                            .clipShape(RoundedRectangle(cornerRadius: 15))
                     })
-                    .frame(width: 200, height: 80)
-                    .background(Color.primaryColor)
-                    .clipShape(RoundedRectangle(cornerRadius: 15))
+                    
                     
                 }else {
                     Text("Hey \(vm.profile?.first_name ?? ""),")
@@ -58,10 +59,11 @@ struct PopUpView: View {
                             .font(.system(size: 20, weight: .semibold))
                             .foregroundColor(Color.white)
                             .padding()
+                            .frame(width: 250, height: 60)
+                            .background(Color.primaryColor)
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
                     })
-                    .frame(width: 250, height: 60)
-                    .background(Color.primaryColor)
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    
                     
                     Button(action: {
                         show.toggle()
@@ -70,10 +72,11 @@ struct PopUpView: View {
                             .font(.system(size: 20, weight: .semibold))
                             .foregroundColor(Color.black)
                             .padding()
+                            .frame(width: 250, height: 60)
+                            .background(Color.buttonGray)
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
                     })
-                    .frame(width: 250, height: 60)
-                    .background(Color.buttonGray)
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    
                 }
                 
             }

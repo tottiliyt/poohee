@@ -1,0 +1,122 @@
+//
+//  PostMatchView.swift
+//  poohee
+//
+//  Created by Will Zhao on 4/11/22.
+//
+
+import SwiftUI
+
+struct PostMatchView: View {
+    @State var message = ""
+    @ObservedObject var vm : ChatViewModel
+    @State var cancelMatching = false
+    
+    var body: some View {
+        VStack{
+            ScrollView {
+                ScrollViewReader { scrollViewProxy in
+                    VStack {
+                        ForEach(vm.messages) { message in
+                            SingleMessageView(message: message, recipientId: vm.recipientId)
+                        }
+
+                        HStack{ Spacer() }
+                        .id("Empty")
+                    }
+                    .onReceive(vm.$count) { _ in
+                        withAnimation(.easeOut(duration: 0.5)) {
+                            scrollViewProxy.scrollTo("Empty", anchor: .bottom)
+                            print(vm.count)
+                        }
+                    }
+                }
+            }
+            .background(Color.white)
+            .onTapGesture {
+                cancelMatching = false
+            }
+            .overlay(
+                CancelMatchingButton(show: $cancelMatching)
+            )
+        
+            HStack{
+                Button{
+                    cancelMatching.toggle()
+                } label: {
+                    Image("EggYellow")
+                }
+                
+                TextField("Message", text: $message)
+                    .padding()
+                    .overlay(
+                            RoundedRectangle(cornerRadius: 14)
+                                .stroke(Color.primaryColor, lineWidth: 2)
+                        )
+                    .padding(.horizontal)
+                
+                Button{
+                    vm.send(text: self.message)
+                    self.message = ""
+                } label: {
+                    Text("Send")
+                        .foregroundColor(Color.primaryColor)
+                        .font(.system(size:20))
+                }
+                
+            }
+            .padding(.vertical, 6)
+            .padding(.horizontal)
+            .background(Color.chatGray)
+                .ignoresSafeArea()
+        }
+    }
+}
+
+struct SingleMessageView : View{
+    let message : ChatMessage
+    let recipientId : String
+    
+    var body: some View {
+        if message.toId == self.recipientId{
+            HStack{
+                Spacer()
+                
+                HStack{
+                    Text("\(message.text)")
+                        .foregroundColor(Color.white)
+                }
+                .padding()
+                .background(Color.primaryColor)
+                .cornerRadius(10)
+                
+            }
+            .padding(.horizontal)
+            .padding(.top, 8)
+            
+        }else {
+            HStack{
+
+                HStack{
+                    Text("\(message.text)")
+                        
+                }
+                .padding()
+                .background(Color.chatGray)
+                .cornerRadius(10)
+                
+                Spacer()
+            }
+            .padding(.horizontal)
+            .padding(.top, 8)
+            
+        }
+    }
+}
+
+/*struct PostMatchView_Previews: PreviewProvider {
+    static var previews: some View {
+        PostMatchView()
+    }
+}
+*/

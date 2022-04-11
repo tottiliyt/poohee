@@ -23,7 +23,7 @@ struct MessageView: View {
                 }
                 
                 if isPopUp{
-                    PopUpView(show: $isPopUp, accepted: $accepted, vm: vm)
+                    HomePopUp(show: $isPopUp, accepted: $accepted, vm: vm)
                 }
             }
     }
@@ -49,10 +49,11 @@ struct MessageView: View {
                             .foregroundColor(Color.black)
                             .font(.system(size: 25, weight: .bold))
                             .padding()
+                            .frame(width: 175, height: 60)
+                            .background()
+                            .clipShape(RoundedRectangle(cornerRadius: 20))
                     })
-                    .frame(width: 175, height: 60)
-                    .background()
-                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                    
                 }
             }
             .padding(.horizontal)
