@@ -7,10 +7,11 @@
 
 import SwiftUI
 
-struct PostMatchView: View {
+struct PostSchedulingView: View {
     @State var message = ""
     @ObservedObject var vm : ChatViewModel
     @State var cancelMatching = false
+    
     
     var body: some View {
         VStack{
@@ -18,7 +19,12 @@ struct PostMatchView: View {
                 ScrollViewReader { scrollViewProxy in
                     VStack {
                         ForEach(vm.messages) { message in
-                            SingleMessageView(message: message, recipientId: vm.recipientId)
+                            if message.stage == 0{
+                                ChatbotMessages(message: message, firstName: vm.chat.firstName)
+                            } else {
+                                SingleMessageView(message: message, recipientId: vm.recipientId)
+                            }
+                            
                         }
 
                         HStack{ Spacer() }
@@ -56,7 +62,7 @@ struct PostMatchView: View {
                     .padding(.horizontal)
                 
                 Button{
-                    vm.send(text: self.message)
+                    vm.send(text: self.message, stage: 2)
                     self.message = ""
                 } label: {
                     Text("Send")
@@ -73,12 +79,30 @@ struct PostMatchView: View {
     }
 }
 
+
+
+
 struct SingleMessageView : View{
     let message : ChatMessage
     let recipientId : String
     
     var body: some View {
-        if message.toId == self.recipientId{
+        if message.stage == 1{
+            HStack{
+
+                HStack{
+                    Text("\(message.text)")
+                        .foregroundColor(Color.white)
+                }
+                .padding()
+                .background(Color.secondaryColor)
+                .cornerRadius(10)
+                
+                Spacer()
+            }
+            .padding(.horizontal)
+            .padding(.bottom, 8)
+        } else if message.toId == self.recipientId{
             HStack{
                 Spacer()
                 
@@ -114,9 +138,9 @@ struct SingleMessageView : View{
     }
 }
 
-/*struct PostMatchView_Previews: PreviewProvider {
+struct PostMatchView_Previews: PreviewProvider {
     static var previews: some View {
-        PostMatchView()
+        HomeView()
     }
 }
-*/
+

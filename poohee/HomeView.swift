@@ -71,9 +71,9 @@ class HomeViewModel: ObservableObject {
         let uid = self.uid
         
         FirebaseManager.shared.firestore
-            .collection("recent_messages")
+            .collection("chats")
             .document(uid)
-            .collection("messages")
+            .collection("with")
             .order(by: "timestamp")
             .addSnapshotListener{ snapshot, error in
                 if let error = error{

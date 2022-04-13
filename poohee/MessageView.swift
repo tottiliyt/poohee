@@ -94,12 +94,23 @@ struct MessageView: View {
                             
                             VStack (alignment: .leading){
                                 Text("\(chat.firstName)")
-                                    .font(.system(size: 20, weight:
-                                            .semibold))
+                                    .font(.system(size: 20, weight: chat.stage == 0 ? .bold: .semibold))
                                     .foregroundColor(Color.black)
                                 Spacer()
-                                Text("\(chat.text)")
-                                    .foregroundColor(Color(.lightGray)).font(.system(size:14))
+                                
+                                if chat.stage == 0 {
+                                    Text("^^^  You have a new match!")
+                                        .fixedSize(horizontal: false, vertical: true)
+                                        .lineLimit(1)
+                                        .foregroundColor(Color.black).font(.system(size:14, weight: .semibold))
+                                        
+                                } else {
+                                    Text("\(chat.text)")
+                                        .fixedSize(horizontal: false, vertical: true)
+                                        .lineLimit(1)
+                                        .foregroundColor(Color(.lightGray)).font(.system(size:14))
+                                }
+                                
                             }
                             
                             Spacer()

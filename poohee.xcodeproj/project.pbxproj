@@ -15,9 +15,10 @@
 		51418ED528011B3E00D19CBD /* ChatMessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51418ED428011B3E00D19CBD /* ChatMessageModel.swift */; };
 		51418ED7280121D500D19CBD /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51418ED6280121D500D19CBD /* ChatView.swift */; };
 		51418ED928028CB900D19CBD /* ChatModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51418ED828028CB900D19CBD /* ChatModel.swift */; };
-		51418EDB2803A01000D19CBD /* MatchingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51418EDA2803A01000D19CBD /* MatchingView.swift */; };
-		51418EDD2803B83700D19CBD /* SchedulingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51418EDC2803B83700D19CBD /* SchedulingView.swift */; };
-		51418EDF28049AA400D19CBD /* PostMatchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51418EDE28049AA400D19CBD /* PostMatchView.swift */; };
+		51418EDB2803A01000D19CBD /* SchedulingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51418EDA2803A01000D19CBD /* SchedulingView.swift */; };
+		51418EDD2803B83700D19CBD /* SchedulingPopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51418EDC2803B83700D19CBD /* SchedulingPopUp.swift */; };
+		51418EDF28049AA400D19CBD /* PostSchedulingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51418EDE28049AA400D19CBD /* PostSchedulingView.swift */; };
+		51418EE128067C9600D19CBD /* InternalMatchingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51418EE028067C9600D19CBD /* InternalMatchingView.swift */; };
 		51CEC38027F7904100BA8267 /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51CEC37F27F7904100BA8267 /* MessageView.swift */; };
 		51CEC38327F7F01700BA8267 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 51CEC38227F7F01700BA8267 /* FirebaseAuth */; };
 		51CEC38527F7F01700BA8267 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 51CEC38427F7F01700BA8267 /* FirebaseFirestore */; };
@@ -54,9 +55,10 @@
 		51418ED428011B3E00D19CBD /* ChatMessageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessageModel.swift; sourceTree = "<group>"; };
 		51418ED6280121D500D19CBD /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
 		51418ED828028CB900D19CBD /* ChatModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatModel.swift; sourceTree = "<group>"; };
-		51418EDA2803A01000D19CBD /* MatchingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchingView.swift; sourceTree = "<group>"; };
-		51418EDC2803B83700D19CBD /* SchedulingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchedulingView.swift; sourceTree = "<group>"; };
-		51418EDE28049AA400D19CBD /* PostMatchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostMatchView.swift; sourceTree = "<group>"; };
+		51418EDA2803A01000D19CBD /* SchedulingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchedulingView.swift; sourceTree = "<group>"; };
+		51418EDC2803B83700D19CBD /* SchedulingPopUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchedulingPopUp.swift; sourceTree = "<group>"; };
+		51418EDE28049AA400D19CBD /* PostSchedulingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostSchedulingView.swift; sourceTree = "<group>"; };
+		51418EE028067C9600D19CBD /* InternalMatchingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalMatchingView.swift; sourceTree = "<group>"; };
 		51CEC37F27F7904100BA8267 /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
 		51CEC38827F7F22900BA8267 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B944F0BF27F15FCF00805A43 /* poohee.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = poohee.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -122,11 +124,12 @@
 				B9DBE8CB27F961F800F29992 /* Info.plist */,
 				B944F0C227F15FCF00805A43 /* pooheeApp.swift */,
 				B944F0C427F15FCF00805A43 /* CreateAccountView.swift */,
+				51418EE028067C9600D19CBD /* InternalMatchingView.swift */,
 				5100F02327F7F927000ABFFF /* LoginView.swift */,
 				51418ED6280121D500D19CBD /* ChatView.swift */,
-				51418EDA2803A01000D19CBD /* MatchingView.swift */,
-				51418EDE28049AA400D19CBD /* PostMatchView.swift */,
-				51418EDC2803B83700D19CBD /* SchedulingView.swift */,
+				51418EDA2803A01000D19CBD /* SchedulingView.swift */,
+				51418EDE28049AA400D19CBD /* PostSchedulingView.swift */,
+				51418EDC2803B83700D19CBD /* SchedulingPopUp.swift */,
 				51418ED228009F0A00D19CBD /* HomePopUp.swift */,
 				51CEC37F27F7904100BA8267 /* MessageView.swift */,
 				51418ECE2800051A00D19CBD /* ProfileView.swift */,
@@ -254,18 +257,19 @@
 			files = (
 				B9D2ACA527FCCCE700D71ADA /* ProfileModel.swift in Sources */,
 				B9DBE8C227F9372100F29992 /* PersonalInfoView.swift in Sources */,
+				51418EE128067C9600D19CBD /* InternalMatchingView.swift in Sources */,
 				B9DBE8C827F937DF00F29992 /* PersonalityQuestionView.swift in Sources */,
 				B9DBE8C627F937AA00F29992 /* PersonalityIntroView.swift in Sources */,
 				51418ED7280121D500D19CBD /* ChatView.swift in Sources */,
 				51CEC38027F7904100BA8267 /* MessageView.swift in Sources */,
 				51418ECD27FFE43600D19CBD /* HomeView.swift in Sources */,
 				B9DBE8BC27F8FD0100F29992 /* SurveyView.swift in Sources */,
-				51418EDB2803A01000D19CBD /* MatchingView.swift in Sources */,
+				51418EDB2803A01000D19CBD /* SchedulingView.swift in Sources */,
 				B96A1C8F27F8D30400DEBC48 /* WelcomeView.swift in Sources */,
 				B944F0C527F15FCF00805A43 /* CreateAccountView.swift in Sources */,
-				51418EDF28049AA400D19CBD /* PostMatchView.swift in Sources */,
+				51418EDF28049AA400D19CBD /* PostSchedulingView.swift in Sources */,
 				B9DBE8C427F9376C00F29992 /* SelfIdView.swift in Sources */,
-				51418EDD2803B83700D19CBD /* SchedulingView.swift in Sources */,
+				51418EDD2803B83700D19CBD /* SchedulingPopUp.swift in Sources */,
 				51418ECF2800051A00D19CBD /* ProfileView.swift in Sources */,
 				51418ED528011B3E00D19CBD /* ChatMessageModel.swift in Sources */,
 				51418ED928028CB900D19CBD /* ChatModel.swift in Sources */,
