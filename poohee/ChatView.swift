@@ -19,9 +19,13 @@ class ChatViewModel: ObservableObject {
     @Published var chat : Chat
     @Published var recipientProfile : Profile?
     @Published var profile: Profile?
+    @Published var recipientChoices = [false]
+    @Published var needMoreChoices = false
     
     let date = Date()
     let calendar = Calendar.current
+    let weekdays = ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+    let meals = ["Morning Coffee", "Lunch", "Afternoon Tea", "Dinner"]
     @Published var day = 0
     @Published var matchDay = 0
     
@@ -31,6 +35,7 @@ class ChatViewModel: ObservableObject {
         self.fetchMessages()
         self.fetchProfiles()
         self.setCurrentTime()
+        self.fetchSchedulingChoices()
     }
     
     private func setCurrentTime(){
@@ -111,14 +116,14 @@ class ChatViewModel: ObservableObject {
         
     }
     
-    func send (text: String) {
+    func send (text: String, stage: Int) {
         
         let document = FirebaseManager.shared.firestore.collection("messages")
             .document(self.uid)
             .collection(self.recipientId)
             .document()
         
-        let messageContent = ["fromId": self.uid, "toId": self.recipientId, "text":text, "timestamp": Timestamp()] as [String: Any]
+        let messageContent = ["fromId": self.uid, "toId": self.recipientId, "text":text, "timestamp": Timestamp(), "stage": stage] as [String: Any]
         
         document.setData(messageContent) { error in
             if let error = error{
@@ -140,20 +145,20 @@ class ChatViewModel: ObservableObject {
             
         }
         
-        persistRecentMessage(text: text)
+        persistRecentMessage(text: text, stage: stage)
         print(self.errorMessage)
                 
         
     }
     
-    private func persistRecentMessage(text: String) {
+    private func persistRecentMessage(text: String, stage:Int) {
         
         
-        let senderContent = ["fromId": self.uid, "toId": self.recipientId, "text":text, "timestamp": Timestamp(), "first_name": self.recipientProfile?.first_name ?? "", "profileImageUrl": self.recipientProfile?.profileImageUrl ?? ""] as [String: Any]
+        let senderContent = ["fromId": self.uid, "toId": self.recipientId, "text":text, "timestamp": Timestamp(), "first_name": self.recipientProfile?.first_name ?? "", "profileImageUrl": self.recipientProfile?.profileImageUrl ?? "", "stage": stage] as [String: Any]
         
-        let document = FirebaseManager.shared.firestore.collection("recent_messages")
+        let document = FirebaseManager.shared.firestore.collection("chats")
             .document(self.uid)
-            .collection("messages")
+            .collection("with")
             .document(self.recipientId)
         
         document.setData(senderContent) { error in
@@ -162,11 +167,11 @@ class ChatViewModel: ObservableObject {
             }
         }
         
-        let recipientContent = ["fromId": self.uid, "toId": self.recipientId, "text":text, "timestamp": Timestamp(), "first_name": self.profile?.first_name ?? "", "profileImageUrl": self.profile?.profileImageUrl ?? ""] as [String: Any]
+        let recipientContent = ["fromId": self.uid, "toId": self.recipientId, "text":text, "timestamp": Timestamp(), "first_name": self.profile?.first_name ?? "", "profileImageUrl": self.profile?.profileImageUrl ?? "", "stage" : stage] as [String: Any]
         
-        let recipientDocument = FirebaseManager.shared.firestore.collection("recent_messages")
+        let recipientDocument = FirebaseManager.shared.firestore.collection("chats")
             .document(self.recipientId)
-            .collection("messages")
+            .collection("with")
             .document(self.uid)
         
         
@@ -179,13 +184,85 @@ class ChatViewModel: ObservableObject {
         
     }
     
+    private func fetchSchedulingChoices(){
+        FirebaseManager.shared.firestore.collection("scheduling").document(self.recipientId).collection("choices").document(self.uid).addSnapshotListener { snapshot, error in
+            if let error = error {
+                self.errorMessage = "no scheduling choices found: \(error)"
+                print("Failed to fetch current user:", error)
+                return
+            }
+            
+            guard let data = snapshot?.data() else {
+                self.errorMessage = "No data found"
+                return
+
+            }
+            
+            self.recipientChoices = data["schedulingChoices"] as? [Bool] ?? [false]
+            
+        }
+    }
+    
+    func setSchedulingChoices(schedulingChoices: [Bool]) {
+        var choices = 0
+        for b in schedulingChoices{
+            if b{
+                choices += 1
+            }
+        }
+        
+        if choices <= 3 {
+            self.needMoreChoices = true
+            return
+        }
+        
+        let senderContent = ["fromId": self.uid, "toId": self.recipientId, "schedulingChoices": schedulingChoices] as [String: Any]
+        
+        let document = FirebaseManager.shared.firestore.collection("scheduling")
+            .document(self.uid)
+            .collection("choices")
+            .document(self.recipientId)
+        
+        document.setData(senderContent) { error in
+            if let error = error{
+                self.errorMessage = "Failed to save recent message into Firebase: \(error)"
+            }
+        }
+        self.needMoreChoices = false
+        
+        
+        if self.recipientChoices.count > 1 {
+            var x = -1
+            for i in 0..<16{
+                if self.recipientChoices[i] && schedulingChoices[i]{
+                    print(x)
+                    x = i
+                    break
+                }
+            }
+            if x == -1{
+                send(text: "Oops, looks like none of your availabilities match line up the next 4 days. Maybe figuring out a time to meet up next week could be your first icebreaker 😇", stage: 1)
+            } else {
+                print("got here")
+                send(text: "😇 You guys have agreed to meet on  \(weekdays[(self.matchDay + x/4 + 1) % 7]) for \(meals[x%4])! Ready to break out of the shell? Maybe first break the ice by finding out with each other a place to meet!", stage: 1)
+            }
+            
+        }
+        
+        
+        
+        
+        
+        print(self.errorMessage)
+    }
+    
 }
 
 struct ChatView: View {
     
     @State var chat : Chat
     @ObservedObject var vm : ChatViewModel
-    @State var matched = false
+    @State var scheduled = false
     
     init(chat: Chat){
         self.chat = chat
@@ -195,8 +272,8 @@ struct ChatView: View {
     var body: some View {
         
         VStack (spacing: 0){
-            Button{
-                
+            NavigationLink{
+                ProfileView()
             } label: {
                 HStack{
                     Image(systemName: "person.fill")
@@ -217,12 +294,12 @@ struct ChatView: View {
                 
             }
             
-            if matched {
-                PostMatchView(vm: vm)
-                    
+            if scheduled {
+                PostSchedulingView(vm: vm)
+            } else if vm.chat.stage == 0 {
+                SchedulingView(vm:vm, scheduled: $scheduled)
             } else {
-                MatchingView(vm:vm)
-                    .background(Color.white)
+                PostSchedulingView(vm: vm)
             }
         }
         .background(Color.chatGray)

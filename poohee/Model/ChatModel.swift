@@ -12,6 +12,8 @@ public struct Chat : Identifiable{
     
     public var id: String{documentId}
     
+    var stage : Int
+    
     var documentId, fromId, toId, text, firstName, profileImageUrl: String
     
     var timestamp: Timestamp
@@ -28,6 +30,7 @@ public struct Chat : Identifiable{
         self.toId = data["toId"] as? String ?? ""
         self.text = data["text"] as? String ?? ""
         self.timestamp = data["timestamp"] as? Timestamp ?? Timestamp(date: Date())
+        self.stage = data["stage"] as? Int ?? 2
         self.firstName = data["first_name"] as? String ?? ""
         self.profileImageUrl = data["profileImageUrl"] as? String ?? ""
     }
