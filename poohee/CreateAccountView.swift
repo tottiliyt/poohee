@@ -14,131 +14,127 @@ struct CreateAccountView: View {
     
     @State var isLogin = false
     @State var email = ""
-    @State var username = ""
     @State var password = ""
     @State var msg = ""
     @State var inVerifyView = false
     @State var verificationStage = 0
     
     var body: some View {
+        ScrollView {
+            if (inVerifyView) {
                 
-        if (inVerifyView) {
-            
-            VStack {
-                Image("logo")
-                    .resizable()
-                    .frame(width: 250, height: 250, alignment: .center)
-                    .padding(.vertical, 40)
-                
-                Text(verificationStage == 0 ? "Please check your inbox/spam" : verificationStage == 1 ? "Verification failed" : "We re-sent a link to your JHU email")
-                    .foregroundColor(Color.primaryColor)
-                    .font(.system(size: 36))
-                
-                
-                Button {
-                    resendVerificationEmail()
-                }label: {
-                    HStack{
-                    
-                            Spacer()
-                            Text("Re-send link")
-                                .foregroundColor(.black)
-                                .font(.system(size: 24))
-                            Spacer()
-
-                    }.padding(.vertical, 12)
-                        
-                        .background(Color(.init(white: 0, alpha: 0.05)))
-                        .cornerRadius(24)
-                }.padding(.top, 150)
-                
-                
-                Button {
-                    verify()
-                }label: {
-                    HStack{
-                    
-                            Spacer()
-                            Text("I have verified my JHU email")
-                                .foregroundColor(.white)
-                                .font(.system(size: 24))
-                            Spacer()
-
-                    }.padding(.vertical, 12)
-                        .background(Color.primaryColor)
-                        .cornerRadius(24)
-                }
-            }
-            .padding(.horizontal, 50)
-        }
-        else {
-            
-                VStack (){
-                    
-                    
-                    
+                VStack {
                     Image("logo")
                         .resizable()
                         .frame(width: 250, height: 250, alignment: .center)
-                        .padding(.bottom, 20)
+                        .padding(.vertical, 40)
                     
-                    Text("Create your account")
-                        .font(.title)
-                        .fontWeight(.bold)
-                        .foregroundColor(.primaryColor)
-                        .padding(.bottom, 30)
-
-
-
-                    TextField("JHU Email", text: $email)
-                        .keyboardType(.emailAddress)
-                        .autocapitalization(.none)
-                        .padding()
-                        .background(RoundedRectangle(cornerRadius: 8).stroke( Color.primaryColor))
-                        .disableAutocorrection(true)
-
-                    TextField("Username", text: $username)
-                        .keyboardType(.emailAddress)
-                        .autocapitalization(.none)
-                        .padding()
-                        .background(RoundedRectangle(cornerRadius: 8).stroke( Color.primaryColor))
-                        .disableAutocorrection(true)
-                    
-                    SecureField("Password", text: $password)
-                        .autocapitalization(.none)
-                        .padding()
-                        .background(RoundedRectangle(cornerRadius: 8).stroke( Color.primaryColor))
-                        .disableAutocorrection(true)
-                    
-                    Text(msg)
+                    Text(verificationStage == 0 ? "Please check your inbox/spam" : verificationStage == 1 ? "Verification failed" : "We re-sent a link to your JHU email")
                         .foregroundColor(Color.primaryColor)
-                        .fixedSize(horizontal: false, vertical: true)
+                        .font(.system(size: 36))
                     
                     
                     Button {
-                        createAccount()
+                        resendVerificationEmail()
                     }label: {
                         HStack{
-                            
-
+                        
                                 Spacer()
-                                Text("Send verification email")
+                                Text("Re-send link")
+                                    .foregroundColor(.black)
+                                    .font(.system(size: 24))
+                                Spacer()
+
+                        }.padding(.vertical, 12)
+                            
+                            .background(Color(.init(white: 0, alpha: 0.05)))
+                            .cornerRadius(24)
+                    }.padding(.top, 150)
+                    
+                    
+                    Button {
+                        verify()
+                    }label: {
+                        HStack{
+                        
+                                Spacer()
+                                Text("I have verified my JHU email")
                                     .foregroundColor(.white)
                                     .font(.system(size: 24))
                                 Spacer()
 
-                            
                         }.padding(.vertical, 12)
                             .background(Color.primaryColor)
                             .cornerRadius(24)
-                    }.padding(.top, 130)
-                    
-                    
+                    }
+                }
+                .padding(.horizontal, 50)
+            }
+            else {
+                
+                    VStack (){
+                        
+                        
+                        
+                        Image("logo")
+                            .resizable()
+                            .frame(width: 250, height: 250, alignment: .center)
+                            .padding(.bottom, 20)
+                        
+                        Text("Create your account")
+                            .font(.title)
+                            .fontWeight(.bold)
+                            .foregroundColor(.primaryColor)
+                            .padding(.bottom, 30)
 
-                    
-                    
-                }.padding(.horizontal, 50)
+
+
+                        TextField("JHU Email (xxxx@jh.edu)", text: $email)
+                            .keyboardType(.emailAddress)
+                            .autocapitalization(.none)
+                            .padding()
+                            .background(RoundedRectangle(cornerRadius: 8).stroke( Color.primaryColor))
+                            .disableAutocorrection(true)
+
+                        
+                        SecureField("Password", text: $password)
+                            .autocapitalization(.none)
+                            .padding()
+                            .background(RoundedRectangle(cornerRadius: 8).stroke( Color.primaryColor))
+                            .disableAutocorrection(true)
+                        
+                        Text(msg)
+                            .foregroundColor(Color.primaryColor)
+                            .fixedSize(horizontal: false, vertical: true)
+                        
+                        
+                        Button {
+                            createAccount()
+                        }label: {
+                            HStack{
+                                
+
+                                    Spacer()
+                                    Text("Send verification email")
+                                        .foregroundColor(.white)
+                                        .font(.system(size: 24))
+                                    Spacer()
+
+                                
+                            }.padding(.vertical, 12)
+                                .background(Color.primaryColor)
+                                .cornerRadius(24)
+                        }.padding(.top, 200)
+                        
+                        
+
+                        
+                        
+                    }.padding(.horizontal, 50)
+            }
         }
+                
+
             
                 
     }
@@ -150,17 +146,12 @@ struct CreateAccountView: View {
             return
         }
         
-        if (username == "") {
-            msg = "Username can't be empty"
-            return
-        }
-        
         if (password == "") {
             msg = "Password can't be empty"
             return
         }
         
-        if (!email.hasSuffix("@jh.edu")) {
+        if (!(email.hasSuffix("@jh.edu") || email.hasSuffix("@jhu.edu"))) {
             msg = "Email must end with @jh.edu"
             return
         }
@@ -252,7 +243,7 @@ struct CreateAccountView: View {
         
         print(uid)
         
-        let userData = ["email": self.email, "username": self.username, "profileImageUrl": "", "profile": [:]] as [String : Any]
+        let userData = ["email": self.email, "profile": [:], "matching": "On", "profileImageUrl": "", "num_meet": 0] as [String : Any]
         
         FirebaseManager.shared.firestore.collection("users")
             .document(uid).setData(userData) { err in

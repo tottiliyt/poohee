@@ -12,7 +12,7 @@ import SwiftUI
 struct pooheeApp: App {
     var body: some Scene {
         WindowGroup {
-            SurveyView()
+            HomeView()
         }
     }
 }

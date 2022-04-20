@@ -273,7 +273,7 @@ struct ChatView: View {
         
         VStack (spacing: 0){
             NavigationLink{
-                ProfileView()
+//                ProfileView()
             } label: {
                 HStack{
                     Image(systemName: "person.fill")

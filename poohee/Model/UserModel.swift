@@ -9,7 +9,7 @@ import Foundation
 
 public struct User {
     
-    var uid, email: String
+    var uid, email, profileImageUrl, matching: String
     var profile: Profile
-    
+    var num_meet: Int
 }

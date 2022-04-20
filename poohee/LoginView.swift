@@ -14,112 +14,197 @@ struct LoginView: View {
     @State var email = ""
     @State var password = ""
     @State var msg = ""
+    @State var forget_email = ""
     @State var inVerifyView = false
     @State var verification_fail = false
-    
-//    init() {
-//        //Use this if NavigationBarTitle is with Large Font
-//        UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: Color.primaryColor]
-//
-//    }
+    @State var inForgetPassword = false
     
     var body: some View {
-            
-        if (inVerifyView) {
-            
-            VStack {
-                Image("logo")
-                    .resizable()
-                    .frame(width: 250, height: 250, alignment: .center)
-                    .padding(.vertical, 40)
+        ScrollView {
+            if (inVerifyView) {
                 
-                Text(verification_fail ? "Verification failed" : "Please check your email inbox/spam")
-                    .foregroundColor(Color.primaryColor)
-                    .font(.system(size: 36))
-                
-                
-                
-                
-                
-                Button {
-                    verify()
-                }label: {
-                    HStack{
+                VStack {
+                    Image("logo")
+                        .resizable()
+                        .frame(width: 250, height: 250, alignment: .center)
+                        .padding(.vertical, 40)
                     
-                            Spacer()
-                            Text(verification_fail ? "Resend link" : "I have verified my JHU email")
-                                .foregroundColor(.white)
-                                .font(.system(size: 24))
-                            Spacer()
+                    Text(verification_fail ? "Verification failed" : "Please check your email inbox/spam")
+                        .foregroundColor(Color.primaryColor)
+                        .font(.system(size: 36))
+                    
+                    
+                    
+                    
+                    
+                    Button {
+                        verify()
+                    }label: {
+                        HStack{
+                        
+                                Spacer()
+                                Text(verification_fail ? "Resend link" : "I have verified my JHU email")
+                                    .foregroundColor(.white)
+                                    .font(.system(size: 24))
+                                Spacer()
 
-                    }.padding(.vertical, 12)
-                        .background(Color.primaryColor)
-                        .cornerRadius(24)
-                }.padding(.top, 150)
+                        }.padding(.vertical, 12)
+                            .background(Color.primaryColor)
+                            .cornerRadius(24)
+                    }.padding(.top, 150)
+                }
+                .padding(.horizontal, 50)
             }
-            .padding(.horizontal, 50)
-        }
-        else {
-            VStack (){
+            else {
                 
-                
-                
-                Image("logo")
-                    .resizable()
-                    .frame(width: 250, height: 250, alignment: .center)
-                    .padding(.bottom, 20)
-                
-                Text("Log in to your account")
-                    .font(.title)
-                    .fontWeight(.bold)
-                    .foregroundColor(.primaryColor)
-                    .padding(.bottom, 30)
-                    .disableAutocorrection(true)
-
-
-
-                TextField("JHU Email", text: $email)
-                    .keyboardType(.emailAddress)
-                    .autocapitalization(.none)
-                    .padding()
-                    .background(RoundedRectangle(cornerRadius: 8).stroke( Color.primaryColor))
-                    .disableAutocorrection(true)
-
-                
-                SecureField("Password", text: $password)
-                    .autocapitalization(.none)
-                    .padding()
-                    .background(RoundedRectangle(cornerRadius: 8).stroke( Color.primaryColor))
-                    .disableAutocorrection(true)
-                
-
-                Text(msg)
-                    .foregroundColor(Color.primaryColor)
-                    .fixedSize(horizontal: false, vertical: true)
-                
-                Button {
-                    login()
-                }label: {
-                    HStack{
+                if (inForgetPassword) {
+                    VStack (){
                         
+                        
+                        
+                        Image("logo")
+                            .resizable()
+                            .frame(width: 250, height: 250, alignment: .center)
+                            .padding(.bottom, 20)
+                        
+                        Text("Reset password")
+                            .font(.title)
+                            .fontWeight(.bold)
+                            .foregroundColor(.primaryColor)
+                            .padding(.bottom, 30)
+                            .disableAutocorrection(true)
 
-                            Spacer()
-                            Text("Continue")
-                                .foregroundColor(.white)
-                                .font(.system(size: 24))
-                            Spacer()
+
+
+                        TextField("JHU Email (xxxx@jh.edu)", text: $forget_email)
+                            .keyboardType(.emailAddress)
+                            .autocapitalization(.none)
+                            .padding()
+                            .background(RoundedRectangle(cornerRadius: 8).stroke( Color.primaryColor))
+                            .disableAutocorrection(true)
+                        
+                        Text(msg)
+                            .foregroundColor(Color.primaryColor)
+                            .fixedSize(horizontal: false, vertical: true)
+                        
+                        
+                        Button {
+                            sendResetPasswordLink()
+                        }label: {
+                            HStack{
+                                
+
+                                    Spacer()
+                                    Text("Send reset password link")
+                                        .foregroundColor(.white)
+                                        .font(.system(size: 24))
+                                    Spacer()
+
+                                
+                            }.padding(.vertical, 12)
+                                .background(Color.primaryColor)
+                                .cornerRadius(24)
+                        }.padding(.top, 250)
+                        
+                    }.padding(.horizontal, 50)
+                }
+                else {
+                    VStack (){
+                        
+                        
+                        
+                        Image("logo")
+                            .resizable()
+                            .frame(width: 250, height: 250, alignment: .center)
+                            .padding(.bottom, 20)
+                        
+                        Text("Log in to your account")
+                            .font(.title)
+                            .fontWeight(.bold)
+                            .foregroundColor(.primaryColor)
+                            .padding(.bottom, 30)
+                            .disableAutocorrection(true)
+
+
+
+                        TextField("JHU Email (xxxx@jh.edu)", text: $email)
+                            .keyboardType(.emailAddress)
+                            .autocapitalization(.none)
+                            .padding()
+                            .background(RoundedRectangle(cornerRadius: 8).stroke( Color.primaryColor))
+                            .disableAutocorrection(true)
 
                         
-                    }.padding(.vertical, 12)
-                        .background(Color.primaryColor)
-                        .cornerRadius(24)
-                }.padding(.top, 200)
+                        SecureField("Password", text: $password)
+                            .autocapitalization(.none)
+                            .padding()
+                            .background(RoundedRectangle(cornerRadius: 8).stroke( Color.primaryColor))
+                            .disableAutocorrection(true)
+                        
+                        
+                        Button {
+                            forget_password()
+                        }label: {
+
+                                Text("Forgot password?")
+                                .foregroundColor(Color.primaryColor)
+                                .font(.system(size: 14))
+                                .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing)
+                        
+                        }
+
+                        Text(msg)
+                            .foregroundColor(Color.primaryColor)
+                            .fixedSize(horizontal: false, vertical: true)
+                        
+                        Button {
+                            login()
+                        }label: {
+                            HStack{
+                                
+
+                                    Spacer()
+                                    Text("Continue")
+                                        .foregroundColor(.white)
+                                        .font(.system(size: 24))
+                                    Spacer()
+
+                                
+                            }.padding(.vertical, 12)
+                                .background(Color.primaryColor)
+                                .cornerRadius(24)
+                        }.padding(.top, 180)
+                        
+                    }.padding(.horizontal, 50)
+                }
                 
-            }.padding(.horizontal, 50)
+                
+            }
+                    
         }
-                
+
                 
     }
+    
+    
+    private func forget_password() {
+        inForgetPassword = true
+    }
+    
+    private func sendResetPasswordLink(){
+        
+        FirebaseManager.shared.auth.sendPasswordReset(withEmail: forget_email) { error in
+            if let error = error {
+                msg = "Failed to send reset password link, please try again"
+            } else {
+                inForgetPassword = false
+                msg = "Reset password link has been sent successfully"
+            }
+        }
+        
+
+    }
+    
     private func verify() {
         
         if (verification_fail) {
@@ -154,6 +239,8 @@ struct LoginView: View {
         }
     }
     
+    
+    
     private func login() {
         
         if (email == "") {
@@ -166,55 +253,17 @@ struct LoginView: View {
             return
         }
         
-        if (!email.hasSuffix("@jh.edu")) {
+        if (!(email.hasSuffix("@jh.edu") || email.hasSuffix("@jhu.edu"))) {
             msg = "Email must end with @jh.edu"
             return
         }
-        
-//        FirebaseManager.shared.auth.createUser(withEmail: "yuntao-li@outlook.com", password: "123qweASD") {
-//            result, error in
-//            if let error = error {
-//                print("failed to create user: \(error)")
-//            }
-//            print("account created")
-//        }
-        
-        
-        
-//        let actionCodeSettings = ActionCodeSettings()
-//        // The sign-in operation has to always be completed in the app.
-//        actionCodeSettings.handleCodeInApp = true
-//
-//        actionCodeSettings.url =
-//        URL(string: "https://yolkapps.com/email_auth")
-//
-//        actionCodeSettings.setIOSBundleID(Bundle.main.bundleIdentifier!)
-//
-//        FirebaseManager.shared.auth.sendSignInLink(toEmail: "yli346@jhu.edu",
-//                                   actionCodeSettings: actionCodeSettings) { error in
-//            if let error = error {
-//                print(error.localizedDescription)
-//              return
-//            }
-//            // The link was successfully sent. Inform the user.
-//            // Save the email locally so you don't need to ask the user for it again
-//            // if they open the link on the same device.
-//            UserDefaults.standard.set("yli346@jhu.edu", forKey: "Email")
-//            print("Check your email for link")
-//        }
         
         FirebaseManager.shared.auth.signIn(withEmail: email, password: password) {
             result, error in
             if let error = error {
                 
-                if (error.localizedDescription == "There is no user record corresponding to this identifier. The user may have been deleted.") {
-                    msg = "No account is associated with this email address"
-                }
-                else {
-                    msg = "Email or password is incorrect"
-                }
+                msg = "The email or password is incorrect"
                 
-                print(error)
                 return
             }
 

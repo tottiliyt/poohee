@@ -8,79 +8,12 @@
 import SwiftUI
 
 
-class SurveyViewModel: ObservableObject {
-    
-    @Published var uid = ""
-    
-    @Published var error_message = ""
-    
-    @Published var question_now = 0
-    
-    @Published var isCurrentlyLoggedOut = true
-    
-    @Published var isProfileFinished = false
-    
-    @Published var user: User?
-    
-    @Published var profile: Profile?
-    
-    private var db = FirebaseManager.shared.firestore
-    
-    init() {
-        
-        DispatchQueue.main.async {
-            self.isCurrentlyLoggedOut = FirebaseManager.shared.auth.currentUser?.uid == nil
-            
-            print(self.isCurrentlyLoggedOut)
-        }
-        
-        fetchCurrentUser()
-    }
-    
-    public func fetchCurrentUser(){
-        guard let uid = FirebaseManager.shared.auth.currentUser?.uid else {
-            self.error_message = "not logged in"
-            self.isCurrentlyLoggedOut = true
-            return
-        }
-        
-        self.uid = uid
-        
-        FirebaseManager.shared.firestore.collection("users").document(uid).getDocument { snapshot, error in
-            if let error = error {
-                self.error_message = "Failed to fetch current user: \(error)"
-                print("Failed to fetch current user:", error)
-                self.isCurrentlyLoggedOut = true
-                return
-            }
-
-            guard let data = snapshot?.data() else {
-                self.error_message = "No data found"
-                self.isCurrentlyLoggedOut = true
-                return
-
-            }
-            
-            let email = data["email"] as? String ?? ""
-            self.profile = Profile(uid: self.uid, data: data["profile"] as? Dictionary<String, Any> ?? [:])
-            
-            self.user = User(uid: self.uid, email: email, profile: self.profile!)
-            
-            
-            
-        }
-    }
-    
-    public func signOut() {
-        isCurrentlyLoggedOut.toggle()
-        try? FirebaseManager.shared.auth.signOut()
-    }
-}
-
 struct SurveyView: View {
     
-    @ObservedObject private var vm = SurveyViewModel()
-    @State private var createProfileStage = 5
+    @ObservedObject var vm: HomeViewModel
+    
+    
+    @State private var createProfileStage = 0
     @State private var friend = false
     @State private var career = false
     @State private var first = ""
@@ -95,9 +28,11 @@ struct SurveyView: View {
     @State private var political = "Select"
     @State private var questionnaire = [Int](repeating: 0, count: 17)
     
+    
     @State private var first_major_isExpanded = false
     @State private var second_major_isExpanded = false
     @State private var gender_isExpanded = false
+    @State private var age_isExpanded = false
     @State private var grad_isExpanded = false
     @State private var political_isExpanded = false
     @State private var religious_isExpanded = false
@@ -170,7 +105,7 @@ struct SurveyView: View {
     
     let religious_option = ["Select","Buddhist", "Christian", "Hindu", "Muslim", "Sikh","Other religion", "Unaffiliated"]
     
-    @State var question_list = [
+    @State private var question_list = [
         "I like to stick with people I know at social events",
         "I feel comfortable striking up conversations with strangers",
         "The best thing to do after an exam is PARTY",
@@ -189,127 +124,111 @@ struct SurveyView: View {
         "I watch movies for the experience not the meaning behind them",
         "Mistakes I made a long time ago still bother me"]
     
-    @State var card_x : [CGFloat] = [CGFloat](repeating: 0, count: 17)
-    @State var current_question_num = 16
-    @State var isShowingPhotoPicker = false
-    @State var image: UIImage?
-    @State var showAge = true
-    @State var showGender = true
-    @State var bio = ""
+    @State private var card_x : [CGFloat] = [CGFloat](repeating: 0, count: 17)
+    @State private var current_question_num = 16
+    @State private var isShowingPhotoPicker = false
+    @State private var image: UIImage?
+    @State private var show_class = true
+    @State private var bio = ""
     
-    @State var sportIsExpanded = true
-    @State var businessIsExpanded = false
-    @State var careerIsExpanded = false
-    @State var socialIsExpanded = false
-    @State var artIsExpanded = false
-    @State var fashionIsExpanded = false
-    @State var lifestyleIsExpanded = false
+    @State private var sportIsExpanded = true
+    @State private var businessIsExpanded = false
+    @State private var careerIsExpanded = false
+    @State private var socialIsExpanded = false
+    @State private var artIsExpanded = false
+    @State private var fashionIsExpanded = false
+    @State private var lifestyleIsExpanded = false
     
-    private var sportIndex = 0
-    private var businessIndex = 20
-    private var careerIndex = 40
-    private var socialIndex = 60
-    private var artIndex = 80
-    private var fashionIndex = 100
-    private var lifestyleIndex = 120
+    let sportIndex = 0
+    let businessIndex = 20
+    let careerIndex = 40
+    let socialIndex = 60
+    let artIndex = 80
+    let fashionIndex = 100
+    let lifestyleIndex = 120
     
     
     var body: some View {
         
         if(vm.isCurrentlyLoggedOut) {
             WelcomeView(didCompleteLoginProcess: {
+                self.vm.fetchCurrentUser()
+                self.vm.fetchRecentMessages()
                 self.vm.isCurrentlyLoggedOut = false
+                
             })
         }
+
         
-        else if (vm.isProfileFinished) {
-            
-            HomeView()
-            /*VStack{
-                Text(vm.error_message)
-                
-                Button {
-                    vm.signOut()
-                }label: {
-                    HStack{
-                            Spacer()
-                            Text("Log out")
-                                .foregroundColor(.white)
-                                .font(.system(size: 24))
-                            Spacer()
-                        
-                    }.padding(.vertical, 12)
-                        .background(Color.primaryColor)
-                        .cornerRadius(24)
-                }.padding(.top, 130)
-            }*/
-        }
         else {
-
             
-            if (createProfileStage == 0) {
-                VStack(spacing:50) {
-                    Text("What brings you to Yolk?")
-                        .foregroundColor(Color.primaryColor)
-                        .font(.system(size: 36))
-                        .padding(.bottom, 50)
-                    
-                    Button {
-                        friend.toggle()
-                    }label: {
-                        HStack{
+            ScrollView {
+                if (createProfileStage == 0) {
+                    VStack(spacing:50) {
+                        Text("What brings you to Yolk?")
+                            .foregroundColor(Color.primaryColor)
+                            .font(.system(size: 36))
+                            .padding(.bottom, 50)
+                            .padding(.top, 40)
+                            .frame(minWidth: 0, maxWidth: .infinity, alignment: .center)
                             
-
-                                Spacer()
-                                Text("Make New Friends!")
-                                    .foregroundColor(.white)
-                                    .font(.system(size: 26))
-                                Spacer()
-
-                            
-                        }.padding(.vertical, 65)
-                            .background(Color.primaryColor)
-                            .cornerRadius(15)
-                            .border(Color.orange, width: friend ? 5 : 0)
-                    }
-                    
-                    
-                    
-                    Button {
-                        career.toggle()
-                    }label: {
-                        HStack{
                         
-                                Spacer()
-                                Text("Meet Like-minded People (Career/Academic)")
-                                    .foregroundColor(.white)
-                                    .font(.system(size: 26))
-                                Spacer()
-                            
-                        }.padding(.vertical, 50)
-                            .background(Color.secondaryColor)
-                            .cornerRadius(15)
-                            .border(Color.purple, width: career ? 5 : 0)
+                        Button {
+                            friend.toggle()
+                        }label: {
+                            HStack{
+                                
+
+                                    Spacer()
+                                    Text("Make New Friends!")
+                                        .foregroundColor(.white)
+                                        .font(.system(size: 26))
+                                    Spacer()
+
+                                
+                            }.padding(.vertical, 65)
+                                .background(Color.primaryColor)
+                                .cornerRadius(15)
+                                .border(Color.orange, width: friend ? 5 : 0)
+                        }
                         
+                        
+                        
+                        Button {
+                            career.toggle()
+                        }label: {
+                            HStack{
+                            
+                                    Spacer()
+                                    Text("Meet Like-minded People (Career/Academic)")
+                                        .foregroundColor(.white)
+                                        .font(.system(size: 26))
+                                    Spacer()
+                                
+                            }.padding(.vertical, 50)
+                                .background(Color.secondaryColor)
+                                .cornerRadius(15)
+                                .border(Color.purple, width: career ? 5 : 0)
+                            
+                        }
+                        
+                        Button {
+                            nextStage()
+                        }label: {
+                            Text("> Next")
+                                .foregroundColor(Color.gray)
+                                .font(.system(size: 26))
+                        }
+                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing)
+                        .padding(.top, 100)
                     }
+                    .padding(.horizontal, 50)
                     
-                    Button {
-                        nextStage()
-                    }label: {
-                        Text("> Next")
-                            .foregroundColor(Color.gray)
-                            .font(.system(size: 26))
-                    }
-                    .padding(.leading, 250)
-                    .padding(.top, 100)
+                    
                 }
-                .padding(.horizontal, 50)
-                
-                
-            }
-            if(createProfileStage == 1) {
-                
-                ScrollView {
+                if(createProfileStage == 1) {
+                    
+
                     VStack{
                         
                         Button {
@@ -318,9 +237,10 @@ struct SurveyView: View {
                             Text("< Back")
                                 .foregroundColor(Color.gray)
                                 .font(.system(size: 26))
+                                .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                         }
-                        .padding(.trailing, 250)
-                        .padding(.bottom, 100)
+                        
+                        .padding(.bottom, 50)
                         
                         
                         Text("Tell us a little about yourself")
@@ -332,7 +252,7 @@ struct SurveyView: View {
                             Text("NAME")
                                 .foregroundColor(Color.primaryColor)
                                 .font(.system(size: 20))
-                                .padding(.trailing, 270)
+                                .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                         
                             HStack{
                                 TextField("First", text: $first)
@@ -351,14 +271,14 @@ struct SurveyView: View {
                             Text("Only your first name will be shared")
                                 .foregroundColor(Color(.init(white: 0, alpha: 0.2)))
                                 .font(.system(size: 10))
-                                .padding(.trailing, 155)
+                                .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                                 .padding(.bottom, 5)
                                 
                             Group {
                                 Text("GENDER")
                                     .foregroundColor(Color.primaryColor)
                                     .font(.system(size: 20))
-                                    .padding(.trailing, 250)
+                                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                                 
                                 DisclosureGroup("\(gender)", isExpanded: $gender_isExpanded) {
                                     ScrollView {
@@ -391,11 +311,12 @@ struct SurveyView: View {
                                     .padding(.bottom, 5)
                             }
                             
+                            
                             Group {
                                 Text("GRADUATION YEAR")
                                     .foregroundColor(Color.primaryColor)
                                     .font(.system(size: 20))
-                                    .padding(.trailing, 150)
+                                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
 
                                 DisclosureGroup("\(self.grad_year)", isExpanded: $grad_isExpanded) {
                                     ScrollView {
@@ -430,7 +351,7 @@ struct SurveyView: View {
                                 Text("FIRST MAJOR")
                                     .foregroundColor(Color.primaryColor)
                                     .font(.system(size: 20))
-                                    .padding(.trailing, 202)
+                                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                                 
                                 
                                 DisclosureGroup("\(first_major)", isExpanded: $first_major_isExpanded) {
@@ -469,7 +390,7 @@ struct SurveyView: View {
                                 Text("SECOND MAJOR")
                                     .foregroundColor(Color.primaryColor)
                                     .font(.system(size: 20))
-                                    .padding(.trailing, 175)
+                                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                                 
                                 DisclosureGroup("\(second_major)", isExpanded: $second_major_isExpanded) {
                                     ScrollView {
@@ -515,17 +436,17 @@ struct SurveyView: View {
                                 .foregroundColor(Color.gray)
                                 .font(.system(size: 26))
                         }
-                        .padding(.leading, 250)
-                        .padding(.top, 100)
+                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing)
+                        .padding(.top, 150)
                         
                     }.padding(.horizontal, 50)
+                    
+                    
+                    
                 }
-                
-                
-            }
-            if(createProfileStage == 2) {
-                
-                ScrollView {
+                if(createProfileStage == 2) {
+                    
+
                     VStack{
                         
                         Button {
@@ -535,7 +456,7 @@ struct SurveyView: View {
                                 .foregroundColor(Color.gray)
                                 .font(.system(size: 26))
                         }
-                        .padding(.trailing, 250)
+                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                         .padding(.bottom, 50)
                         
                         
@@ -546,17 +467,6 @@ struct SurveyView: View {
                         
                     
                         HStack {
-                            Text("HOBBIES")
-                                .foregroundColor(Color.primaryColor)
-                                .font(.system(size: 20))
-                            
-                            Text("(optional)")
-                                .foregroundColor(Color.gray)
-                                .font(.system(size: 10))
-                                .padding(.top, 5)
-                        }.padding(.trailing, 190)
-                        
-                        HStack {
                             Text("CAREER INTERESTS")
                                 .foregroundColor(Color.primaryColor)
                                 .font(.system(size: 20))
@@ -565,7 +475,7 @@ struct SurveyView: View {
                                 .foregroundColor(Color.gray)
                                 .font(.system(size: 10))
                                 .padding(.top, 5)
-                        }.padding(.trailing, 90)
+                        }.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                         
                         
                         Group {
@@ -761,7 +671,7 @@ struct SurveyView: View {
                                 .foregroundColor(Color.gray)
                                 .font(.system(size: 10))
                                 .padding(.top, 5)
-                        }.padding(.trailing, 50)
+                        }.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                         
                         DisclosureGroup("\(religious)", isExpanded: $religious_isExpanded) {
                             ScrollView {
@@ -802,7 +712,7 @@ struct SurveyView: View {
                                 .foregroundColor(Color.gray)
                                 .font(.system(size: 10))
                                 .padding(.top, 5)
-                        }.padding(.trailing, 50)
+                        }.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                         
                         DisclosureGroup("\(political)", isExpanded: $political_isExpanded) {
                             ScrollView {
@@ -841,140 +751,142 @@ struct SurveyView: View {
                                 .foregroundColor(Color.gray)
                                 .font(.system(size: 26))
                         }
-                        .padding(.leading, 250)
-                        .padding(.top, 100)
+                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing)
+                        .padding(.top, 120)
                         
                     }.padding(.horizontal, 50)
+                    
+                    
                 }
-                
-            }
-            if (createProfileStage == 3) {
-                
+                if (createProfileStage == 3) {
                     
-                    VStack {
-                        Button {
-                            prevStage()
-                        }label: {
-                            Text("< Back")
-                                .foregroundColor(Color.gray)
-                                .font(.system(size: 26))
-                        }
-                        .padding(.trailing, 250)
-                        .padding(.bottom, 50)
-                        
-                        Text("Nice to Meet You, \(self.first)!")
-                            .foregroundColor(Color.primaryColor)
-                            .font(.system(size: 36))
-                            .padding(.bottom, 50)
-                        
-                        
-                        Group{
-                            Text("Let’s now see who might share your unique tastes & sensibilities").foregroundColor(Color.gray)
-                                .font(.system(size: 24))
-                                .padding(.bottom, 50)
-                            
-                            HStack{
-                                Text("If you").foregroundColor(Color.gray)
-                                Text("Agree").foregroundColor(Color.primaryColor)
-                                Text("--> Swipe").foregroundColor(Color.gray)
-                                Text("Right!").foregroundColor(Color.primaryColor)
-                                
-                                
-                            }.font(.system(size: 18))
-                            
-                            HStack{
-                                Text("If you").foregroundColor(Color.gray)
-                                Text("Disagree").foregroundColor(Color.primaryColor)
-                                Text("--> Swipe").foregroundColor(Color.gray)
-                                Text("Left!").foregroundColor(Color.primaryColor)
-                            }.font(.system(size: 18))
-                        }.padding(.horizontal, 30)
-                        
-                        Image("logo")
-                            .resizable()
-                            .frame(width: 100, height: 100, alignment: .center)
-                            .padding(.vertical, 40)
-                        
-                        Button {
-                            nextStage()
-                        }label: {
-                            Text("> I'M READY")
-                                .foregroundColor(Color.primaryColor)
-                                .font(.system(size: 24))
-                        }
-                        .padding(.leading, 180)
-                        .padding(.top, 80)
-                        
-                    }.padding(.horizontal, 50)
-                    
-            }
-            if (createProfileStage == 4) {
-                
-
-                    ZStack {
-                        
-                        
-                        
-                        ForEach(0..<17, id: \.self) {i in
-                            Card(text: self.$question_list[(question_list.count-1-i)])
-                                .offset(x: self.card_x[i])
-                                .gesture(DragGesture()
-                                        .onChanged({(value) in
-                                            
-                                            self.card_x[i] = value.translation.width
-
-                                        })
-                                        .onEnded({(value) in
-                                            
-                                            if value.translation.width > 0 {
-                                                
-                                                if value.translation.width > 200 {
-                                                    self.card_x[i] = 600
-                                                    current_question_num -= 1
-                                                    
-                                                    self.questionnaire[i] = 1
-                                                } else {
-                                                    self.card_x[i] = 0
-                                                }
-                                                
-                                            } else {
-                                                if value.translation.width < -200 {
-                                                    self.card_x[i] = -600
-                                                    current_question_num -= 1
-                                                    self.questionnaire[i] = -1
-                                                } else {
-                                                    self.card_x[i] = 0
-                                                }
-                                                
-                                            }
-                                            
-                                        })
-                                )
-                        }
                         
                         VStack {
-                            
-                            if current_question_num != 16 {
+                            Button {
+                                prevStage()
+                            }label: {
                                 Text("< Back")
                                     .foregroundColor(Color.gray)
                                     .font(.system(size: 26))
-                                    .padding(.trailing, 250)
-                                    .onTapGesture{
-                                        self.card_x[current_question_num+1] = 0
-                                        current_question_num += 1
-                                        self.questionnaire[current_question_num] = 0
-                                        
-                                    }
                             }
-
+                            .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                            .padding(.bottom, 50)
+                            
+                            Text("Nice to Meet You, \(self.first)!")
+                                .foregroundColor(Color.primaryColor)
+                                .font(.system(size: 36))
+                                .padding(.bottom, 50)
+                            
+                            
+                            Group{
+                                Text("Let’s now see who might share your unique tastes & sensibilities").foregroundColor(Color.gray)
+                                    .font(.system(size: 24))
+                                    .padding(.bottom, 50)
                                 
+                                HStack{
+                                    Text("If you").foregroundColor(Color.gray)
+                                    Text("Agree").foregroundColor(Color.primaryColor)
+                                    Text("--> Swipe").foregroundColor(Color.gray)
+                                    Text("Right!").foregroundColor(Color.primaryColor)
+                                    
+                                    
+                                }.font(.system(size: 18))
+                                
+                                HStack{
+                                    Text("If you").foregroundColor(Color.gray)
+                                    Text("Disagree").foregroundColor(Color.primaryColor)
+                                    Text("--> Swipe").foregroundColor(Color.gray)
+                                    Text("Left!").foregroundColor(Color.primaryColor)
+                                }.font(.system(size: 18))
+                            }.frame(minWidth: 0, maxWidth: .infinity, alignment: .center)
                             
                             Image("logo")
                                 .resizable()
-                                .frame(width: 200, height: 200, alignment: .center)
-                                .padding(.top, 400)
+                                .frame(width: 100, height: 100, alignment: .center)
+                                .padding(.vertical, 40)
                             
-                            if current_question_num != 0{
+                            Button {
+                                nextStage()
+                            }label: {
+                                Text("> I'M READY")
+                                    .foregroundColor(Color.primaryColor)
+                                    .font(.system(size: 24))
+                            }
+                            .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing)
+                            .padding(.top, 80)
+                            
+                        }.padding(.horizontal, 50)
+                        
+                }
+                if (createProfileStage == 4) {
+                    
+
+                        ZStack {
+                            
+                            
+                            
+                            ForEach(0..<17, id: \.self) {i in
+                                Card(text: self.$question_list[(question_list.count-1-i)])
+                                    .offset(x: self.card_x[i])
+                                    .gesture(DragGesture()
+                                            .onChanged({(value) in
+                                                
+                                                self.card_x[i] = value.translation.width
+
+                                            })
+                                            .onEnded({(value) in
+                                                
+                                                if value.translation.width > 0 {
+                                                    
+                                                    if value.translation.width > 200 {
+                                                        self.card_x[i] = 600
+                                                        current_question_num -= 1
+                                                        self.questionnaire[i] = 1
+                                                    } else {
+                                                        self.card_x[i] = 0
+                                                    }
+                                                    
+                                                } else {
+                                                    if value.translation.width < -200 {
+                                                        self.card_x[i] = -600
+                                                        current_question_num -= 1
+                                                        self.questionnaire[i] = -1
+                                                    } else {
+                                                        self.card_x[i] = 0
+                                                    }
+                                                }
+                                                
+                                                if (self.current_question_num < 0) {
+                                                    nextStage()
+                                                }
+                                                
+                                            })
+                                    )
+                            }
+                            
+                            VStack {
+                                
+                                if current_question_num != 16 {
+                                    Text("< Back")
+                                        .foregroundColor(Color.gray)
+                                        .font(.system(size: 26))
+                                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                                        .onTapGesture{
+                                            self.card_x[current_question_num+1] = 0
+                                            current_question_num += 1
+                                            self.questionnaire[current_question_num] = 0
+                                            
+                                        }
+                                }
+
+                                    
+                                
+                                Image("logo")
+                                    .resizable()
+                                    .frame(width: 200, height: 200, alignment: .center)
+                                    .padding(.top, 400)
+                                
+                               
                                 Text("Skip")
                                     .font(.system(size: 26))
                                     .padding(.top, 100)
@@ -983,30 +895,34 @@ struct SurveyView: View {
                                         self.card_x[current_question_num] = 600
                                         self.questionnaire[current_question_num] = 0
                                         current_question_num -= 1
+                                        if (self.current_question_num < 0) {
+                                            nextStage()
+                                        }
                                     }
+                            
                             }
                             
-                            if current_question_num == 0{
-                                Text("> Next")
-                                    .font(.system(size: 26))
-                                    .padding(.top, 100)
-                                    .foregroundColor(Color.gray)
-                                    .onTapGesture{
-                                        nextStage()
-                                    }
-                            }
 
-                                
+                        }.padding(.horizontal, 50)
+                    
+                    
+                }
+                if (createProfileStage == 5) {
+
+                    VStack {
+                        
+                        Button {
+                            self.card_x[current_question_num+1] = 0
+                            current_question_num += 1
+                            self.questionnaire[current_question_num] = 0
+                            prevStage()
+                        }label: {
+                            Text("< Back")
+                                .foregroundColor(Color.gray)
+                                .font(.system(size: 26))
+                                .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                         }
                         
-
-                    }
-                
-                
-            }
-            if (createProfileStage == 5) {
-                ScrollView {
-                    VStack {
 
                         Text("What do you enjoy talking with your peers about? And what are your hobbies? (10 Max)")
                             .foregroundColor(Color.primaryColor)
@@ -1902,7 +1818,7 @@ struct SurveyView: View {
                                     }
                                     
                                     Button {
-                                       
+                                        
                                     }label: {
                                         HStack{
                                             Spacer()
@@ -1944,135 +1860,129 @@ struct SurveyView: View {
                             .onTapGesture{
                                 nextStage()
                             }
-                            .padding(.leading, 250)
+                            .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing)
                     }.padding(.horizontal, 50)
+                    
                 }
-            }
-            if (createProfileStage == 6) {
-                
+                if (createProfileStage == 6) {
                     
-                    
-                    VStack {
                         
                         
-                        
-                        Button {
-                            handleSubmit()
-                        } label: {
-                            HStack{
-                                    Spacer()
-                                    Text("Done")
-                                        .foregroundColor(.white)
-                                        .font(.system(size: 24))
-                                    Spacer()
+                        VStack {
 
-                                
-                            }
-                                .background(Color.primaryColor)
-                                .cornerRadius(24)
-                        }.padding(.leading, 250)
-                        
-                        
-                        Button {
-                            isShowingPhotoPicker.toggle()
-                        } label: {
-                            
-                            VStack{
-                                if let image = self.image {
-                                    Image(uiImage:image)
-                                        .resizable()
-                                        .frame(width: 128, height: 128)
-                                        .scaledToFill()
-                                        .cornerRadius(64)
-                                }
-                                else {
-                                    Image("plus_photo")
-                                        .font(.system(size: 64))
-                                        .padding()
-                                }
-                            }
-
-                        }
-                        
-                        Text("Tangya")
-                            .font(.system(size: 36))
-                            .foregroundColor(Color.primaryColor)
-                        
-                        
-                        HStack{
-                            
-                            
-                            Image("female_icon")
-                                .resizable()
-                                .frame(width: 20, height: 30)
-                                .padding(.leading, 90)
-                                .padding(.trailing, 15)
-                            
-                            Spacer()
-                            
                             Button {
-                                
+                                handleSubmit()
                             } label: {
                                 HStack{
                                         Spacer()
-                                        Text("Age 21")
+                                        Text("Done")
                                             .foregroundColor(.white)
                                             .font(.system(size: 24))
                                         Spacer()
-
-                                    
                                 }
                                     .background(Color.primaryColor)
                                     .cornerRadius(24)
-                            }.padding(.trailing, 60)
-                        }
-                        
+                                    .padding(.leading, (UIScreen.main.bounds.width*0.5))
+                            }
 
-                        Toggle("Display age", isOn: $showAge)
-                            .font(.system(size: 24))
-                            .foregroundColor(Color.primaryColor)
-                            .tint(Color.primaryColor)
-                        
-                        Toggle("Display gender", isOn: $showGender)
-                            .font(.system(size: 24))
-                            .foregroundColor(Color.primaryColor)
-                            .tint(Color.primaryColor)
-                        
-                        Text("Add a short bio about yourself")
-                            .font(.system(size: 20))
-                            .italic()
-                            .foregroundColor(Color.primaryColor)
-                            .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                            Button {
+                                isShowingPhotoPicker.toggle()
+                            } label: {
 
-                        
-                        TextEditor(text: $bio)
-                            .overlay(RoundedRectangle(cornerRadius: 10.0).strokeBorder(Color.primaryColor, style: StrokeStyle(lineWidth: 2.0)))
+                                VStack{
+                                    if let image = self.image {
+                                        Image(uiImage:image)
+                                            .resizable()
+                                            .frame(width: 180, height: 180)
+                                            .scaledToFill()
+                                            .cornerRadius(90)
+                                    }
+                                    else {
+                                        Image("plus_photo")
+                                            .font(.system(size: 64))
+                                            .padding()
+                                    }
+                                }
+
+                            }.padding(.top, 50)
+
+                            Text(self.first)
+                                .font(.system(size: 36))
+                                .foregroundColor(Color.primaryColor)
+
+
+                            HStack{
+
+                                
+                                if (self.show_class) {
+                                    Button {
+
+                                    } label: {
+                                        HStack{
+                                                Spacer()
+                                            Text(self.grad_year == "2022" ? "Senior": self.grad_year == "2023" ? "Junior" : self.grad_year == "2024" ? "Sophomore": "Freshman")
+                                                    .foregroundColor(.white)
+                                                    .font(.system(size: 24))
+                                                Spacer()
+
+
+                                        }
+                                            .background(Color.primaryColor)
+                                            .cornerRadius(24)
+                                    }.padding(.horizontal, UIScreen.main.bounds.width*0.2)
+                                }
+                                
+
+                                
+
+                            }
+
+                            Group {
+                                Toggle("Display class standing", isOn: $show_class)
+                                    .font(.system(size: 24))
+                                    .foregroundColor(Color.primaryColor)
+                                    .tint(Color.primaryColor)
+
+                                Text("Add a short bio about yourself")
+                                    .font(.system(size: 20))
+                                    .italic()
+                                    .foregroundColor(Color.primaryColor)
+                                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+
+                                
+                                TextEditor(text: $bio)
+                                    .overlay(RoundedRectangle(cornerRadius: 10.0).strokeBorder(Color.primaryColor, style: StrokeStyle(lineWidth: 2.0)))
+                                    .frame(width: UIScreen.main.bounds.width*0.8, height: UIScreen.main.bounds.height*0.2, alignment: .leading)
+
+
+                                Text("View a sample bio")
+                                    .font(.system(size: 16))
+                                    .foregroundColor(Color.gray)
+                                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+
+                                HStack {
+                                    Image("tangya_profile_pic")
+                                        .resizable()
+                                        .frame(width: 80, height: 80)
+
+                                    Spacer()
+
+                                    Text("Third-year college student daydreaming about the next start-up idea. Interested in VC, tech, and coffee. Study international affairs and economics. ")
+                                        .font(.system(size: 12))
+                                        .foregroundColor(Color.black)
+                                }
+                            }.padding(.vertical, 5)
                             
-                        Text("View a sample bio")
-                            .font(.system(size: 16))
-                            .foregroundColor(Color.gray)
-                            .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                        
-                        HStack {
-                            Image("tangya_profile_pic")
-                                .resizable()
-                                .frame(width: 80, height: 80)
                             
-                            Spacer()
+                        }.padding(.horizontal, 50)
+                            .fullScreenCover(isPresented: $isShowingPhotoPicker, onDismiss: nil) {
+                                ImagePicker(image: $image)
+                            }
                             
-                            Text("Third-year college student daydreaming about the next start-up idea. Interested in VC, tech, and coffee. Study international affairs and economics. ")
-                                .font(.system(size: 12))
-                                .foregroundColor(Color.black)
-                        }
-                        
-                    }.padding(.horizontal, 50)
-                        .fullScreenCover(isPresented: $isShowingPhotoPicker, onDismiss: nil) {
-                            ImagePicker(image: $image)
-                        }
-                        
-                        
-                
+                }
             }
+            
+
             
         }
     }
@@ -2098,39 +2008,31 @@ struct SurveyView: View {
         
         let ref = FirebaseManager.shared.firestore.collection("users").document(vm.uid)
         
-//        let storage_ref = FirebaseManager.shared.storage.reference(withPath: vm.uid)
-//        guard let imageData = self.image?.jpegData(compressionQuality: 0.5) else { return }
-//        storage_ref.putData(imageData, metadata: nil) { metadata, err in
-//            if let err = err {
-//                print("Failed to push image to Storage: \(err)")
-//                return
-//            }
-//
-//            storage_ref.downloadURL { url, err in
-//                if let err = err {
-//                    print("Failed to retrieve downloadURL: \(err)")
-//                    return
-//                }
-//
-//                ref.updateData([
-//                    "profileImageUrl": url?.absoluteString ?? ""
-//                ]) { err in
-//                    if let err = err {
-//                        print("Error updating document: \(err)")
-//                    } else {
-//                        FirebaseManager.shared.auth.currentUser?.reload() {
-//                            error in
-//                            if let error = error {
-//                                print("reload failed" + error.localizedDescription)
-//                                return
-//                            }
-//                        }
-//                    }
-//                }
-//
-//                print("Successfully stored image with url: \(url?.absoluteString ?? "")")
-//            }
-//        }
+        let storage_ref = FirebaseManager.shared.storage.reference(withPath: "profilePictures/" + vm.uid)
+        guard let imageData = self.image?.jpegData(compressionQuality: 0.5) else { return }
+        storage_ref.putData(imageData, metadata: nil) { metadata, err in
+            if let err = err {
+                print("Failed to push image to Storage: \(err)")
+                return
+            }
+
+            storage_ref.downloadURL { url, err in
+                if let err = err {
+                    print("Failed to retrieve downloadURL: \(err)")
+                    return
+                }
+
+                ref.updateData([
+                    "profileImageUrl": url?.absoluteString ?? ""
+                ]) { err in
+                    if let err = err {
+                        print("Error updating document: \(err)")
+                    }
+                }
+
+                print("Successfully stored image with url: \(url?.absoluteString ?? "")")
+            }
+        }
         
         var profile: [String: Any] = [:]
         
@@ -2146,10 +2048,11 @@ struct SurveyView: View {
         profile["hobbies"] = self.hobbies
         profile["majors"] = [self.first_major, self.second_major]
         profile["questionnaire"] = self.questionnaire
+        profile["bio"] = self.bio
+        profile["class_standing"] = self.grad_year == "2022" ? "Senior": self.grad_year == "2023" ? "Junior" : self.grad_year == "2024" ? "Sophomore": "Freshman"
+        profile["display_class"] = self.show_class
         
 
-
-        // Set the "capital" field of the city 'DC'
         ref.updateData([
             "profile": profile
         ]) { err in
@@ -2162,6 +2065,7 @@ struct SurveyView: View {
                         print("reload failed" + error.localizedDescription)
                         return
                     }
+                    vm.fetchRecentMessages()
                     vm.fetchCurrentUser()
             }
         }
@@ -2179,7 +2083,6 @@ struct Card: View {
                 .foregroundColor(Color.primaryColor)
                 .font(.system(size: 36))
                 .padding(.bottom, 300)
-                .padding(.horizontal, 50)
                 
         }.frame(
             minWidth: 0,
@@ -2189,14 +2092,11 @@ struct Card: View {
             alignment: .center
           )
           .background(Color.white)
-            
-        
     }
 }
 
-
 struct SurveyView_Previews: PreviewProvider {
     static var previews: some View {
-        SurveyView()
+        HomeView()
     }
 }
