@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import PermissionsSwiftUINotification
+import PermissionsSwiftUIPhoto
 
 
 struct SurveyView: View {
@@ -13,7 +15,7 @@ struct SurveyView: View {
     @ObservedObject var vm: HomeViewModel
     
     
-    @State private var createProfileStage = 0
+    @State private var createProfileStage = 7
     @State private var friend = false
     @State private var career = false
     @State private var first = ""
@@ -27,7 +29,7 @@ struct SurveyView: View {
     @State private var religious = "Select"
     @State private var political = "Select"
     @State private var questionnaire = [Int](repeating: 0, count: 17)
-    
+    @State private var showPushNotificationModal = false
     
     @State private var first_major_isExpanded = false
     @State private var second_major_isExpanded = false
@@ -48,6 +50,7 @@ struct SurveyView: View {
     
     
     let majors_option = ["Select",
+                         "Not Applicable",
                          "Africana Studies",
                          "Anthropology",
                          "Applied Mathematics & Statistics",
@@ -138,6 +141,8 @@ struct SurveyView: View {
     @State private var artIsExpanded = false
     @State private var fashionIsExpanded = false
     @State private var lifestyleIsExpanded = false
+    @State private var requiredmsg = ""
+    @State private var addProfileImageMsg = ""
     
     let sportIndex = 0
     let businessIndex = 20
@@ -174,7 +179,8 @@ struct SurveyView: View {
                             
                         
                         Button {
-                            friend.toggle()
+                            friend = true
+                            nextStage()
                         }label: {
                             HStack{
                                 
@@ -189,13 +195,13 @@ struct SurveyView: View {
                             }.padding(.vertical, 65)
                                 .background(Color.primaryColor)
                                 .cornerRadius(15)
-                                .border(Color.orange, width: friend ? 5 : 0)
                         }
                         
                         
                         
                         Button {
-                            career.toggle()
+                            career = true
+                            nextStage()
                         }label: {
                             HStack{
                             
@@ -208,19 +214,9 @@ struct SurveyView: View {
                             }.padding(.vertical, 50)
                                 .background(Color.secondaryColor)
                                 .cornerRadius(15)
-                                .border(Color.purple, width: career ? 5 : 0)
                             
                         }
                         
-                        Button {
-                            nextStage()
-                        }label: {
-                            Text("> Next")
-                                .foregroundColor(Color.gray)
-                                .font(.system(size: 26))
-                        }
-                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing)
-                        .padding(.top, 100)
                     }
                     .padding(.horizontal, 50)
                     
@@ -232,6 +228,8 @@ struct SurveyView: View {
                     VStack{
                         
                         Button {
+                            friend = true
+                            career = false
                             prevStage()
                         }label: {
                             Text("< Back")
@@ -293,7 +291,6 @@ struct SurveyView: View {
                                                         withAnimation{self.gender_isExpanded.toggle()}
                                                         self.gender = gender
                                                     }
-                                                    
                                             }
                                         }
                                     }.frame(height: 150)
@@ -430,7 +427,16 @@ struct SurveyView: View {
                         
                         
                         Button {
-                            nextStage()
+                            
+                            if (self.first=="" || self.last=="" || self.gender=="Select" || self.first_major=="Select" || self.second_major=="Select") {
+                                self.requiredmsg = "All fields are required"
+                            }
+                            else {
+                                nextStage()
+                                self.requiredmsg = ""
+                            }
+                            
+                            
                         }label: {
                             Text("> Next")
                                 .foregroundColor(Color.gray)
@@ -438,6 +444,9 @@ struct SurveyView: View {
                         }
                         .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing)
                         .padding(.top, 150)
+                        
+                        Text(self.requiredmsg).foregroundColor(Color.primaryColor)
+                            .font(.system(size: 20))
                         
                     }.padding(.horizontal, 50)
                     
@@ -876,6 +885,17 @@ struct SurveyView: View {
                                             current_question_num += 1
                                             self.questionnaire[current_question_num] = 0
                                             
+                                        }
+                                }
+                                
+                                if current_question_num == 16 {
+                                    Text("< Back")
+                                        .foregroundColor(Color.gray)
+                                        .font(.system(size: 26))
+                                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                                        .onTapGesture{
+                                            
+                                            prevStage()
                                         }
                                 }
 
@@ -1865,11 +1885,54 @@ struct SurveyView: View {
                     
                 }
                 if (createProfileStage == 6) {
+                    VStack {
+                        
+                        Image("logo")
+                            .resizable()
+                            .frame(width: 150, height: 150, alignment: .center)
+                            .padding(.top, 200)
+                            .padding(.bottom, 100)
+                        
+                        Text("Find out when you get matches!").font(.system(size: 28)).foregroundColor(Color.primaryColor)
+                            .padding(.bottom, 50)
+                        
+                        Button {
+                            self.showPushNotificationModal=true
+                        } label: {
+                            HStack{
+                                    Spacer()
+                                    Text("Turn on Notifications")
+                                        .foregroundColor(.white)
+                                        .font(.system(size: 24))
+                                        .padding(.vertical, 20)
+                                    Spacer()
+                            }
+                                .background(Color.primaryColor)
+                                .cornerRadius(12)
+                        }.padding(.bottom, 30)
+                            .JMModal(showModal: $showPushNotificationModal, for: [.notification, .photo], onAppear: {}, onDisappear: {nextStage()})
+                            .setPermissionComponent(for: .photo,
+                                                    description: "We want you to upload a picture of yourself")
+                            .setPermissionComponent(for: .notification,
+                                                    description: "We want to send you notification when you get matches")
+                            .changeHeaderDescriptionTo("Yolk needs certain permissions in order for all the features to work. See description for each permission")
+
+                        
+                        Text("NVM for now").font(.system(size: 18)).foregroundColor(Color.gray)
+                            .onTapGesture{
+                                nextStage()
+                            }
+                        
+                    }.padding(.horizontal, 50)
+                }
+                if (createProfileStage == 7) {
                     
                         
                         
                         VStack {
 
+                            
+                            
                             Button {
                                 handleSubmit()
                             } label: {
@@ -1884,6 +1947,11 @@ struct SurveyView: View {
                                     .cornerRadius(24)
                                     .padding(.leading, (UIScreen.main.bounds.width*0.5))
                             }
+                            
+                            Text(self.addProfileImageMsg)
+                                .foregroundColor(Color.primaryColor)
+                                .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing)
+                                .font(.system(size: 14))
 
                             Button {
                                 isShowingPhotoPicker.toggle()
@@ -1913,6 +1981,7 @@ struct SurveyView: View {
 
                             HStack{
 
+                                
                                 
                                 if (self.show_class) {
                                     Button {
@@ -2006,10 +2075,18 @@ struct SurveyView: View {
     
     private func handleSubmit() {
         
+        if (self.image == nil) {
+            self.addProfileImageMsg = "Please add a profile picture"
+            return
+        }
+        
         let ref = FirebaseManager.shared.firestore.collection("users").document(vm.uid)
         
+        
+        
         let storage_ref = FirebaseManager.shared.storage.reference(withPath: "profilePictures/" + vm.uid)
-        guard let imageData = self.image?.jpegData(compressionQuality: 0.5) else { return }
+        guard let imageData = (self.image ?? UIImage(named: "logo"))?.jpegData(compressionQuality: 0.5) else { return }
+        
         storage_ref.putData(imageData, metadata: nil) { metadata, err in
             if let err = err {
                 print("Failed to push image to Storage: \(err)")
@@ -2031,45 +2108,45 @@ struct SurveyView: View {
                 }
 
                 print("Successfully stored image with url: \(url?.absoluteString ?? "")")
-            }
-        }
-        
-        var profile: [String: Any] = [:]
-        
-        profile["first_name"] = self.first
-        profile["gender"] = self.gender
-        profile["goal"] = friend ? "friend" : "career"
-        profile["graduation_year"] = self.grad_year
-        profile["last_name"] = self.last
-        profile["political"] = self.political
-        profile["religious"] = self.religious
-        
-        profile["career_interests"] = self.career_interests
-        profile["hobbies"] = self.hobbies
-        profile["majors"] = [self.first_major, self.second_major]
-        profile["questionnaire"] = self.questionnaire
-        profile["bio"] = self.bio
-        profile["class_standing"] = self.grad_year == "2022" ? "Senior": self.grad_year == "2023" ? "Junior" : self.grad_year == "2024" ? "Sophomore": "Freshman"
-        profile["display_class"] = self.show_class
-        
+                
+                var profile: [String: Any] = [:]
+                
+                profile["first_name"] = self.first
+                profile["gender"] = self.gender
+                profile["goal"] = friend ? "friend" : "career"
+                profile["graduation_year"] = self.grad_year
+                profile["last_name"] = self.last
+                profile["political"] = self.political
+                profile["religious"] = self.religious
+                
+                profile["career_interests"] = self.career_interests
+                profile["hobbies"] = self.hobbies
+                profile["majors"] = [self.first_major, self.second_major]
+                profile["questionnaire"] = self.questionnaire
+                profile["bio"] = self.bio
+                profile["class_standing"] = self.grad_year == "2022" ? "Senior": self.grad_year == "2023" ? "Junior" : self.grad_year == "2024" ? "Sophomore": "Freshman"
+                profile["display_class"] = self.show_class
+                
 
-        ref.updateData([
-            "profile": profile
-        ]) { err in
-            if let err = err {
-                print("Error updating document: \(err)")
-            } else {
-                FirebaseManager.shared.auth.currentUser?.reload() {
-                    error in
-                    if let error = error {
-                        print("reload failed" + error.localizedDescription)
-                        return
+                ref.updateData([
+                    "profile": profile
+                ]) { err in
+                    if let err = err {
+                        print("Error updating document: \(err)")
+                    } else {
+                        FirebaseManager.shared.auth.currentUser?.reload() {
+                            error in
+                            if let error = error {
+                                print("reload failed" + error.localizedDescription)
+                                return
+                            }
+                            vm.fetchRecentMessages()
+                            vm.fetchCurrentUser()
                     }
-                    vm.fetchRecentMessages()
-                    vm.fetchCurrentUser()
+                }
+            }
             }
         }
-    }
         
     }
 

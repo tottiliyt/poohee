@@ -16,6 +16,7 @@ class HomeViewModel: ObservableObject {
     @Published var user: User?
     @Published var profile: Profile?
     @Published var chats = [Chat]()
+    @Published var profile_img_url = ""
     
     init() {
         
@@ -27,6 +28,25 @@ class HomeViewModel: ObservableObject {
         fetchCurrentUser()
 
         fetchRecentMessages()
+    }
+    
+    public func logout() {
+        
+        do {
+          try FirebaseManager.shared.auth.signOut()
+        
+            
+        } catch let signOutError as NSError {
+          print("Error signing out: %@", signOutError)
+        }
+        
+        self.uid = ""
+        self.errorMessage = ""
+        self.isCurrentlyLoggedOut = true
+        self.isProfileFinished = false
+        self.user = nil
+        self.profile = nil
+        self.chats = []
     }
     
     public func fetchCurrentUser(){
@@ -55,10 +75,16 @@ class HomeViewModel: ObservableObject {
             let profile_image_url = data["profileImageUrl"] as? String ?? ""
             let matching = data["matching"] as? String ?? ""
             let num_meet = data["num_meet"] as? Int ?? 0
+            
+            self.profile_img_url = data["profileImageUrl"] as? String ?? ""
+            
+            print("fetched url is \(self.profile_img_url)")
 
             if ((data["profile"] as? Dictionary<String, Any> ?? [:]).count > 0) {
                 print("user has profile uploaded")
                 self.isProfileFinished = true
+            } else {
+                self.isProfileFinished = false
             }
 
             self.profile = Profile(uid: self.uid, data: data["profile"] as? Dictionary<String, Any> ?? [:])

@@ -279,6 +279,20 @@ struct LoginView: View {
                     inVerifyView = true
                 }
                 else {
+                    guard let uid = FirebaseManager.shared.auth.currentUser?.uid else {
+                        return
+                    }
+                    guard let fcmToken = Messaging.messaging().fcmToken else { return }
+                    
+                    let ref = FirebaseManager.shared.firestore.collection("users").document(uid)
+                    
+                    ref.updateData([
+                        "fcmToken": fcmToken
+                    ]) { err in
+                        if let err = err {
+                            print("Error updating document: \(err)")
+                        }
+                    }
                     didCompleteLoginProcess()
                 }
             }

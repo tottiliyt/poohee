@@ -241,9 +241,9 @@ struct CreateAccountView: View {
             return
         }
         
-        print(uid)
+        guard let fcmToken = Messaging.messaging().fcmToken else { return }
         
-        let userData = ["email": self.email, "profile": [:], "matching": "On", "profileImageUrl": "", "num_meet": 0] as [String : Any]
+        let userData = ["email": self.email, "profile": [:], "matching": "On", "profileImageUrl": "", "num_meet": 0, "fcmToken": fcmToken] as [String : Any]
         
         FirebaseManager.shared.firestore.collection("users")
             .document(uid).setData(userData) { err in
