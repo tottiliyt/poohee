@@ -18,9 +18,12 @@ class ChatViewModel: ObservableObject {
     @Published var recipientId = ""
     @Published var chat : Chat
     @Published var recipientProfile : Profile?
+    @Published var recipientProfileImageUrl : String?
+    @Published var recipientMeetNum : Int?
     @Published var profile: Profile?
     @Published var recipientChoices = [false]
     @Published var needMoreChoices = false
+    
     
     let date = Date()
     let calendar = Calendar.current
@@ -109,6 +112,9 @@ class ChatViewModel: ObservableObject {
                 return
 
             }
+            
+            self.recipientProfileImageUrl = data["profileImageUrl"] as? String ?? ""
+            self.recipientMeetNum = data["num_meet"] as? Int ?? 0
             
             self.recipientProfile = Profile(uid: self.recipientId, data: data["profile"] as? Dictionary<String, Any> ?? [:])
             
@@ -273,7 +279,7 @@ struct ChatView: View {
         
         VStack (spacing: 0){
             NavigationLink{
-//                ProfileView()
+                OtherUserProfileView(vm: vm)
             } label: {
                 HStack{
                     Image(systemName: "person.fill")
