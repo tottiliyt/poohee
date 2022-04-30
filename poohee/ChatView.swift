@@ -148,7 +148,6 @@ class ChatViewModel: ObservableObject {
             if let error = error{
                 self.errorMessage = "Failed to save message into Firebase: \(error)"
             }
-            
         }
         
         persistRecentMessage(text: text, stage: stage)

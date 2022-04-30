@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Firebase
 
 class HomeViewModel: ObservableObject {
     
@@ -15,8 +16,11 @@ class HomeViewModel: ObservableObject {
     @Published var isProfileFinished = false
     @Published var user: User?
     @Published var profile: Profile?
+    @Published var matchProfile: Profile?
     @Published var chats = [Chat]()
     @Published var profile_img_url = ""
+    @Published var matchIsAvailable = false
+    
     
     init() {
         
@@ -26,7 +30,6 @@ class HomeViewModel: ObservableObject {
         }
         
         fetchCurrentUser()
-
         fetchRecentMessages()
     }
     
@@ -89,13 +92,43 @@ class HomeViewModel: ObservableObject {
 
             self.profile = Profile(uid: self.uid, data: data["profile"] as? Dictionary<String, Any> ?? [:])
 
-            self.user = User(uid: self.uid, email: email, profileImageUrl: profile_image_url, matching: matching, profile: self.profile!, num_meet: num_meet)
+            self.user = User(uid: self.uid, email: email, profileImageUrl: profile_image_url, matching: matching, current_match: data["current_match"] as? String ?? "", match_similarity: data["match_similarity"] as? String ?? "", available: data["available"] as? Bool ?? false, profile: self.profile!, num_meet: num_meet)
+            
+            self.fetchMatch()
+            
         }
     }
     
     public func signOut() {
         isCurrentlyLoggedOut.toggle()
         try? FirebaseManager.shared.auth.signOut()
+    }
+    
+    private func fetchMatch() {
+        guard let currentMatch = self.user?.current_match else {
+            print ("couldn't")
+            return
+        }
+        
+        FirebaseManager.shared.firestore.collection("users").document(currentMatch).addSnapshotListener { snapshot, error in
+            if let error = error {
+                self.errorMessage = "no match found: \(error)"
+                print("Failed to fetch matched user:", error)
+                return
+            }
+            
+            guard let data = snapshot?.data() else {
+                self.errorMessage = "No data found"
+                return
+
+            }
+
+            self.matchProfile = Profile(uid: currentMatch, data: data["profile"] as? Dictionary<String, Any> ?? [:])
+            
+            self.matchIsAvailable = data["available"] as? Bool ?? false
+            print ("could")
+            
+        }
     }
     
     public func fetchRecentMessages() {
@@ -135,6 +168,109 @@ class HomeViewModel: ObservableObject {
             }
         
         print (self.errorMessage)
+    }
+    
+    func match() {
+        guard let currentMatch =  self.user?.current_match else {
+            return
+        }
+        
+        let document = FirebaseManager.shared.firestore.collection("messages")
+            .document(self.uid)
+            .collection(currentMatch)
+            .document()
+        
+        let senderContent = ["fromId": self.uid, "toId": currentMatch, "text": self.user?.match_similarity ?? "", "timestamp": Timestamp(), "stage": 0] as [String: Any]
+        
+        let recipientContent = ["fromId": currentMatch, "toId": self.uid, "text":self.user?.match_similarity ?? "", "timestamp": Timestamp(), "stage": 0] as [String: Any]
+        
+        document.setData(senderContent) { error in
+            if let error = error{
+                self.errorMessage = "Failed to save message into Firebase: \(error)"
+            }
+            
+        }
+        
+        let recipientDocument = FirebaseManager.shared.firestore.collection("messages")
+            .document(currentMatch)
+            .collection(self.uid)
+            .document()
+        
+        recipientDocument.setData(recipientContent) { error in
+            if let error = error{
+                self.errorMessage = "Failed to save message into Firebase: \(error)"
+            }
+            
+        }
+        
+        persistRecentMessage(text: self.user?.match_similarity ?? "", stage: 0, currentMatch: currentMatch)
+        print(self.errorMessage)
+                
+        
+    }
+    
+    private func persistRecentMessage(text: String, stage:Int, currentMatch: String) {
+        
+        
+        let senderContent = ["fromId": self.uid, "toId": currentMatch, "text":text, "timestamp": Timestamp(), "first_name": self.matchProfile?.first_name ?? "", "profileImageUrl": self.matchProfile?.profileImageUrl ?? "", "stage": stage] as [String: Any]
+        
+        let document = FirebaseManager.shared.firestore.collection("chats")
+            .document(self.uid)
+            .collection("with")
+            .document(currentMatch)
+        
+        document.setData(senderContent) { error in
+            if let error = error{
+                self.errorMessage = "Failed to save recent message into Firebase: \(error)"
+            }
+        }
+        
+        let recipientContent = ["fromId": currentMatch, "toId": self.uid, "text":text, "timestamp": Timestamp(), "first_name": self.profile?.first_name ?? "", "profileImageUrl": self.profile?.profileImageUrl ?? "", "stage" : stage] as [String: Any]
+        
+        let recipientDocument = FirebaseManager.shared.firestore.collection("chats")
+            .document(currentMatch)
+            .collection("with")
+            .document(self.uid)
+        
+        
+        
+        recipientDocument.setData(recipientContent) { error in
+            if let error = error{
+                self.errorMessage = "Failed to save message into Firebase: \(error)"
+            }
+        }
+        
+    }
+    
+    func updateMatching(){
+        let ref = FirebaseManager.shared.firestore.collection("users").document(self.uid)
+        if (self.user?.matching == "On") {
+            
+            self.user?.matching = "Off"
+            ref.updateData([
+                "matching": "Off"
+            ]) { err in
+                if let err = err {
+                    print("Error updating document: \(err)")
+                } else {
+                    
+                    self.fetchCurrentUser()
+                }
+            }
+        }
+        else {
+            self.user?.matching = "On"
+            ref.updateData([
+                "matching": "On"
+            ]) { err in
+                if let err = err {
+                    print("Error updating document: \(err)")
+                } else {
+                    
+                    self.fetchCurrentUser()
+                }
+            }
+        }
     }
 }
 

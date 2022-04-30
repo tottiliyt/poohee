@@ -13,6 +13,19 @@ struct HomePopUp: View {
     @Binding var accepted: Bool
     @ObservedObject var vm : HomeViewModel
     
+    private func updateAvailability(available: Bool){
+        let ref = FirebaseManager.shared.firestore.collection("users").document(vm.uid)
+        ref.updateData([
+            "available": available
+        ]) { err in
+            if let err = err {
+                print("Error updating document: \(err)")
+            }
+        }
+        
+    }
+    
+    
     var body: some View {
         
         ZStack{
@@ -53,7 +66,14 @@ struct HomePopUp: View {
                         .padding(.horizontal)
                     
                     Button(action: {
-                        accepted.toggle()
+                        if vm.matchIsAvailable {
+                            print("asdasdasdasd")
+                            vm.match()
+                        } else {
+                            accepted.toggle()
+                            updateAvailability(available: true)
+                        }
+                        
                     }, label: {
                         Text("Yes, I'd love to")
                             .font(.system(size: 20, weight: .semibold))
@@ -66,6 +86,7 @@ struct HomePopUp: View {
                     
                     
                     Button(action: {
+                        updateAvailability(available: false)
                         show.toggle()
                     }, label: {
                         Text("Too busy, I'll pass")

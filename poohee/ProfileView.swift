@@ -57,7 +57,7 @@ struct ProfileView: View {
                             }
                             
                             Button {
-                                updateMatching()
+                                vm.updateMatching()
                             } label: {
                                 HStack{
                                         Spacer()
@@ -331,36 +331,6 @@ struct ProfileView: View {
         }
     }
     
-    private func updateMatching(){
-        let ref = FirebaseManager.shared.firestore.collection("users").document(vm.uid)
-        if (vm.user?.matching == "On") {
-            
-            vm.user?.matching = "Off"
-            ref.updateData([
-                "matching": "Off"
-            ]) { err in
-                if let err = err {
-                    print("Error updating document: \(err)")
-                } else {
-                    
-                    vm.fetchCurrentUser()
-                }
-            }
-        }
-        else {
-            vm.user?.matching = "On"
-            ref.updateData([
-                "matching": "On"
-            ]) { err in
-                if let err = err {
-                    print("Error updating document: \(err)")
-                } else {
-                    
-                    vm.fetchCurrentUser()
-                }
-            }
-        }
-    }
 }
 
 

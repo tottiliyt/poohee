@@ -10,7 +10,6 @@ import SwiftUI
 struct PostSchedulingView: View {
     @State var message = ""
     @ObservedObject var vm : ChatViewModel
-    @State var cancelMatching = false
     
     
     var body: some View {
@@ -39,20 +38,8 @@ struct PostSchedulingView: View {
                 }
             }
             .background(Color.white)
-            .onTapGesture {
-                cancelMatching = false
-            }
-            .overlay(
-                CancelMatchingButton(show: $cancelMatching)
-            )
-        
+
             HStack{
-                Button{
-                    cancelMatching.toggle()
-                } label: {
-                    Image("EggYellow")
-                }
-                
                 TextField("Message", text: $message)
                     .padding()
                     .overlay(
