@@ -188,7 +188,7 @@ struct SurveyView: View {
                                     Spacer()
                                     Text("Make New Friends!")
                                         .foregroundColor(.white)
-                                        .font(.system(size: 26))
+                                        .font(.system(size: 28))
                                     Spacer()
 
                                 
@@ -206,9 +206,9 @@ struct SurveyView: View {
                             HStack{
                             
                                     Spacer()
-                                    Text("Meet Like-minded People (Career/Academic)")
+                                    Text("Meet Summer Buddies!")
                                         .foregroundColor(.white)
-                                        .font(.system(size: 26))
+                                        .font(.system(size: 28))
                                     Spacer()
                                 
                             }.padding(.vertical, 50)
@@ -223,22 +223,20 @@ struct SurveyView: View {
                     
                 }
                 if(createProfileStage == 1) {
-                    
+                    Button {
+                        friend = true
+                        career = false
+                        prevStage()
+                    }label: {
+                        Text("< Back")
+                            .foregroundColor(Color.gray)
+                            .font(.system(size: 26))
+                            .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                    }
+                    .padding()
 
                     VStack{
                         
-                        Button {
-                            friend = true
-                            career = false
-                            prevStage()
-                        }label: {
-                            Text("< Back")
-                                .foregroundColor(Color.gray)
-                                .font(.system(size: 26))
-                                .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                        }
-                        
-                        .padding(.bottom, 50)
                         
                         
                         Text("Tell us a little about yourself")
@@ -768,18 +766,17 @@ struct SurveyView: View {
                     
                 }
                 if (createProfileStage == 3) {
-                    
-                        
+                    Button {
+                        prevStage()
+                    }label: {
+                        Text("< Back")
+                            .foregroundColor(Color.gray)
+                            .font(.system(size: 26))
+                    }
+                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                    .padding()
                         VStack {
-                            Button {
-                                prevStage()
-                            }label: {
-                                Text("< Back")
-                                    .foregroundColor(Color.gray)
-                                    .font(.system(size: 26))
-                            }
-                            .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                            .padding(.bottom, 50)
+                            
                             
                             Text("Nice to Meet You, \(self.first)!")
                                 .foregroundColor(Color.primaryColor)
@@ -886,9 +883,7 @@ struct SurveyView: View {
                                             self.questionnaire[current_question_num] = 0
                                             
                                         }
-                                }
-                                
-                                if current_question_num == 16 {
+                                } else{
                                     Text("< Back")
                                         .foregroundColor(Color.gray)
                                         .font(.system(size: 26))

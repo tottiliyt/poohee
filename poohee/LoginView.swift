@@ -27,48 +27,42 @@ struct LoginView: View {
                     Image("logo")
                         .resizable()
                         .frame(width: 250, height: 250, alignment: .center)
-                        .padding(.vertical, 40)
+                        .padding(.vertical)
                     
                     Text(verification_fail ? "Verification failed" : "Please check your email inbox/spam")
                         .foregroundColor(Color.primaryColor)
                         .font(.system(size: 36))
-                    
-                    
-                    
+                        .padding(.vertical)
+                        .padding(.bottom)
                     
                     
                     Button {
                         verify()
                     }label: {
                         HStack{
-                        
-                                Spacer()
                                 Text(verification_fail ? "Resend link" : "I have verified my JHU email")
                                     .foregroundColor(.white)
-                                    .font(.system(size: 24))
-                                Spacer()
+                                    .font(.system(size: 30))
 
-                        }.padding(.vertical, 12)
+                        }.padding()
                             .background(Color.primaryColor)
                             .cornerRadius(24)
-                    }.padding(.top, 150)
+                    }
                 }
-                .padding(.horizontal, 50)
+                .padding(.horizontal)
+                .padding()
             }
             else {
                 
                 if (inForgetPassword) {
-                    VStack (){
-                        
-                        
-                        
+                    VStack{
                         Image("logo")
                             .resizable()
                             .frame(width: 250, height: 250, alignment: .center)
                             .padding(.bottom, 20)
                         
                         Text("Reset password")
-                            .font(.title)
+                            .font(.system(size: 35))
                             .fontWeight(.bold)
                             .foregroundColor(.primaryColor)
                             .padding(.bottom, 30)
@@ -83,46 +77,44 @@ struct LoginView: View {
                             .background(RoundedRectangle(cornerRadius: 8).stroke( Color.primaryColor))
                             .disableAutocorrection(true)
                         
-                        Text(msg)
-                            .foregroundColor(Color.primaryColor)
-                            .fixedSize(horizontal: false, vertical: true)
+                        ZStack{
+                            Text("\n")
+                                .foregroundColor(Color.white)
+                            
+                            Text(msg)
+                                .foregroundColor(Color.primaryColor)
+                            
+                            
+                        }
+                        .padding(.bottom)
                         
                         
                         Button {
                             sendResetPasswordLink()
                         }label: {
-                            HStack{
-                                
-
-                                    Spacer()
-                                    Text("Send reset password link")
-                                        .foregroundColor(.white)
-                                        .font(.system(size: 24))
-                                    Spacer()
-
-                                
-                            }.padding(.vertical, 12)
+                            Text("Send reset password link")
+                                .foregroundColor(.white)
+                                .font(.system(size: 20))
+                                .padding()
                                 .background(Color.primaryColor)
-                                .cornerRadius(24)
-                        }.padding(.top, 250)
+                                .cornerRadius(15)
+                        }
                         
                     }.padding(.horizontal, 50)
                 }
                 else {
-                    VStack (){
-                        
-                        
+                    VStack{
                         
                         Image("logo")
                             .resizable()
                             .frame(width: 250, height: 250, alignment: .center)
                             .padding(.bottom, 20)
                         
-                        Text("Log in to your account")
-                            .font(.title)
+                        Text("Sign in to your account")
+                            .font(.system(size: 35))
                             .fontWeight(.bold)
                             .foregroundColor(.primaryColor)
-                            .padding(.bottom, 30)
+                            .padding(.bottom)
                             .disableAutocorrection(true)
 
 
@@ -156,15 +148,16 @@ struct LoginView: View {
                         Text(msg)
                             .foregroundColor(Color.primaryColor)
                             .fixedSize(horizontal: false, vertical: true)
+                            .padding(.bottom)
+                        
+                        Spacer()
                         
                         Button {
                             login()
                         }label: {
                             HStack{
-                                
-
                                     Spacer()
-                                    Text("Continue")
+                                    Text("Sign In")
                                         .foregroundColor(.white)
                                         .font(.system(size: 24))
                                     Spacer()
@@ -173,7 +166,7 @@ struct LoginView: View {
                             }.padding(.vertical, 12)
                                 .background(Color.primaryColor)
                                 .cornerRadius(24)
-                        }.padding(.top, 180)
+                        }
                         
                     }.padding(.horizontal, 50)
                 }

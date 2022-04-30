@@ -73,18 +73,18 @@ struct ProfileView: View {
                                 .background(vm.user?.matching == "On" ? Color.primaryColor : Color.secondaryColor)
                                     .cornerRadius(12)
                             }
-                        }.padding(.bottom, 50)
+                        }.padding(.bottom)
                         
                         
                         WebImage(url: imageURL)
                             .resizable()
                             .scaledToFill()
-                            .frame(width: 200, height: 200)
+                            .frame(width: 120, height: 120)
                             .clipped()
                             .cornerRadius(200)
                             .onReceive(vm.$profile_img_url) { _ in
                                 loadImageFromFirebase()
-                            }.padding(.bottom, 20)
+                            }
                             
                         
 
@@ -193,98 +193,117 @@ struct ProfileView: View {
                                 
                             }
                             
-                            Text("Bio")
-                                .font(.system(size: 24))
-                                .bold()
-                                .foregroundColor(Color.primaryColor)
-                                .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                            VStack (spacing: 7) {
+                                Text("Bio")
+                                    .font(.system(size: 24))
+                                    .bold()
+                                    .foregroundColor(Color.primaryColor)
+                                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
 
-                            HStack{
-                                
+                                HStack (){
+                                    
 
-                                    Spacer()
-                                    Text(vm.profile?.bio ?? "")
-                                        .font(.system(size: 16))
-                                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                                        
-                                        .padding()
-                                        .overlay(
-                                        RoundedRectangle(cornerRadius: 20)
-                                            .stroke(Color.primaryColor, lineWidth: 2)
-                                        )
-                                    Spacer()
+                                        Spacer()
+                                        Text(vm.profile?.bio ?? "")
+                                            .font(.system(size: 16))
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            
+                                            .padding()
+                                            .overlay(
+                                            RoundedRectangle(cornerRadius: 20)
+                                                .stroke(Color.primaryColor, lineWidth: 2)
+                                            )
+                                        Spacer()
 
-                                
+                                    
+                                }
                             }
                             
-                            HStack {
-                                Text("Goal")
-                                    .font(.system(size: 24))
-                                    .foregroundColor(Color.primaryColor)
+                            VStack (spacing: 7) {
+                                HStack {
+                                    Text("Goal")
+                                        .font(.system(size: 24))
+                                        .bold()
+                                        .foregroundColor(Color.primaryColor)
 
-                                Text("(Click to change)")
-                                    .font(.system(size: 12))
-                                    .foregroundColor(Color.gray)
+                                    Text("(Click to change)")
+                                        .font(.system(size: 12))
+                                        .foregroundColor(Color.gray)
 
-                            }                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                            
-                            HStack {
-                                Button {
-                                    if (vm.profile?.goal == "career") {
-                                        updateGoal()
-                                    }
-                                    
-                                }label: {
-                                    HStack{
+                                }                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                                
+                                HStack {
+                                    Button {
+                                        if (vm.profile?.goal == "career") {
+                                            updateGoal()
+                                        }
                                         
-
+                                    }label: {
+                                        HStack {
                                             Spacer()
-                                            Text("Make New Friends!")
-                                                .foregroundColor(vm.profile?.goal == "friend" ? .white : .gray)
-                                                .font(.system(size: 15))
-                                            Spacer()
+                                            VStack{
+                                                    Text("Make New")
+                                                        .foregroundColor(vm.profile?.goal == "friend" ? .white : .gray)
+                                                        .font(.system(size: 15))
+                                                Text("Friends!")
+                                                    .foregroundColor(vm.profile?.goal == "friend" ? .white : .gray)
+                                                    .font(.system(size: 15))
 
-                                        
-                                    }.padding(.vertical, 25)
+                                                
+                                            }
+                                            Spacer()
+                                        }
+                                        .padding()
                                         .background(vm.profile?.goal == "friend" ? Color.primaryColor : Color.buttonGray)
                                         .cornerRadius(15)
-                                }
-                                
-                                Spacer()
-                                Spacer()
-                                
-                                Button {
-                                    if (vm.profile?.goal == "friend") {
-                                        updateGoal()
                                     }
-                                }label: {
-                                    HStack{
                                     
+                                    
+                                    Button {
+                                        if (vm.profile?.goal == "friend") {
+                                            updateGoal()
+                                        }
+                                    }label: {
+                                        HStack{
                                             Spacer()
-                                            Text("Meet Like-minded People (Career/Academic)")
-                                            .foregroundColor(vm.profile?.goal == "career" ? .white : .gray)
-                                                .font(.system(size: 10))
+                                            VStack{
+                                                Text("Meet Summer")
+                                                .foregroundColor(vm.profile?.goal == "career" ? .white : .gray)
+                                                .font(.system(size: 15))
+                                                
+                                                Text("Buddies")
+                                                .foregroundColor(vm.profile?.goal == "career" ? .white : .gray)
+                                                .font(.system(size: 15))
+
+                                                    
+                                                    
+                                                
+                                            }
                                             Spacer()
-                                        
-                                    }.padding(.vertical, 20)
+                                        }
+                                        .padding()
                                         .background(vm.profile?.goal == "career" ? Color.secondaryColor : Color.buttonGray)
                                         .cornerRadius(15)
+                                        
+                                    }
+                                    
+                                    
                                     
                                 }
-                                
-                                
-                                
                             }
                             
-                        
                             
-
                         }
                         
+                        Image("logo")
+                            .resizable()
+                            .frame(width: 80, height: 80)
                         
                         
 
-                    }.padding(.horizontal, 30)
+                    }
+                    .padding(.horizontal, 30)
+                    
                        
                 }
             }

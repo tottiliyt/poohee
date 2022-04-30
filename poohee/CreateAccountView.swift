@@ -49,7 +49,8 @@ struct CreateAccountView: View {
                             
                             .background(Color(.init(white: 0, alpha: 0.05)))
                             .cornerRadius(24)
-                    }.padding(.top, 150)
+                    }
+                    .padding(.vertical)
                     
                     
                     Button {
@@ -103,9 +104,16 @@ struct CreateAccountView: View {
                             .background(RoundedRectangle(cornerRadius: 8).stroke( Color.primaryColor))
                             .disableAutocorrection(true)
                         
-                        Text(msg)
-                            .foregroundColor(Color.primaryColor)
-                            .fixedSize(horizontal: false, vertical: true)
+                        ZStack{
+                            Text("\n")
+                                .foregroundColor(Color.white)
+                            
+                            Text(msg)
+                                .foregroundColor(Color.primaryColor)
+                            
+                            
+                        }
+                        .padding(.bottom)
                         
                         
                         Button {
@@ -124,7 +132,7 @@ struct CreateAccountView: View {
                             }.padding(.vertical, 12)
                                 .background(Color.primaryColor)
                                 .cornerRadius(24)
-                        }.padding(.top, 200)
+                        }
                         
                         
 

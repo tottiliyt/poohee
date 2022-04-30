@@ -249,7 +249,7 @@ class ChatViewModel: ObservableObject {
                 send(text: "Oops, looks like none of your availabilities match line up the next 4 days. Maybe figuring out a time to meet up next week could be your first icebreaker 😇", stage: 1)
             } else {
                 print("got here")
-                send(text: "😇 You guys have agreed to meet on  \(weekdays[(self.matchDay + x/4 + 1) % 7]) for \(meals[x%4])! Ready to break out of the shell? Maybe first break the ice by finding out with each other a place to meet!", stage: 1)
+                send(text: "😇 You guys have agreed to meet on  \(weekdays[(self.matchDay + x/4 + 1) % 7]) for \(meals[x%4])! You can now message each other freely. Be the first to break the ice by finding out with each other a place to meet!", stage: 1)
             }
             
         }

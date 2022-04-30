@@ -16,10 +16,10 @@ struct WelcomeView: View {
         NavigationView{
 
                 VStack(){
-                    Text("Ready to break out of your shell?").font(.system(size: 56)).foregroundColor(Color.primaryColor)
+                    Text("Ready to break out of your shell?").font(.system(size: 45)).foregroundColor(Color.primaryColor)
                     Image("logo")
                         .resizable()
-                        .frame(width: 250, height: 250, alignment: .center)
+                        .frame(width: 180, height: 180, alignment: .center)
                         .padding(.vertical, 40)
                     
                     Button {

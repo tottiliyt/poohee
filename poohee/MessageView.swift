@@ -18,6 +18,7 @@ struct MessageView: View {
             ZStack{
                 VStack(spacing:0){
                         topBar
+                        .padding(.horizontal)
                         messageQueue
                 }
                 
@@ -30,60 +31,68 @@ struct MessageView: View {
     private var topBar: some View {
         VStack{
             ZStack{
-                RoundedRectangle(cornerRadius: 25, style: .continuous)
+                /*RoundedRectangle(cornerRadius: 25, style: .continuous)
                                 .fill(Color.primaryColor)
-                                .frame(width: 380, height: 250, alignment: .center)
+                                .frame(width: 380, height: 250, alignment: .center)*/
                 
-                if !(vm.user?.new_match ?? false){
-                    if self.vm.user?.matching == "On"{
-                        VStack (alignment: .center){
-                            Text("Hey \(vm.profile?.first_name ?? ""), We are working hard to find your next best friend!" )
-                                .font(.system(size: 30, weight: .bold))
-                                .padding()
-                                .padding()
+                HStack{
+                    Spacer()
+                    if !(vm.user?.new_match ?? false){
+                        if self.vm.user?.matching == "On"{
+                            Text("Hey \(vm.profile?.first_name ?? ""), we are working hard to find your next best friend!" )
+                                    .font(.system(size: 30, weight: .bold))
+                                    .padding()
                             
+                        } else {
+                            VStack (alignment: .center){
+                                Text("Your matching is currently paused")
+                                    .font(.system(size: 30, weight: .bold))
+                                Button(action: {
+                                    vm.updateMatching()
+                                }, label: {
+                                    
+                                    Text("Resume")
+                                        .foregroundColor(Color.black)
+                                        .font(.system(size: 30, weight: .bold))
+                                        .padding()
+                                        .background()
+                                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                                })
+                                .padding(.horizontal)
+                            }
+                            .padding(.vertical)
                         }
+                        
                     } else {
-                        VStack (alignment: .center, spacing: 20){
-                            Text("Your matching is currently paused")
+                        VStack (alignment: .center){
+                            Text("\(vm.profile?.first_name ?? ""),you have a new match!")
                                 .font(.system(size: 30, weight: .bold))
                             
                             Button(action: {
-                                vm.updateMatching()
+                                withAnimation{
+                                    isPopUp.toggle()
+                                }
                             }, label: {
                                 
-                                Text("Resume Matching")
+                                Text("Check")
                                     .foregroundColor(Color.black)
-                                    .font(.system(size: 25, weight: .bold))
+                                    .font(.system(size: 30, weight: .bold))
                                     .padding()
+                                    .frame(width: 175, height: 60)
                                     .background()
                                     .clipShape(RoundedRectangle(cornerRadius: 20))
                             })
-                        }
-                    }
-                    
-                } else {
-                    VStack (alignment: .center, spacing: 20){
-                        Text("\(vm.profile?.first_name ?? ""), you have a new potential match!")
-                            .font(.system(size: 30, weight: .bold))
-                        
-                        Button(action: {
-                            withAnimation{
-                                isPopUp.toggle()
-                            }
-                        }, label: {
                             
-                            Text("Check")
-                                .foregroundColor(Color.black)
-                                .font(.system(size: 25, weight: .bold))
-                                .padding()
-                                .frame(width: 175, height: 60)
-                                .background()
-                                .clipShape(RoundedRectangle(cornerRadius: 20))
-                        })
-                        
+                        }
+                        .padding(.vertical)
                     }
+                        
+                    Spacer()
                 }
+                .padding()
+                .background(Color.primaryColor)
+                .cornerRadius(20)
+                
                 
             }
             .padding(.horizontal)

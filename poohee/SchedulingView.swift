@@ -108,7 +108,7 @@ struct ChatbotMessages: View {
             .padding(.bottom, 9)
             
             HStack{
-                Text("😎 You guys are both\(self.message.text)")
+                Text("😎 You guys are both \n\(self.message.text)")
                 .foregroundColor(Color.white)
                 .padding()
                 .background(Color.secondaryColor)

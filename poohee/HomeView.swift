@@ -61,7 +61,7 @@ class HomeViewModel: ObservableObject {
 
         self.uid = uid
 
-        FirebaseManager.shared.firestore.collection("users").document(uid).getDocument { snapshot, error in
+        FirebaseManager.shared.firestore.collection("users").document(uid).addSnapshotListener { snapshot, error in
             if let error = error {
                 self.errorMessage = "Failed to fetch current user: \(error)"
                 print("Failed to fetch current user:", error)
