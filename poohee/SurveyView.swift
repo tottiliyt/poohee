@@ -15,7 +15,7 @@ struct SurveyView: View {
     @ObservedObject var vm: HomeViewModel
     
     
-    @State private var createProfileStage = 7
+    @State private var createProfileStage = 0
     @State private var friend = false
     @State private var career = false
     @State private var first = ""
@@ -256,13 +256,13 @@ struct SurveyView: View {
                                 TextField("First", text: $first)
                                     .font(.system(size: 18))
                                     .multilineTextAlignment(.center)
-                                .background(Color(.init(white: 0, alpha: 0.05)).ignoresSafeArea())
+                                .background(Color(.init(white: 0, alpha: 0.05)))
                                 .cornerRadius(10)
                                 
                                 TextField("Last", text: $last)
                                     .font(.system(size: 18))
                                     .multilineTextAlignment(.center)
-                                .background(Color(.init(white: 0, alpha: 0.05)).ignoresSafeArea())
+                                .background(Color(.init(white: 0, alpha: 0.05)))
                                 .cornerRadius(10)
                             }
                             
@@ -795,18 +795,18 @@ struct SurveyView: View {
                                 HStack{
                                     Text("If you").foregroundColor(Color.gray)
                                     Text("Agree").foregroundColor(Color.primaryColor)
-                                    Text("--> Swipe").foregroundColor(Color.gray)
+                                    Text("Swipe").foregroundColor(Color.gray)
                                     Text("Right!").foregroundColor(Color.primaryColor)
                                     
                                     
-                                }.font(.system(size: 18))
+                                }.font(.system(size: 25))
                                 
                                 HStack{
                                     Text("If you").foregroundColor(Color.gray)
                                     Text("Disagree").foregroundColor(Color.primaryColor)
-                                    Text("--> Swipe").foregroundColor(Color.gray)
+                                    Text("Swipe").foregroundColor(Color.gray)
                                     Text("Left!").foregroundColor(Color.primaryColor)
-                                }.font(.system(size: 18))
+                                }.font(.system(size: 25))
                             }.frame(minWidth: 0, maxWidth: .infinity, alignment: .center)
                             
                             Image("logo")
