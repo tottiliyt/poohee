@@ -110,25 +110,28 @@ class HomeViewModel: ObservableObject {
             return
         }
         
-        FirebaseManager.shared.firestore.collection("users").document(currentMatch).addSnapshotListener { snapshot, error in
-            if let error = error {
-                self.errorMessage = "no match found: \(error)"
-                print("Failed to fetch matched user:", error)
-                return
-            }
-            
-            guard let data = snapshot?.data() else {
-                self.errorMessage = "No data found"
-                return
+        if currentMatch != "" {
+            FirebaseManager.shared.firestore.collection("users").document(currentMatch).addSnapshotListener { snapshot, error in
+                if let error = error {
+                    self.errorMessage = "no match found: \(error)"
+                    print("Failed to fetch matched user:", error)
+                    return
+                }
+                
+                guard let data = snapshot?.data() else {
+                    self.errorMessage = "No data found"
+                    return
 
-            }
+                }
 
-            self.matchProfile = Profile(uid: currentMatch, data: data["profile"] as? Dictionary<String, Any> ?? [:])
-            
-            self.matchIsAvailable = data["available"] as? Bool ?? false
-            print ("could")
-            
+                self.matchProfile = Profile(uid: currentMatch, data: data["profile"] as? Dictionary<String, Any> ?? [:])
+                
+                self.matchIsAvailable = data["available"] as? Bool ?? false
+                print ("could")
+                
+            }
         }
+        
     }
     
     public func fetchRecentMessages() {
@@ -171,41 +174,42 @@ class HomeViewModel: ObservableObject {
     }
     
     func match() {
-        guard let currentMatch =  self.user?.current_match else {
+        guard let currentMatch = self.user?.current_match else {
             return
         }
         
-        let document = FirebaseManager.shared.firestore.collection("messages")
-            .document(self.uid)
-            .collection(currentMatch)
-            .document()
-        
-        let senderContent = ["fromId": self.uid, "toId": currentMatch, "text": self.user?.match_similarity ?? "", "timestamp": Timestamp(), "stage": 0] as [String: Any]
-        
-        let recipientContent = ["fromId": currentMatch, "toId": self.uid, "text":self.user?.match_similarity ?? "", "timestamp": Timestamp(), "stage": 0] as [String: Any]
-        
-        document.setData(senderContent) { error in
-            if let error = error{
-                self.errorMessage = "Failed to save message into Firebase: \(error)"
-            }
+        if currentMatch != "" {
+            let document = FirebaseManager.shared.firestore.collection("messages")
+                .document(self.uid)
+                .collection(currentMatch)
+                .document()
             
-        }
-        
-        let recipientDocument = FirebaseManager.shared.firestore.collection("messages")
-            .document(currentMatch)
-            .collection(self.uid)
-            .document()
-        
-        recipientDocument.setData(recipientContent) { error in
-            if let error = error{
-                self.errorMessage = "Failed to save message into Firebase: \(error)"
-            }
+            let senderContent = ["fromId": self.uid, "toId": currentMatch, "text": self.user?.match_similarity ?? "", "timestamp": Timestamp(), "stage": 0] as [String: Any]
             
-        }
-        
-        persistRecentMessage(text: self.user?.match_similarity ?? "", stage: 0, currentMatch: currentMatch)
-        print(self.errorMessage)
+            let recipientContent = ["fromId": currentMatch, "toId": self.uid, "text":self.user?.match_similarity ?? "", "timestamp": Timestamp(), "stage": 0] as [String: Any]
+            
+            document.setData(senderContent) { error in
+                if let error = error{
+                    self.errorMessage = "Failed to save message into Firebase: \(error)"
+                }
                 
+            }
+            
+            let recipientDocument = FirebaseManager.shared.firestore.collection("messages")
+                .document(currentMatch)
+                .collection(self.uid)
+                .document()
+            
+            recipientDocument.setData(recipientContent) { error in
+                if let error = error{
+                    self.errorMessage = "Failed to save message into Firebase: \(error)"
+                }
+                
+            }
+            
+            persistRecentMessage(text: self.user?.match_similarity ?? "", stage: 0, currentMatch: currentMatch)
+            print(self.errorMessage)
+        }
         
     }
     

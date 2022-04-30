@@ -56,20 +56,23 @@ struct ProfileView: View {
                                 Image("logout").resizable().frame(width: 30, height:30)
                             }
                             
+                            Spacer()
+                            
                             Button {
                                 vm.updateMatching()
                             } label: {
                                 HStack{
-                                        Spacer()
                                     Text(vm.user?.matching ?? "Off")
                                             .foregroundColor(.white)
-                                            .font(.system(size: 24))
-                                        Spacer()
+                                            .font(.system(size: 22))
+                                            .padding(.horizontal)
+                                            .padding(5)
+                                        
                                     
                                 }
                                 .background(vm.user?.matching == "On" ? Color.primaryColor : Color.secondaryColor)
-                                    .cornerRadius(24)
-                            }.padding(.leading, 250)
+                                    .cornerRadius(12)
+                            }
                         }.padding(.bottom, 50)
                         
                         

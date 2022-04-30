@@ -86,7 +86,7 @@ struct OtherUserProfileView: View {
                 
                 Group {
                     
-                    if (vm.recipientProfile?.bio != "") {
+                    if(vm.recipientProfile?.bio != ""){
                         Text("About")
                             .font(.system(size: 24))
                             .bold()
