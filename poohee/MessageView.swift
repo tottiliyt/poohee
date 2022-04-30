@@ -12,7 +12,6 @@ struct MessageView: View {
     @State var selectedUser : Profile?
     @Binding var isPopUp : Bool
     @ObservedObject var vm : HomeViewModel
-    @Binding var accepted: Bool
     
     
     var body: some View {
@@ -23,7 +22,7 @@ struct MessageView: View {
                 }
                 
                 if isPopUp{
-                    HomePopUp(show: $isPopUp, accepted: $accepted, vm: vm)
+                    HomePopUp(show: $isPopUp, vm: vm)
                 }
             }
     }
@@ -35,11 +34,14 @@ struct MessageView: View {
                                 .fill(Color.primaryColor)
                                 .frame(width: 380, height: 250, alignment: .center)
                 
-                if vm.user?.current_match == ""{
+                if !(vm.user?.new_match ?? false){
                     if self.vm.user?.matching == "On"{
-                        VStack (alignment: .center, spacing: 20){
-                            Text("We are working hard to find your next best friend!")
+                        VStack (alignment: .center){
+                            Text("Hey \(vm.profile?.first_name ?? ""), We are working hard to find your next best friend!" )
                                 .font(.system(size: 30, weight: .bold))
+                                .padding()
+                                .padding()
+                            
                         }
                     } else {
                         VStack (alignment: .center, spacing: 20){
@@ -54,7 +56,6 @@ struct MessageView: View {
                                     .foregroundColor(Color.black)
                                     .font(.system(size: 25, weight: .bold))
                                     .padding()
-                                    .frame(width: 175, height: 60)
                                     .background()
                                     .clipShape(RoundedRectangle(cornerRadius: 20))
                             })

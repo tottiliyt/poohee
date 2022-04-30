@@ -92,7 +92,7 @@ class HomeViewModel: ObservableObject {
 
             self.profile = Profile(uid: self.uid, data: data["profile"] as? Dictionary<String, Any> ?? [:])
 
-            self.user = User(uid: self.uid, email: email, profileImageUrl: profile_image_url, matching: matching, current_match: data["current_match"] as? String ?? "", match_similarity: data["match_similarity"] as? String ?? "", available: data["available"] as? Bool ?? false, profile: self.profile!, num_meet: num_meet)
+            self.user = User(uid: self.uid, email: email, profileImageUrl: profile_image_url, matching: matching, current_match: data["current_match"] as? String ?? "", match_similarity: data["match_similarity"] as? String ?? "", available: data["available"] as? Bool ?? false, new_match: data["new_match"] as? Bool ?? false, profile: self.profile!, num_meet: num_meet)
             
             self.fetchMatch()
             
@@ -293,7 +293,7 @@ struct HomeView: View {
                 VStack(spacing:0){
                     ZStack{
                         if isMessageMode {
-                            MessageView(isPopUp: $isPopUp, vm : vm, accepted: $accepted)
+                            MessageView(isPopUp: $isPopUp, vm : vm)
                         } else {
                             ProfileView(vm : vm)
                         }

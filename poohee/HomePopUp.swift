@@ -10,13 +10,56 @@ import SwiftUI
 struct HomePopUp: View {
     
     @Binding var show : Bool
-    @Binding var accepted: Bool
     @ObservedObject var vm : HomeViewModel
     
     private func updateAvailability(available: Bool){
+        vm.user?.available = available
+        let ref = FirebaseManager.shared.firestore.collection("users").document(vm.uid)
+        if available {
+            
+            ref.updateData([
+                "available": available
+            ]) { err in
+                if let err = err {
+                    print("Error updating document: \(err)")
+                }
+            }
+        } else {
+            guard let current_match = vm.user?.current_match else {
+                print ("couldn't")
+                return
+            }
+            vm.user?.current_match = ""
+            let match_ref = FirebaseManager.shared.firestore.collection("users").document(current_match)
+            match_ref.updateData([
+                "new_match": false,
+                "current_match": ""
+            ]) { err in
+                if let err = err {
+                    print("Error updating document: \(err)")
+                }
+            }
+            
+            ref.updateData([
+                "available": available,
+                "current_match": ""
+                
+            ]) { err in
+                if let err = err {
+                    print("Error updating document: \(err)")
+                }
+            }
+            
+            
+        }
+        
+    }
+    
+    private func updateNewMatch(new_match: Bool){
+        vm.user?.new_match = new_match
         let ref = FirebaseManager.shared.firestore.collection("users").document(vm.uid)
         ref.updateData([
-            "available": available
+            "new_match": new_match
         ]) { err in
             if let err = err {
                 print("Error updating document: \(err)")
@@ -30,75 +73,53 @@ struct HomePopUp: View {
         
         ZStack{
             VStack (alignment: .center, spacing: 20){
-                if (accepted){
-                    Text("Awesome!")
-                        .font(.system(size: 25))
-                        .padding(.horizontal)
-                    
-                    Text("We will set up the meet up as soon as your match confirms their availability too.")
-                        .font(.system(size: 25))
-                        .padding(.horizontal)
-                    
-                    Button(action: {
+                
+                Text("Hey \(vm.profile?.first_name ?? ""),")
+                    .font(.system(size: 25))
+                    .padding(.horizontal)
+                
+                Text("We might have just found you your next best friend!")
+                    .font(.system(size: 25))
+                    .padding(.horizontal)
+                
+                Text("Will you be available anytime in the next 3 days to meetup?")
+                    .font(.system(size: 25))
+                    .padding(.horizontal)
+                
+                Button(action: {
+                    updateNewMatch(new_match: false)
+                    if vm.matchIsAvailable {
+                        vm.match()
                         show.toggle()
-                    }, label: {
-                        Text("Alrighty")
-                            .font(.system(size: 35, weight: .semibold))
-                            .foregroundColor(Color.white)
-                            .padding()
-                            .frame(width: 200, height: 80)
-                            .background(Color.primaryColor)
-                            .clipShape(RoundedRectangle(cornerRadius: 15))
-                    })
-                    
-                    
-                }else {
-                    Text("Hey \(vm.profile?.first_name ?? ""),")
-                        .font(.system(size: 25))
-                        .padding(.horizontal)
-                    
-                    Text("We might have just found you your next best friend!")
-                        .font(.system(size: 25))
-                        .padding(.horizontal)
-                    
-                    Text("Will you be available anytime in the next 3 days to meetup?")
-                        .font(.system(size: 25))
-                        .padding(.horizontal)
-                    
-                    Button(action: {
-                        if vm.matchIsAvailable {
-                            print("asdasdasdasd")
-                            vm.match()
-                        } else {
-                            accepted.toggle()
-                            updateAvailability(available: true)
-                        }
-                        
-                    }, label: {
-                        Text("Yes, I'd love to")
-                            .font(.system(size: 20, weight: .semibold))
-                            .foregroundColor(Color.white)
-                            .padding()
-                            .frame(width: 250, height: 60)
-                            .background(Color.primaryColor)
-                            .clipShape(RoundedRectangle(cornerRadius: 10))
-                    })
-                    
-                    
-                    Button(action: {
-                        updateAvailability(available: false)
+                    } else {
+                        updateAvailability(available: true)
                         show.toggle()
-                    }, label: {
-                        Text("Too busy, I'll pass")
-                            .font(.system(size: 20, weight: .semibold))
-                            .foregroundColor(Color.black)
-                            .padding()
-                            .frame(width: 250, height: 60)
-                            .background(Color.buttonGray)
-                            .clipShape(RoundedRectangle(cornerRadius: 10))
-                    })
+                    }
                     
-                }
+                }, label: {
+                    Text("Yes, I'd love to")
+                        .font(.system(size: 20, weight: .semibold))
+                        .foregroundColor(Color.white)
+                        .padding()
+                        .frame(width: 250, height: 60)
+                        .background(Color.primaryColor)
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                })
+                
+                
+                Button(action: {
+                    updateNewMatch(new_match: false)
+                    updateAvailability(available: false)
+                    show.toggle()
+                }, label: {
+                    Text("Too busy, I'll pass")
+                        .font(.system(size: 20, weight: .semibold))
+                        .foregroundColor(Color.black)
+                        .padding()
+                        .frame(width: 250, height: 60)
+                        .background(Color.buttonGray)
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                })
                 
             }
             .padding(30)
