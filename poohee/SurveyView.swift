@@ -15,7 +15,7 @@ struct SurveyView: View {
     @ObservedObject var vm: HomeViewModel
     
     
-    @State private var createProfileStage = 7
+    @State private var createProfileStage = 4
     @State private var friend = false
     @State private var career = false
     @State private var first = ""
@@ -28,7 +28,7 @@ struct SurveyView: View {
     @State private var career_interests = [false, false,false, false,false, false,false, false,false, false,false, false]
     @State private var religious = "Select"
     @State private var political = "Select"
-    @State private var questionnaire = [Int](repeating: 0, count: 17)
+    @State private var questionnaire = [Int](repeating: 0, count: 18)
     @State private var showPushNotificationModal = false
     
     @State private var first_major_isExpanded = false
@@ -110,30 +110,30 @@ struct SurveyView: View {
     
     @State private var question_list = [
         "I like to stick with people I know at social events",
-        "I feel comfortable striking up conversations with strangers",
-        "The best thing to do after an exam is PARTY",
-        "I like to be the center of attention",
-        "I have cried over movie scenes",
-        "I get sentimental over small things",
         "I think with my head, not my heart",
-        "I am a straight shooter",
         "I like to organize my schedule with tools",
+        "The best thing to do after an exam is PARTY",
         "Real traveling isn’t planned",
-        "I keep myself busy with tasks",
+        "I have cried over movie scenes",
+        "Men and women can just be friends",
         "I procrastinate more than others around me",
         "I wonder what the meaning of life is sometimes",
-        "I like to analyze different interpretations of fiction",
+        "I am a straight shooter",
+        "I like to be the center of attention",
         "I like to talk about theoretical things with my friends",
+        "I get sentimental over small things",
+        "I keep myself busy with tasks",
         "I watch movies for the experience not the meaning behind them",
-        "Mistakes I made a long time ago still bother me"]
+        "Mistakes I made a long time ago still bother me",
+        "I like to analyze different interpretations of fiction",
+        "I feel comfortable striking up conversations with strangers"]
     
-    @State private var card_x : [CGFloat] = [CGFloat](repeating: 0, count: 17)
-    @State private var current_question_num = 16
+    @State private var card_x : [CGFloat] = [CGFloat](repeating: 0, count: 18)
+    @State private var current_question_num = 17
     @State private var isShowingPhotoPicker = false
     @State private var image: UIImage?
     @State private var show_class = true
     @State private var bio = ""
-    
     @State private var sportIsExpanded = true
     @State private var businessIsExpanded = false
     @State private var careerIsExpanded = false
@@ -857,7 +857,7 @@ struct SurveyView: View {
                     
                     
                     
-                    ForEach(0..<17, id: \.self) {i in
+                    ForEach(0..<18, id: \.self) {i in
                         Card(text: self.$question_list[(question_list.count-1-i)])
                             .offset(x: self.card_x[i])
                             .gesture(DragGesture()
@@ -898,7 +898,7 @@ struct SurveyView: View {
                     
                     VStack {
                         
-                        if current_question_num != 16 {
+                        if current_question_num != 17 {
                             Text("< Back")
                                 .foregroundColor(Color.gray)
                                 .font(.system(size: 26))
