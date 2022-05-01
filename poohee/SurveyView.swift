@@ -106,7 +106,7 @@ struct SurveyView: View {
     
     let political_option = ["Select", "Democratic", "Republican", "Libertarian", "Socialist", "Other", "Unaffiliated"]
     
-    let religious_option = ["Select","Christian", "Jewish", "Buddhist", "Hindu", "Muslim", "Sikh","Other", "Unaffiliated"]
+    let religious_option = ["Select", "Christian", "Jewish", "Buddhist", "Hindu", "Muslim", "Sikh","Other", "Unaffiliated"]
     
     @State private var question_list = [
         "I like to stick with people I know at social events",

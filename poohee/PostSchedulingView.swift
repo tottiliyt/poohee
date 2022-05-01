@@ -17,7 +17,7 @@ struct PostSchedulingView: View {
                 ScrollViewReader { scrollViewProxy in
                     VStack {
                         ForEach(vm.messages) { message in
-                            if message.stage == 0{
+                            if message.stage == 0 {
                                 ChatbotMessages(message: message, firstName: vm.chat.firstName)
                             } else {
                                 SingleMessageView(message: message, recipientId: vm.recipientId)
@@ -72,7 +72,7 @@ struct SingleMessageView : View{
     let recipientId : String
     
     var body: some View {
-        if message.stage == 1{
+        if message.stage != 2{
             HStack{
 
                 HStack{

@@ -40,10 +40,9 @@ struct MessageView: View {
                     Spacer()
                     if !(vm.user?.new_match ?? false){
                         if self.vm.user?.matching == "On"{
-                            Text("Hey \(vm.profile?.first_name ?? ""), we are working hard to find your next best friend!" )
+                            Text("Hey \(vm.profile?.first_name ?? ""), we are working hard to find your next friend!")
                                     .font(.system(size: 30, weight: .bold))
                                     .padding()
-                            
                         } else {
                             VStack (alignment: .center){
                                 Text("Your matching is currently paused")
@@ -51,7 +50,6 @@ struct MessageView: View {
                                 Button(action: {
                                     vm.updateMatching()
                                 }, label: {
-                                    
                                     Text("Resume")
                                         .foregroundColor(Color.black)
                                         .font(.system(size: 30, weight: .bold))
@@ -63,7 +61,6 @@ struct MessageView: View {
                             }
                             .padding(.vertical)
                         }
-                        
                     } else {
                         VStack (alignment: .center){
                             Text("\(vm.profile?.first_name ?? ""), you have a new match!")
@@ -146,7 +143,13 @@ struct MessageView: View {
                                         .lineLimit(1)
                                         .foregroundColor(Color.black).font(.system(size:14, weight: .semibold))
                                         
-                                } else {
+                                } else if chat.stage == -1 {
+                                    Text("Meet up cancled")
+                                        .fixedSize(horizontal: false, vertical: true)
+                                        .lineLimit(1)
+                                        .foregroundColor(Color(.lightGray)).font(.system(size:14))
+                                        
+                                }else {
                                     Text("\(chat.text)")
                                         .fixedSize(horizontal: false, vertical: true)
                                         .lineLimit(1)

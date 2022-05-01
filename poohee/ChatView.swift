@@ -312,7 +312,7 @@ struct ChatView: View {
             
             if scheduled {
                 PostSchedulingView(vm: vm)
-            } else if vm.chat.stage == 0 {
+            } else if vm.chat.stage <= 0 {
                 SchedulingView(vm:vm, scheduled: $scheduled)
             } else {
                 PostSchedulingView(vm: vm)

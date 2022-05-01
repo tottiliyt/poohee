@@ -13,20 +13,41 @@ struct SchedulingView: View {
     @ObservedObject var vm : ChatViewModel
     @State var cancelMatching = false
     @State var scheduling = false
+    @State var canceling = false
     @Binding var scheduled: Bool
+    @State var canceled = false
     
     var body: some View {
         ZStack{
             VStack{
                 ScrollView {
                     ChatbotMessages(message: vm.messages[0], firstName: vm.chat.firstName)
+                    
+                    if vm.messages.count > 1{
+                        SingleMessageView(message: vm.messages[1], recipientId: vm.recipientId)
+                    } else if canceled {
+                        HStack{
+
+                            HStack{
+                                Text("Unfortunately \(vm.profile?.first_name ?? "") has canceled the meet up. Sorry for the inconvenicence!")
+                                    .foregroundColor(Color.white)
+                            }
+                            .padding()
+                            .background(Color.secondaryColor)
+                            .cornerRadius(10)
+                            
+                            Spacer()
+                        }
+                        .padding(.horizontal)
+                        .padding(.bottom, 8)
+                    }
                 }
                 .background(Color.white)
                 .onTapGesture {
                     cancelMatching = false
                 }
                 .overlay(
-                    CancelMatchingButton(show: $cancelMatching)
+                    CancelMatchingButton(show: $cancelMatching, canceling: $canceling)
                 )
             
                 HStack{
@@ -63,6 +84,10 @@ struct SchedulingView: View {
                 SchedulingPopUp(show: $scheduling, vm: vm)
             }
             
+            if canceling{
+                CancelView(show: $canceling, canceled: $canceled, vm: vm)
+            }
+            
         }
     }
     
@@ -93,7 +118,7 @@ struct ChatbotMessages: View {
             
             
             HStack{
-                Text("We have found your new friend - \(self.firstName)!")
+                Text("We have found your new friend - \(self.firstName)! You can check out their profile above")
                 .foregroundColor(Color.white)
                 .padding()
                 .background(Color.secondaryColor)
@@ -138,6 +163,7 @@ struct ChatbotMessages: View {
 
 struct CancelMatchingButton: View {
     @Binding var show : Bool
+    @Binding var canceling: Bool
     
     var body: some View {
         if show {
@@ -146,6 +172,7 @@ struct CancelMatchingButton: View {
                 Spacer()
                 HStack{
                     Button{
+                        canceling.toggle()
                         
                     } label: {
                         Text("Cancel This Meetup")

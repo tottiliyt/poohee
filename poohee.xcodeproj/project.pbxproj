@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		5100F02427F7F927000ABFFF /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5100F02327F7F927000ABFFF /* LoginView.swift */; };
 		5100F02627F7FBA6000ABFFF /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5100F02527F7FBA6000ABFFF /* FirebaseManager.swift */; };
+		511B770A281F2CC300973630 /* CancelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511B7709281F2CC300973630 /* CancelView.swift */; };
 		51418ECD27FFE43600D19CBD /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51418ECC27FFE43600D19CBD /* HomeView.swift */; };
 		51418ECF2800051A00D19CBD /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51418ECE2800051A00D19CBD /* ProfileView.swift */; };
 		51418ED328009F0A00D19CBD /* HomePopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51418ED228009F0A00D19CBD /* HomePopUp.swift */; };
@@ -50,6 +51,7 @@
 /* Begin PBXFileReference section */
 		5100F02327F7F927000ABFFF /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		5100F02527F7FBA6000ABFFF /* FirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
+		511B7709281F2CC300973630 /* CancelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelView.swift; sourceTree = "<group>"; };
 		51418ECC27FFE43600D19CBD /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		51418ECE2800051A00D19CBD /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		51418ED228009F0A00D19CBD /* HomePopUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePopUp.swift; sourceTree = "<group>"; };
@@ -135,6 +137,7 @@
 				51418EDA2803A01000D19CBD /* SchedulingView.swift */,
 				51418EDE28049AA400D19CBD /* PostSchedulingView.swift */,
 				51418EDC2803B83700D19CBD /* SchedulingPopUp.swift */,
+				511B7709281F2CC300973630 /* CancelView.swift */,
 				51418ED228009F0A00D19CBD /* HomePopUp.swift */,
 				51CEC37F27F7904100BA8267 /* MessageView.swift */,
 				51418ECE2800051A00D19CBD /* ProfileView.swift */,
@@ -265,6 +268,7 @@
 				B9DBE8C227F9372100F29992 /* PersonalInfoView.swift in Sources */,
 				51418EE128067C9600D19CBD /* InternalMatchingView.swift in Sources */,
 				51E8D23E281CE2BD001F92F3 /* OtherUserProfileView.swift in Sources */,
+				511B770A281F2CC300973630 /* CancelView.swift in Sources */,
 				B9DBE8C827F937DF00F29992 /* PersonalityQuestionView.swift in Sources */,
 				B9DBE8C627F937AA00F29992 /* PersonalityIntroView.swift in Sources */,
 				51418ED7280121D500D19CBD /* ChatView.swift in Sources */,
