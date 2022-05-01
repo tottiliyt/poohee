@@ -78,11 +78,11 @@ struct HomePopUp: View {
                     .font(.system(size: 25))
                     .padding(.horizontal)
                 
-                Text("We might have just found you your next best friend!")
+                Text("we are trying to match you with someone.")
                     .font(.system(size: 25))
                     .padding(.horizontal)
                 
-                Text("Will you be available anytime in the next 3 days to meetup?")
+                Text("Would you be available anytime in the next 4 days?")
                     .font(.system(size: 25))
                     .padding(.horizontal)
                 

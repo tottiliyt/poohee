@@ -15,8 +15,6 @@ struct SchedulingView: View {
     @State var scheduling = false
     @Binding var scheduled: Bool
     
-    
-    
     var body: some View {
         ZStack{
             VStack{

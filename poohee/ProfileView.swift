@@ -62,7 +62,7 @@ struct ProfileView: View {
                                 vm.updateMatching()
                             } label: {
                                 HStack{
-                                    Text(vm.user?.matching ?? "Off")
+                                    Text("Matching \(vm.user?.matching ?? "Off")")
                                             .foregroundColor(.white)
                                             .font(.system(size: 22))
                                             .padding(.horizontal)

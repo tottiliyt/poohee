@@ -15,7 +15,7 @@ struct SurveyView: View {
     @ObservedObject var vm: HomeViewModel
     
     
-    @State private var createProfileStage = 0
+    @State private var createProfileStage = 5
     @State private var friend = false
     @State private var career = false
     @State private var first = ""
@@ -50,7 +50,7 @@ struct SurveyView: View {
     
     
     let majors_option = ["Select",
-                         "Not Applicable",
+                         "Undecided",
                          "Africana Studies",
                          "Anthropology",
                          "Applied Mathematics & Statistics",
@@ -163,66 +163,62 @@ struct SurveyView: View {
                 
             })
         }
-
+        
         
         else {
-            
-            ScrollView {
-                if (createProfileStage == 0) {
-                    VStack(spacing:50) {
-                        Text("What brings you to Yolk?")
-                            .foregroundColor(Color.primaryColor)
-                            .font(.system(size: 36))
-                            .padding(.bottom, 50)
-                            .padding(.top, 40)
-                            .frame(minWidth: 0, maxWidth: .infinity, alignment: .center)
+            if (createProfileStage == 0) {
+                VStack(spacing:50) {
+                    Text("What brings you to Yolk?")
+                        .foregroundColor(Color.primaryColor)
+                        .font(.system(size: 36))
+                        .padding()
+                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .center)
+                    
+                    Button {
+                        friend = true
+                        nextStage()
+                    }label: {
+                        HStack{
                             
-                        
-                        Button {
-                            friend = true
-                            nextStage()
-                        }label: {
-                            HStack{
-                                
-
-                                    Spacer()
-                                    Text("Make New Friends!")
-                                        .foregroundColor(.white)
-                                        .font(.system(size: 28))
-                                    Spacer()
-
-                                
-                            }.padding(.vertical, 65)
-                                .background(Color.primaryColor)
-                                .cornerRadius(15)
-                        }
-                        
-                        
-                        
-                        Button {
-                            career = true
-                            nextStage()
-                        }label: {
-                            HStack{
+                            Spacer()
+                            Text("Make New Friends!")
+                                .foregroundColor(.white)
+                                .font(.system(size: 28))
+                            Spacer()
                             
-                                    Spacer()
-                                    Text("Meet Summer Buddies!")
-                                        .foregroundColor(.white)
-                                        .font(.system(size: 28))
-                                    Spacer()
-                                
-                            }.padding(.vertical, 50)
-                                .background(Color.secondaryColor)
-                                .cornerRadius(15)
                             
-                        }
+                        }.padding(.vertical, 65)
+                            .background(Color.primaryColor)
+                            .cornerRadius(15)
+                    }
+                    
+                    
+                    
+                    Button {
+                        career = true
+                        nextStage()
+                    }label: {
+                        HStack{
+                            
+                            Spacer()
+                            Text("Meet Summer Buddies!")
+                                .foregroundColor(.white)
+                                .font(.system(size: 28))
+                            Spacer()
+                            
+                        }.padding(.vertical, 50)
+                            .background(Color.secondaryColor)
+                            .cornerRadius(15)
                         
                     }
-                    .padding(.horizontal, 50)
-                    
                     
                 }
-                if(createProfileStage == 1) {
+                .padding(.horizontal, 50)
+                
+                
+            }
+            if(createProfileStage == 1) {
+                VStack{
                     Button {
                         friend = true
                         career = false
@@ -234,42 +230,40 @@ struct SurveyView: View {
                             .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                     }
                     .padding()
-
+                    
                     VStack{
-                        
-                        
                         
                         Text("Tell us a little about yourself")
                             .foregroundColor(Color.primaryColor)
                             .font(.system(size: 36))
-                            .padding(.bottom, 50)
+                            .padding(.bottom)
                         
                         Group {
                             Text("NAME")
                                 .foregroundColor(Color.primaryColor)
                                 .font(.system(size: 20))
                                 .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                        
+                            
                             HStack{
                                 TextField("First", text: $first)
                                     .font(.system(size: 18))
                                     .multilineTextAlignment(.center)
-                                .background(Color(.init(white: 0, alpha: 0.05)))
-                                .cornerRadius(10)
+                                    .background(Color(.init(white: 0, alpha: 0.05)))
+                                    .cornerRadius(10)
                                 
                                 TextField("Last", text: $last)
                                     .font(.system(size: 18))
                                     .multilineTextAlignment(.center)
-                                .background(Color(.init(white: 0, alpha: 0.05)))
-                                .cornerRadius(10)
+                                    .background(Color(.init(white: 0, alpha: 0.05)))
+                                    .cornerRadius(10)
                             }
                             
                             Text("Only your first name will be shared")
-                                .foregroundColor(Color(.init(white: 0, alpha: 0.2)))
+                                .foregroundColor(Color.gray)
                                 .font(.system(size: 10))
                                 .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                                 .padding(.bottom, 5)
-                                
+                            
                             Group {
                                 Text("GENDER")
                                     .foregroundColor(Color.primaryColor)
@@ -293,17 +287,17 @@ struct SurveyView: View {
                                         }
                                     }.frame(height: 150)
                                 }
-                                    .foregroundColor(Color.gray)
-                                    .overlay(
-                                            RoundedRectangle(cornerRadius: 0)
-                                                .stroke(Color.primaryColor, lineWidth: 1)
-                                        )
-                                    .buttonStyle(PlainButtonStyle()).accentColor(.clear).disabled(false)
-                                    .onTapGesture {
-                                        withAnimation{self.gender_isExpanded.toggle()}
-                                    }
-                                    .padding(.top, -10)
-                                    .padding(.bottom, 5)
+                                .foregroundColor(Color.gray)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 0)
+                                        .stroke(Color.primaryColor, lineWidth: 1)
+                                )
+                                .buttonStyle(PlainButtonStyle()).accentColor(.clear).disabled(false)
+                                .onTapGesture {
+                                    withAnimation{self.gender_isExpanded.toggle()}
+                                }
+                                .padding(.top, -10)
+                                .padding(.bottom, 5)
                             }
                             
                             
@@ -312,7 +306,7 @@ struct SurveyView: View {
                                     .foregroundColor(Color.primaryColor)
                                     .font(.system(size: 20))
                                     .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-
+                                
                                 DisclosureGroup("\(self.grad_year)", isExpanded: $grad_isExpanded) {
                                     ScrollView {
                                         
@@ -329,24 +323,25 @@ struct SurveyView: View {
                                         }
                                     }.frame(height: 150)
                                 }
-                                    .foregroundColor(Color.gray)
-                                    .overlay(
-                                            RoundedRectangle(cornerRadius: 0)
-                                                .stroke(Color.primaryColor, lineWidth: 1)
-                                        )
-                                    .buttonStyle(PlainButtonStyle()).accentColor(.clear).disabled(false)
-                                    .onTapGesture {
-                                        withAnimation{self.grad_isExpanded.toggle()}
-                                    }
-                                    .padding(.top, -10)
-                                    .padding(.bottom, 5)
+                                .foregroundColor(Color.gray)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 0)
+                                        .stroke(Color.primaryColor, lineWidth: 1)
+                                )
+                                .buttonStyle(PlainButtonStyle()).accentColor(.clear).disabled(false)
+                                .onTapGesture {
+                                    withAnimation{self.grad_isExpanded.toggle()}
+                                }
+                                .padding(.top, -10)
+                                .padding(.bottom, 5)
                             }
                             
                             Group {
-                                Text("FIRST MAJOR")
-                                    .foregroundColor(Color.primaryColor)
-                                    .font(.system(size: 20))
-                                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                                HStack {
+                                    Text("PRIMARY MAJOR")
+                                        .foregroundColor(Color.primaryColor)
+                                        .font(.system(size: 20))
+                                }.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                                 
                                 
                                 DisclosureGroup("\(first_major)", isExpanded: $first_major_isExpanded) {
@@ -362,30 +357,37 @@ struct SurveyView: View {
                                                         withAnimation{self.first_major_isExpanded.toggle()}
                                                         first_major = major
                                                     }
-                                                    
+                                                
                                             }
                                         }
                                     }.frame(height: 150)
                                 }
-                                    .foregroundColor(Color.gray)
-                                    .overlay(
-                                            RoundedRectangle(cornerRadius: 0)
-                                                .stroke(Color.primaryColor, lineWidth: 1)
-                                        )
-                                    .buttonStyle(PlainButtonStyle()).accentColor(.clear).disabled(false)
-                                    .onTapGesture {
-                                        withAnimation{self.first_major_isExpanded.toggle()}
-                                    }
-                                    .padding(.top, -10)
-                                    .padding(.bottom, 5)
-
+                                .foregroundColor(Color.gray)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 0)
+                                        .stroke(Color.primaryColor, lineWidth: 1)
+                                )
+                                .buttonStyle(PlainButtonStyle()).accentColor(.clear).disabled(false)
+                                .onTapGesture {
+                                    withAnimation{self.first_major_isExpanded.toggle()}
+                                }
+                                .padding(.top, -10)
+                                .padding(.bottom, 5)
+                                
                             }
                             
                             Group {
-                                Text("SECOND MAJOR")
-                                    .foregroundColor(Color.primaryColor)
-                                    .font(.system(size: 20))
-                                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                                HStack {
+                                    Text("SECONDARY MAJOR")
+                                        .foregroundColor(Color.primaryColor)
+                                        .font(.system(size: 20))
+                                    
+                                    Text("(optional)")
+                                        .foregroundColor(Color.gray)
+                                        .font(.system(size: 10))
+                                        .padding(.top, 5)
+                                }.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                                
                                 
                                 DisclosureGroup("\(second_major)", isExpanded: $second_major_isExpanded) {
                                     ScrollView {
@@ -400,34 +402,41 @@ struct SurveyView: View {
                                                         withAnimation{self.second_major_isExpanded.toggle()}
                                                         second_major = major
                                                     }
-                                                    
+                                                
                                             }
                                         }
                                     }.frame(height: 150)
                                 }
-                                    .foregroundColor(Color.gray)
-                                    .overlay(
-                                            RoundedRectangle(cornerRadius: 0)
-                                                .stroke(Color.primaryColor, lineWidth: 1)
-                                        )
-                                    .buttonStyle(PlainButtonStyle()).accentColor(.clear).disabled(false)
-                                    .onTapGesture {
-                                        withAnimation{self.second_major_isExpanded.toggle()}
-                                    }
-                                    .padding(.top, -10)
-                                    .padding(.bottom, 5)
-
+                                .foregroundColor(Color.gray)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 0)
+                                        .stroke(Color.primaryColor, lineWidth: 1)
+                                )
+                                .buttonStyle(PlainButtonStyle()).accentColor(.clear).disabled(false)
+                                .onTapGesture {
+                                    withAnimation{self.second_major_isExpanded.toggle()}
+                                }
+                                .padding(.top, -10)
+                                .padding(.bottom, 5)
+                                
                             }
-                            }
-                            
-                            
+                        }
                         
                         
+                        ZStack{
+                            Text("\n").foregroundColor(Color.white)
+                                .font(.system(size: 20))
+                            
+                            Text(self.requiredmsg).foregroundColor(Color.primaryColor)
+                                .font(.system(size: 20))
+                        }
+                        
+                        Spacer()
                         
                         Button {
                             
-                            if (self.first=="" || self.last=="" || self.gender=="Select" || self.first_major=="Select" || self.second_major=="Select") {
-                                self.requiredmsg = "All fields are required"
+                            if (self.first=="" || self.last=="" || self.gender=="Select" || self.first_major == "Select") {
+                                self.requiredmsg = "Please fill out all required fields"
                             }
                             else {
                                 nextStage()
@@ -441,38 +450,38 @@ struct SurveyView: View {
                                 .font(.system(size: 26))
                         }
                         .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing)
-                        .padding(.top, 150)
                         
-                        Text(self.requiredmsg).foregroundColor(Color.primaryColor)
-                            .font(.system(size: 20))
+                        
                         
                     }.padding(.horizontal, 50)
-                    
-                    
-                    
                 }
-                if(createProfileStage == 2) {
+                
+                
+                
+                
+            }
+            if(createProfileStage == 2) {
+                
+                
+                VStack{
                     
-
+                    Button {
+                        prevStage()
+                    }label: {
+                        Text("< Back")
+                            .foregroundColor(Color.gray)
+                            .font(.system(size: 26))
+                    }
+                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                    .padding()
+                    
                     VStack{
-                        
-                        Button {
-                            prevStage()
-                        }label: {
-                            Text("< Back")
-                                .foregroundColor(Color.gray)
-                                .font(.system(size: 26))
-                        }
-                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                        .padding(.bottom, 50)
-                        
-                        
                         Text("Are any of these things also really important to you?")
                             .foregroundColor(Color.primaryColor)
                             .font(.system(size: 36))
                             .padding(.bottom, 20)
                         
-                    
+                        
                         HStack {
                             Text("CAREER INTERESTS")
                                 .foregroundColor(Color.primaryColor)
@@ -496,7 +505,7 @@ struct SurveyView: View {
                                         Text("Pre-Med")
                                             .foregroundColor(.black)
                                             .font(.system(size: 12))
-
+                                        
                                         Spacer()
                                     }.padding(.vertical)
                                         .background(career_interests[0] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
@@ -511,7 +520,7 @@ struct SurveyView: View {
                                         Text("Finance")
                                             .foregroundColor(.black)
                                             .font(.system(size: 12))
-
+                                        
                                         Spacer()
                                     }.padding(.vertical)
                                         .background(career_interests[1] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
@@ -526,7 +535,7 @@ struct SurveyView: View {
                                         Text("Consulting")
                                             .foregroundColor(.black)
                                             .font(.system(size: 12))
-
+                                        
                                         Spacer()
                                     }.padding(.vertical)
                                         .background(career_interests[2] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
@@ -543,7 +552,7 @@ struct SurveyView: View {
                                         Text("Art/Design")
                                             .foregroundColor(.black)
                                             .font(.system(size: 12))
-
+                                        
                                         Spacer()
                                     }.padding(.vertical)
                                         .background(career_interests[3] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
@@ -558,7 +567,7 @@ struct SurveyView: View {
                                         Text("Pre-Law")
                                             .foregroundColor(.black)
                                             .font(.system(size: 12))
-
+                                        
                                         Spacer()
                                     }.padding(.vertical)
                                         .background(career_interests[4] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
@@ -573,7 +582,7 @@ struct SurveyView: View {
                                         Text("Tech")
                                             .foregroundColor(.black)
                                             .font(.system(size: 12))
-
+                                        
                                         Spacer()
                                     }.padding(.vertical)                                        .background(career_interests[5] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
                                         .cornerRadius(24)
@@ -589,7 +598,7 @@ struct SurveyView: View {
                                         Text("Engineering")
                                             .foregroundColor(.black)
                                             .font(.system(size: 12))
-
+                                        
                                         Spacer()
                                     }.padding(.vertical)                                        .background(career_interests[6] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
                                         .cornerRadius(24)
@@ -603,7 +612,7 @@ struct SurveyView: View {
                                         Text("Business")
                                             .foregroundColor(.black)
                                             .font(.system(size: 12))
-
+                                        
                                         Spacer()
                                     }.padding(.vertical)                                        .background(career_interests[7] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
                                         .cornerRadius(24)
@@ -617,7 +626,7 @@ struct SurveyView: View {
                                         Text("Research")
                                             .foregroundColor(.black)
                                             .font(.system(size: 12))
-
+                                        
                                         Spacer()
                                     }.padding(.vertical)                                        .background(career_interests[8] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
                                         .cornerRadius(24)
@@ -633,7 +642,7 @@ struct SurveyView: View {
                                         Text("Grad School")
                                             .foregroundColor(.black)
                                             .font(.system(size: 12))
-
+                                        
                                         Spacer()
                                     }.padding(.vertical)                                        .background(career_interests[9] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
                                         .cornerRadius(24)
@@ -647,7 +656,7 @@ struct SurveyView: View {
                                         Text("Government")
                                             .foregroundColor(.black)
                                             .font(.system(size: 12))
-
+                                        
                                         Spacer()
                                     }.padding(.vertical)                                        .background(career_interests[10] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
                                         .cornerRadius(24)
@@ -661,7 +670,7 @@ struct SurveyView: View {
                                         Text("Healthcare")
                                             .foregroundColor(.black)
                                             .font(.system(size: 12))
-
+                                        
                                         Spacer()
                                     }.padding(.vertical)                                        .background(career_interests[11] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
                                         .cornerRadius(24)
@@ -693,22 +702,22 @@ struct SurveyView: View {
                                                 withAnimation{self.religious_isExpanded.toggle()}
                                                 self.religious = religious
                                             }
-                                            
+                                        
                                     }
                                 }
                             }.frame(height: 150)
                         }
-                            .foregroundColor(Color.gray)
-                            .overlay(
-                                    RoundedRectangle(cornerRadius: 0)
-                                        .stroke(Color.primaryColor, lineWidth: 1)
-                                )
-                            .buttonStyle(PlainButtonStyle()).accentColor(.clear).disabled(false)
-                            .onTapGesture {
-                                withAnimation{self.religious_isExpanded.toggle()}
-                            }
-                            .padding(.top, -10)
-                            .padding(.bottom, 5)
+                        .foregroundColor(Color.gray)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 0)
+                                .stroke(Color.primaryColor, lineWidth: 1)
+                        )
+                        .buttonStyle(PlainButtonStyle()).accentColor(.clear).disabled(false)
+                        .onTapGesture {
+                            withAnimation{self.religious_isExpanded.toggle()}
+                        }
+                        .padding(.top, -10)
+                        .padding(.bottom, 5)
                         
                         HStack {
                             Text("POLITICAL AFFILIATION")
@@ -734,22 +743,24 @@ struct SurveyView: View {
                                                 withAnimation{self.political_isExpanded.toggle()}
                                                 self.political = political
                                             }
-                                            
+                                        
                                     }
                                 }
                             }.frame(height: 150)
                         }
-                            .foregroundColor(Color.gray)
-                            .overlay(
-                                    RoundedRectangle(cornerRadius: 0)
-                                        .stroke(Color.primaryColor, lineWidth: 1)
-                                )
-                            .buttonStyle(PlainButtonStyle()).accentColor(.clear).disabled(false)
-                            .onTapGesture {
-                                withAnimation{self.political_isExpanded.toggle()}
-                            }
-                            .padding(.top, -10)
-                            .padding(.bottom, 5)
+                        .foregroundColor(Color.gray)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 0)
+                                .stroke(Color.primaryColor, lineWidth: 1)
+                        )
+                        .buttonStyle(PlainButtonStyle()).accentColor(.clear).disabled(false)
+                        .onTapGesture {
+                            withAnimation{self.political_isExpanded.toggle()}
+                        }
+                        .padding(.top, -10)
+                        .padding(.bottom, 5)
+                        
+                        Spacer()
                         
                         Button {
                             nextStage()
@@ -759,13 +770,16 @@ struct SurveyView: View {
                                 .font(.system(size: 26))
                         }
                         .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing)
-                        .padding(.top, 120)
                         
                     }.padding(.horizontal, 50)
                     
                     
                 }
-                if (createProfileStage == 3) {
+                
+                
+            }
+            if (createProfileStage == 3) {
+                VStack{
                     Button {
                         prevStage()
                     }label: {
@@ -775,1278 +789,1301 @@ struct SurveyView: View {
                     }
                     .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                     .padding()
-                        VStack {
-                            
-                            
-                            Text("Nice to Meet You, \(self.first)!")
-                                .foregroundColor(Color.primaryColor)
-                                .font(.system(size: 36))
-                                .padding(.bottom, 50)
-                            
-                            
-                            Group{
-                                Text("Let’s now see who might share your unique tastes & sensibilities").foregroundColor(Color.gray)
-                                    .font(.system(size: 24))
-                                    .padding(.bottom, 50)
-                                
-                                HStack{
-                                    Text("If you").foregroundColor(Color.gray)
-                                    Text("Agree").foregroundColor(Color.primaryColor)
-                                    Text("Swipe").foregroundColor(Color.gray)
-                                    Text("Right!").foregroundColor(Color.primaryColor)
-                                    
-                                    
-                                }.font(.system(size: 25))
-                                
-                                HStack{
-                                    Text("If you").foregroundColor(Color.gray)
-                                    Text("Disagree").foregroundColor(Color.primaryColor)
-                                    Text("Swipe").foregroundColor(Color.gray)
-                                    Text("Left!").foregroundColor(Color.primaryColor)
-                                }.font(.system(size: 25))
-                            }.frame(minWidth: 0, maxWidth: .infinity, alignment: .center)
-                            
-                            Image("logo")
-                                .resizable()
-                                .frame(width: 100, height: 100, alignment: .center)
-                                .padding(.vertical, 40)
-                            
-                            Button {
-                                nextStage()
-                            }label: {
-                                Text("> I'M READY")
-                                    .foregroundColor(Color.primaryColor)
-                                    .font(.system(size: 24))
-                            }
-                            .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing)
-                            .padding(.top, 80)
-                            
-                        }.padding(.horizontal, 50)
-                        
-                }
-                if (createProfileStage == 4) {
                     
-
-                        ZStack {
+                    VStack {
+                        Text("Nice to Meet You, \(self.first)!")
+                            .foregroundColor(Color.primaryColor)
+                            .font(.system(size: 36))
+                            .padding(.bottom)
+                        
+                        
+                        VStack(alignment:.leading, spacing: 20){
+                            Text("Let’s now see who might share your unique sensibilities").foregroundColor(Color.gray)
+                                .font(.system(size: 24))
+                                .padding(.bottom)
                             
-                            
-                            
-                            ForEach(0..<17, id: \.self) {i in
-                                Card(text: self.$question_list[(question_list.count-1-i)])
-                                    .offset(x: self.card_x[i])
-                                    .gesture(DragGesture()
-                                            .onChanged({(value) in
-                                                
-                                                self.card_x[i] = value.translation.width
-
-                                            })
-                                            .onEnded({(value) in
-                                                
-                                                if value.translation.width > 0 {
-                                                    
-                                                    if value.translation.width > 200 {
-                                                        self.card_x[i] = 600
-                                                        current_question_num -= 1
-                                                        self.questionnaire[i] = 1
-                                                    } else {
-                                                        self.card_x[i] = 0
-                                                    }
-                                                    
-                                                } else {
-                                                    if value.translation.width < -200 {
-                                                        self.card_x[i] = -600
-                                                        current_question_num -= 1
-                                                        self.questionnaire[i] = -1
-                                                    } else {
-                                                        self.card_x[i] = 0
-                                                    }
-                                                }
-                                                
-                                                if (self.current_question_num < 0) {
-                                                    nextStage()
-                                                }
-                                                
-                                            })
-                                    )
-                            }
-                            
-                            VStack {
+                            HStack{
+                                Text("If you").foregroundColor(Color.gray)
+                                Text("Agree").foregroundColor(Color.primaryColor)
                                 
-                                if current_question_num != 16 {
-                                    Text("< Back")
-                                        .foregroundColor(Color.gray)
-                                        .font(.system(size: 26))
-                                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                                        .onTapGesture{
-                                            self.card_x[current_question_num+1] = 0
-                                            current_question_num += 1
-                                            self.questionnaire[current_question_num] = 0
-                                            
-                                        }
-                                } else{
-                                    Text("< Back")
-                                        .foregroundColor(Color.gray)
-                                        .font(.system(size: 26))
-                                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                                        .onTapGesture{
-                                            
-                                            prevStage()
-                                        }
-                                }
-
+                            }.font(.system(size: 26))
+                            
+                            HStack{
+                                Spacer()
+                                Text("--->").foregroundColor(Color.primaryColor)
+                                Text("Swipe").foregroundColor(Color.gray)
+                                Text("Right!").foregroundColor(Color.primaryColor)
+                            }.font(.system(size: 26))
+                            
+                            HStack{
+                                Text("If you").foregroundColor(Color.gray)
+                                Text("Disagree").foregroundColor(Color.primaryColor)
+                            }.font(.system(size: 26))
+                            
+                            HStack{
+                                Spacer()
+                                Text("<---").foregroundColor(Color.primaryColor)
+                                Text("Swipe").foregroundColor(Color.gray)
+                                Text("Left!").foregroundColor(Color.primaryColor)
+                            }.font(.system(size: 26))
+                            
+                            
+                        }
+                        
+                        Image("logo")
+                            .resizable()
+                            .frame(width: 100, height: 100, alignment: .center)
+                            .padding(.vertical)
+                        
+                        Spacer()
+                        
+                        Button {
+                            nextStage()
+                        }label: {
+                            Text("> I'M READY")
+                                .foregroundColor(Color.primaryColor)
+                                .font(.system(size: 24))
+                        }
+                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing)
+                        
+                    }
+                    .padding(.horizontal, 50)
+                }
+            }
+            if (createProfileStage == 4) {
+                
+                
+                ZStack {
+                    
+                    
+                    
+                    ForEach(0..<17, id: \.self) {i in
+                        Card(text: self.$question_list[(question_list.count-1-i)])
+                            .offset(x: self.card_x[i])
+                            .gesture(DragGesture()
+                                .onChanged({(value) in
                                     
-                                
-                                Image("logo")
-                                    .resizable()
-                                    .frame(width: 200, height: 200, alignment: .center)
-                                    .padding(.top, 400)
-                                
-                               
-                                Text("Skip")
-                                    .font(.system(size: 26))
-                                    .padding(.top, 100)
-                                    .foregroundColor(Color.gray)
-                                    .onTapGesture{
-                                        self.card_x[current_question_num] = 600
-                                        self.questionnaire[current_question_num] = 0
-                                        current_question_num -= 1
+                                    self.card_x[i] = value.translation.width
+                                    
+                                })
+                                    .onEnded({(value) in
+                                        
+                                        if value.translation.width > 0 {
+                                            
+                                            if value.translation.width > 200 {
+                                                self.card_x[i] = 600
+                                                current_question_num -= 1
+                                                self.questionnaire[i] = 1
+                                            } else {
+                                                self.card_x[i] = 0
+                                            }
+                                            
+                                        } else {
+                                            if value.translation.width < -200 {
+                                                self.card_x[i] = -600
+                                                current_question_num -= 1
+                                                self.questionnaire[i] = -1
+                                            } else {
+                                                self.card_x[i] = 0
+                                            }
+                                        }
+                                        
                                         if (self.current_question_num < 0) {
                                             nextStage()
                                         }
-                                    }
-                            
-                            }
-                            
-
-                        }.padding(.horizontal, 50)
+                                        
+                                    })
+                            )
+                    }
                     
-                    
-                }
-                if (createProfileStage == 5) {
-
                     VStack {
                         
-                        Button {
-                            self.card_x[current_question_num+1] = 0
-                            current_question_num += 1
-                            self.questionnaire[current_question_num] = 0
-                            prevStage()
-                        }label: {
+                        if current_question_num != 16 {
                             Text("< Back")
                                 .foregroundColor(Color.gray)
                                 .font(.system(size: 26))
                                 .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                                .onTapGesture{
+                                    self.card_x[current_question_num+1] = 0
+                                    current_question_num += 1
+                                    self.questionnaire[current_question_num] = 0
+                                    
+                                }
+                        } else{
+                            Text("< Back")
+                                .foregroundColor(Color.gray)
+                                .font(.system(size: 26))
+                                .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                                .onTapGesture{
+                                    
+                                    prevStage()
+                                }
                         }
                         
-
-                        Text("What do you enjoy talking with your peers about? And what are your hobbies? (10 Max)")
-                            .foregroundColor(Color.primaryColor)
-                            .font(.system(size: 24))
-                            .padding(.top, 100)
-                            .padding(.bottom, 50)
                         
-                        DisclosureGroup(
-                            isExpanded: $sportIsExpanded,
-                            content: {
-                                HStack {
-                                    Button {
-                                        hobbies[(sportIndex+0)].toggle()
-                                        
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Football")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(sportIndex+0)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                    
-                                    Button {
-                                        hobbies[(sportIndex+1)].toggle()
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Soccer")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(sportIndex+1)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                    
-                                    Button {
-                                        hobbies[(sportIndex+2)].toggle()
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Basketball")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(sportIndex+2)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                }
-                                HStack {
-                                    Button {
-                                        hobbies[(sportIndex+3)].toggle()
-                                        
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Swimming")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(sportIndex+3)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                    
-                                    Button {
-                                        hobbies[(sportIndex+4)].toggle()
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Lacrosse")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(sportIndex+4)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                    
-                                    Button {
-                                        hobbies[(sportIndex+5)].toggle()
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Tennis")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(sportIndex+5)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                }
-                                HStack {
-                                    Button {
-                                        hobbies[(sportIndex+6)].toggle()
-                                        
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Baseball")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(sportIndex+6)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                    
-                                    Button {
-                                        hobbies[(sportIndex+7)].toggle()
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Golf")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(sportIndex+7)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                    
-                                    Button {
-                                        hobbies[(sportIndex+8)].toggle()
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Running")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(sportIndex+8)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                }
-                                HStack {
-                                    Button {
-                                        hobbies[(sportIndex+9)].toggle()
-                                        
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Volleyball")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(sportIndex+9)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                    
-                                    Button {
-                                        hobbies[(sportIndex+10)].toggle()
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Weightlifting")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(sportIndex+10)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                    
-                                    Button {
-                                        hobbies[(sportIndex+11)].toggle()
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Rugby")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(sportIndex+11)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                }
-                                HStack {
-                                    Button {
-                                        hobbies[(sportIndex+12)].toggle()
-                                        
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Cycling")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(sportIndex+12)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                    
-                                    Button {
-                                        hobbies[(sportIndex+13)].toggle()
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Scuba Diving")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(sportIndex+13)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                    
-                                    Button {
-                                        hobbies[(sportIndex+14)].toggle()
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Extreme sports")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(sportIndex+14)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                }
-                            },
-                            label: {
-                                HStack(spacing: 20) {
-                                    Image("Sports 1")
-                                    Text("Sports & Fitness")
-                                }
-                            }
-                        ).foregroundColor(Color.black)
-                            .accentColor(Color.black)
-                        
-                        DisclosureGroup(
-                            isExpanded: $businessIsExpanded,
-                            content: {
-                                HStack {
-                                    Button {
-                                        hobbies[(businessIndex + 0)].toggle()
-                                        
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Venture Capital")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(businessIndex + 0)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                    
-                                    Button {
-                                        hobbies[(businessIndex + 1)].toggle()
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Entrepreneurship")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 11))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(businessIndex + 1)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                    
-                                    Button {
-                                        hobbies[(businessIndex + 2)].toggle()
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Marketing")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(businessIndex + 2)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                }
-                                HStack {
-                                    Button {
-                                        hobbies[(businessIndex + 3)].toggle()
-                                        
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Sales")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(businessIndex + 3)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                    
-                                    Button {
-                                        hobbies[(businessIndex + 4)].toggle()
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Retail")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(businessIndex + 4)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                    
-                                    Button {
-                                        hobbies[(businessIndex + 5)].toggle()
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Real-Estate")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(businessIndex + 5)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                }
-                                HStack {
-                                    Button {
-                                        hobbies[(businessIndex + 6)].toggle()
-                                        
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Tech & E-commerce")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(businessIndex + 6)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                    
-                                    Button {
-                                        hobbies[(businessIndex + 7)].toggle()
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Investing")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(businessIndex + 7)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                    
-                                    Button {
-                                        hobbies[(businessIndex + 8)].toggle()
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Finance")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(businessIndex + 8)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                }
-                            },
-                            label: {
-                                HStack(spacing: 20) {
-                                    Image("Business 1")
-                                    Text("Business")
-                                }
-                            }
-                        ).foregroundColor(Color.black)
-                            .accentColor(Color.black)
-                        
-                        DisclosureGroup(
-                            isExpanded: $careerIsExpanded,
-                            content: {
-                                HStack {
-                                    Button {
-                                        hobbies[(careerIndex+0)].toggle()
-                                        
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Investment Banking")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(careerIndex+0)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                    
-                                    Button {
-                                        hobbies[(careerIndex+1)].toggle()
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Finance")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(careerIndex+1)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                    
-                                    Button {
-                                        hobbies[(careerIndex+2)].toggle()
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Consulting")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(careerIndex+2)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                }
-                                HStack {
-                                    Button {
-                                        hobbies[(careerIndex+3)].toggle()
-                                        
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Medicine & Healthcare")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(careerIndex+3)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                    
-                                    Button {
-                                        hobbies[(careerIndex+4)].toggle()
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Law")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(careerIndex+4)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                    
-                                    Button {
-                                        hobbies[(careerIndex+5)].toggle()
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Software Engineering")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(careerIndex+5)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                }
-                                HStack {
-                                    Button {
-                                        hobbies[(careerIndex+6)].toggle()
-                                        
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Engineering")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(careerIndex+6)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                    
-                                    Button {
-                                        hobbies[(careerIndex+7)].toggle()
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Analysts")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(careerIndex+7)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                    
-                                    Button {
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-                                            Spacer()
-                                        }.padding(.vertical)
-                                    }.opacity(0)
-                                }
-                            },
-                            label: {
-                                HStack(spacing: 20) {
-                                    Image("Career 1")
-                                    Text("Career")
-                                }
-                            }
-                        ).foregroundColor(Color.black)
-                            .accentColor(Color.black)
-                        
-                        DisclosureGroup(
-                            isExpanded: $socialIsExpanded,
-                            content: {
-                                HStack {
-                                    Button {
-                                        hobbies[(socialIndex+0)].toggle()
-                                        
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Children & Healthcare")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(socialIndex+0)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                    
-                                    Button {
-                                        hobbies[(socialIndex+1)].toggle()
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Women’s Rights")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(socialIndex+1)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                    
-                                    Button {
-                                        hobbies[(socialIndex+2)].toggle()
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("LGBTQ")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(socialIndex+2)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                }
-                                HStack {
-                                    Button {
-                                        hobbies[(socialIndex+3)].toggle()
-                                        
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Civil rights")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(socialIndex+3)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                    
-                                    Button {
-                                        hobbies[(socialIndex+4)].toggle()
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Minority groups")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(socialIndex+4)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                    
-                                    Button {
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-                                            Spacer()
-                                        }.padding(.vertical)
-                                    }.opacity(0)
-                                }
-                            },
-                            label: {
-                                HStack(spacing: 20) {
-                                    Image("Charity 1")
-                                    Text("Social Causes")
-                                }
-                            }
-                        ).foregroundColor(Color.black)
-                            .accentColor(Color.black)
-                        
-                        DisclosureGroup(
-                            isExpanded:$artIsExpanded,
-                            content: {
-                                HStack {
-                                    Button {
-                                        hobbies[(artIndex+0)].toggle()
-                                        
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Arts")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(artIndex+0)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                    
-                                    Button {
-                                        hobbies[(artIndex+1)].toggle()
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Photography")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(artIndex+1)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                    
-                                    Button {
-                                        hobbies[(artIndex+2)].toggle()
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Film")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(artIndex+2)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                }
-                                
-                                HStack {
-                                    Button {
-                                        hobbies[(artIndex+3)].toggle()
-                                        
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Museums")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(artIndex+3)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                    
-                                    Button {
-                                        
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            
-                                    }
-                                    
-                                    Button {
-                                        
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                    }
-                                }
-                            },
-                            label: {
-                                HStack(spacing: 20) {
-                                    Image("Arts 1")
-                                    Text("Arts & Media")
-                                }
-                            }
-                        ).foregroundColor(Color.black)
-                            .accentColor(Color.black)
-                        
-                        DisclosureGroup(
-                            isExpanded: $fashionIsExpanded,
-                            content: {
-                                HStack {
-                                    Button {
-                                        hobbies[(fashionIndex+0)].toggle()
-                                        
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Fashion")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(fashionIndex+0)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                    
-                                    Button {
-                                        hobbies[(fashionIndex+1)].toggle()
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Shopping")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(fashionIndex+1)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                    
-                                    Button {
-                                        hobbies[(fashionIndex+2)].toggle()
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Food & cuisine")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(fashionIndex+2)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                }
-                            },
-                            label: {
-                                HStack(spacing: 20) {
-                                    Image("Fashion 1")
-                                    Text("Fashion & Entertainmet")
-                                }
-                            }
-                        ).foregroundColor(Color.black)
-                            .accentColor(Color.black)
-                        
-                        DisclosureGroup(
-                            isExpanded: $lifestyleIsExpanded,
-                            content: {
-                                HStack {
-                                    Button {
-                                        hobbies[(lifestyleIndex+0)].toggle()
-                                        
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Travel & tourism")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(lifestyleIndex+0)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                    
-                                    Button {
-                                        hobbies[(lifestyleIndex+1)].toggle()
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Astrology")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(lifestyleIndex+1)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                    
-                                    Button {
-                                        hobbies[(lifestyleIndex+2)].toggle()
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Gardening")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(lifestyleIndex+2)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                }
-                                HStack {
-                                    Button {
-                                        hobbies[(lifestyleIndex+3)].toggle()
-                                        
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Coffee")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                            .background(hobbies[(lifestyleIndex+3)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
-                                            .cornerRadius(24)
-                                    }
-                                    
-                                    Button {
-                                        
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                    }
-                                    
-                                    Button {
-                                        
-                                    }label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 12))
-
-                                            Spacer()
-                                        }.padding(.vertical)
-                                    }
-                                }
-                            },
-                            label: {
-                                HStack(spacing: 20) {
-                                    Image("Lifestyle 1")
-                                    Text("Lifestyle")
-                                }
-                            }
-                        ).foregroundColor(Color.black)
-                            .accentColor(Color.black)
-                        
-                        Text("> Next")
-                            .font(.system(size: 26))
-                            .padding(.top, 100)
-                            .foregroundColor(Color.gray)
-                            .onTapGesture{
-                                nextStage()
-                            }
-                            .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing)
-                    }.padding(.horizontal, 50)
-                    
-                }
-                if (createProfileStage == 6) {
-                    VStack {
                         
                         Image("logo")
                             .resizable()
-                            .frame(width: 150, height: 150, alignment: .center)
-                            .padding(.top, 200)
-                            .padding(.bottom, 100)
+                            .frame(width: 200, height: 200, alignment: .center)
+                            .padding(.top, 400)
                         
-                        Text("Find out when you get matches!").font(.system(size: 28)).foregroundColor(Color.primaryColor)
-                            .padding(.bottom, 50)
+                        Spacer()
                         
-                        Button {
-                            self.showPushNotificationModal=true
-                        } label: {
-                            HStack{
-                                    Spacer()
-                                    Text("Turn on Notifications")
-                                        .foregroundColor(.white)
-                                        .font(.system(size: 24))
-                                        .padding(.vertical, 20)
-                                    Spacer()
-                            }
-                                .background(Color.primaryColor)
-                                .cornerRadius(12)
-                        }.padding(.bottom, 30)
-                            .JMModal(showModal: $showPushNotificationModal, for: [.notification, .photo], onAppear: {}, onDisappear: {nextStage()})
-                            .setPermissionComponent(for: .photo,
-                                                    description: "We want you to upload a picture of yourself")
-                            .setPermissionComponent(for: .notification,
-                                                    description: "We want to send you notification when you get matches")
-                            .changeHeaderDescriptionTo("Yolk needs certain permissions in order for all the features to work. See description for each permission")
-
-                        
-                        Text("NVM for now").font(.system(size: 18)).foregroundColor(Color.gray)
+                        Text("Skip")
+                            .font(.system(size: 26))
+                            .foregroundColor(Color.gray)
                             .onTapGesture{
-                                nextStage()
+                                self.card_x[current_question_num] = 600
+                                self.questionnaire[current_question_num] = 0
+                                current_question_num -= 1
+                                if (self.current_question_num < 0) {
+                                    nextStage()
+                                }
                             }
                         
-                    }.padding(.horizontal, 50)
-                }
-                if (createProfileStage == 7) {
+                    }
                     
+                    
+                }.padding(.horizontal, 50)
+                
+                
+            }
+            if (createProfileStage == 5) {
+                
+                VStack {
+                    
+                    Button {
+                        self.card_x[current_question_num+1] = 0
+                        current_question_num += 1
+                        self.questionnaire[current_question_num] = 0
+                        prevStage()
+                    }label: {
+                        Text("< Back")
+                            .foregroundColor(Color.gray)
+                            .font(.system(size: 26))
+                            .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                    }
+                    .padding()
+                    
+                    VStack{
+                        Text("What do you enjoy talking with your peers about? And what are your hobbies? (10 Max)")
+                            .foregroundColor(Color.primaryColor)
+                            .font(.system(size: 24))
+                            .padding(.vertical)
                         
+                    ScrollView{
                         
-                        VStack {
-
+                            
+                            DisclosureGroup(
+                                isExpanded: $sportIsExpanded,
+                                content: {
+                                    HStack {
+                                        Button {
+                                            hobbies[(sportIndex+0)].toggle()
+                                            
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Football")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(sportIndex+0)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                        
+                                        Button {
+                                            hobbies[(sportIndex+1)].toggle()
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Soccer")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(sportIndex+1)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                        
+                                        Button {
+                                            hobbies[(sportIndex+2)].toggle()
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Basketball")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(sportIndex+2)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                    }
+                                    HStack {
+                                        Button {
+                                            hobbies[(sportIndex+3)].toggle()
+                                            
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Swimming")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(sportIndex+3)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                        
+                                        Button {
+                                            hobbies[(sportIndex+4)].toggle()
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Lacrosse")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(sportIndex+4)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                        
+                                        Button {
+                                            hobbies[(sportIndex+5)].toggle()
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Tennis")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(sportIndex+5)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                    }
+                                    HStack {
+                                        Button {
+                                            hobbies[(sportIndex+6)].toggle()
+                                            
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Baseball")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(sportIndex+6)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                        
+                                        Button {
+                                            hobbies[(sportIndex+7)].toggle()
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Golf")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(sportIndex+7)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                        
+                                        Button {
+                                            hobbies[(sportIndex+8)].toggle()
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Running")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(sportIndex+8)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                    }
+                                    HStack {
+                                        Button {
+                                            hobbies[(sportIndex+9)].toggle()
+                                            
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Volleyball")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(sportIndex+9)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                        
+                                        Button {
+                                            hobbies[(sportIndex+10)].toggle()
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Weightlifting")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(sportIndex+10)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                        
+                                        Button {
+                                            hobbies[(sportIndex+11)].toggle()
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Rugby")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(sportIndex+11)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                    }
+                                    HStack {
+                                        Button {
+                                            hobbies[(sportIndex+12)].toggle()
+                                            
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Cycling")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(sportIndex+12)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                        
+                                        Button {
+                                            hobbies[(sportIndex+13)].toggle()
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Scuba Diving")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(sportIndex+13)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                        
+                                        Button {
+                                            hobbies[(sportIndex+14)].toggle()
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Extreme sports")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(sportIndex+14)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                    }
+                                },
+                                label: {
+                                    HStack(spacing: 20) {
+                                        Image("Sports 1")
+                                        Text("Sports & Fitness")
+                                    }
+                                }
+                            ).foregroundColor(Color.black)
+                                .accentColor(Color.black)
+                            
+                            DisclosureGroup(
+                                isExpanded: $businessIsExpanded,
+                                content: {
+                                    HStack {
+                                        Button {
+                                            hobbies[(businessIndex + 0)].toggle()
+                                            
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Venture Capital")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(businessIndex + 0)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                        
+                                        Button {
+                                            hobbies[(businessIndex + 1)].toggle()
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Entrepreneurship")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 11))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(businessIndex + 1)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                        
+                                        Button {
+                                            hobbies[(businessIndex + 2)].toggle()
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Marketing")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(businessIndex + 2)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                    }
+                                    HStack {
+                                        Button {
+                                            hobbies[(businessIndex + 3)].toggle()
+                                            
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Sales")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(businessIndex + 3)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                        
+                                        Button {
+                                            hobbies[(businessIndex + 4)].toggle()
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Retail")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(businessIndex + 4)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                        
+                                        Button {
+                                            hobbies[(businessIndex + 5)].toggle()
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Real-Estate")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(businessIndex + 5)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                    }
+                                    HStack {
+                                        Button {
+                                            hobbies[(businessIndex + 6)].toggle()
+                                            
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Tech & E-commerce")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(businessIndex + 6)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                        
+                                        Button {
+                                            hobbies[(businessIndex + 7)].toggle()
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Investing")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(businessIndex + 7)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                        
+                                        Button {
+                                            hobbies[(businessIndex + 8)].toggle()
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Finance")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(businessIndex + 8)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                    }
+                                },
+                                label: {
+                                    HStack(spacing: 20) {
+                                        Image("Business 1")
+                                        Text("Business")
+                                    }
+                                }
+                            ).foregroundColor(Color.black)
+                                .accentColor(Color.black)
+                            
+                            DisclosureGroup(
+                                isExpanded: $careerIsExpanded,
+                                content: {
+                                    HStack {
+                                        Button {
+                                            hobbies[(careerIndex+0)].toggle()
+                                            
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Investment Banking")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(careerIndex+0)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                        
+                                        Button {
+                                            hobbies[(careerIndex+1)].toggle()
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Finance")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(careerIndex+1)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                        
+                                        Button {
+                                            hobbies[(careerIndex+2)].toggle()
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Consulting")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(careerIndex+2)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                    }
+                                    HStack {
+                                        Button {
+                                            hobbies[(careerIndex+3)].toggle()
+                                            
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Medicine & Healthcare")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(careerIndex+3)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                        
+                                        Button {
+                                            hobbies[(careerIndex+4)].toggle()
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Law")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(careerIndex+4)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                        
+                                        Button {
+                                            hobbies[(careerIndex+5)].toggle()
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Software Engineering")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(careerIndex+5)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                    }
+                                    HStack {
+                                        Button {
+                                            hobbies[(careerIndex+6)].toggle()
+                                            
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Engineering")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(careerIndex+6)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                        
+                                        Button {
+                                            hobbies[(careerIndex+7)].toggle()
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Analysts")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(careerIndex+7)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                        
+                                        Button {
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                Spacer()
+                                            }.padding(.vertical)
+                                        }.opacity(0)
+                                    }
+                                },
+                                label: {
+                                    HStack(spacing: 20) {
+                                        Image("Career 1")
+                                        Text("Career")
+                                    }
+                                }
+                            ).foregroundColor(Color.black)
+                                .accentColor(Color.black)
+                            
+                            DisclosureGroup(
+                                isExpanded: $socialIsExpanded,
+                                content: {
+                                    HStack {
+                                        Button {
+                                            hobbies[(socialIndex+0)].toggle()
+                                            
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Children & Healthcare")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(socialIndex+0)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                        
+                                        Button {
+                                            hobbies[(socialIndex+1)].toggle()
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Women’s Rights")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(socialIndex+1)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                        
+                                        Button {
+                                            hobbies[(socialIndex+2)].toggle()
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("LGBTQ")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(socialIndex+2)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                    }
+                                    HStack {
+                                        Button {
+                                            hobbies[(socialIndex+3)].toggle()
+                                            
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Civil rights")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(socialIndex+3)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                        
+                                        Button {
+                                            hobbies[(socialIndex+4)].toggle()
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Minority groups")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(socialIndex+4)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                        
+                                        Button {
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                Spacer()
+                                            }.padding(.vertical)
+                                        }.opacity(0)
+                                    }
+                                },
+                                label: {
+                                    HStack(spacing: 20) {
+                                        Image("Charity 1")
+                                        Text("Social Causes")
+                                    }
+                                }
+                            ).foregroundColor(Color.black)
+                                .accentColor(Color.black)
+                            
+                            DisclosureGroup(
+                                isExpanded:$artIsExpanded,
+                                content: {
+                                    HStack {
+                                        Button {
+                                            hobbies[(artIndex+0)].toggle()
+                                            
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Arts")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(artIndex+0)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                        
+                                        Button {
+                                            hobbies[(artIndex+1)].toggle()
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Photography")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(artIndex+1)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                        
+                                        Button {
+                                            hobbies[(artIndex+2)].toggle()
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Film")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(artIndex+2)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                    }
+                                    
+                                    HStack {
+                                        Button {
+                                            hobbies[(artIndex+3)].toggle()
+                                            
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Museums")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(artIndex+3)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                        
+                                        Button {
+                                            
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                            
+                                        }
+                                        
+                                        Button {
+                                            
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                        }
+                                    }
+                                },
+                                label: {
+                                    HStack(spacing: 20) {
+                                        Image("Arts 1")
+                                        Text("Arts & Media")
+                                    }
+                                }
+                            ).foregroundColor(Color.black)
+                                .accentColor(Color.black)
+                            
+                            DisclosureGroup(
+                                isExpanded: $fashionIsExpanded,
+                                content: {
+                                    HStack {
+                                        Button {
+                                            hobbies[(fashionIndex+0)].toggle()
+                                            
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Fashion")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(fashionIndex+0)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                        
+                                        Button {
+                                            hobbies[(fashionIndex+1)].toggle()
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Shopping")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(fashionIndex+1)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                        
+                                        Button {
+                                            hobbies[(fashionIndex+2)].toggle()
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Food & cuisine")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(fashionIndex+2)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                    }
+                                },
+                                label: {
+                                    HStack(spacing: 20) {
+                                        Image("Fashion 1")
+                                        Text("Fashion & Entertainmet")
+                                    }
+                                }
+                            ).foregroundColor(Color.black)
+                                .accentColor(Color.black)
+                            
+                            DisclosureGroup(
+                                isExpanded: $lifestyleIsExpanded,
+                                content: {
+                                    HStack {
+                                        Button {
+                                            hobbies[(lifestyleIndex+0)].toggle()
+                                            
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Travel & tourism")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(lifestyleIndex+0)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                        
+                                        Button {
+                                            hobbies[(lifestyleIndex+1)].toggle()
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Astrology")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(lifestyleIndex+1)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                        
+                                        Button {
+                                            hobbies[(lifestyleIndex+2)].toggle()
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Gardening")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(lifestyleIndex+2)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                    }
+                                    HStack {
+                                        Button {
+                                            hobbies[(lifestyleIndex+3)].toggle()
+                                            
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Coffee")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                                .background(hobbies[(lifestyleIndex+3)] ? Color.primaryColor : Color(.init(white: 0, alpha: 0.05)))
+                                                .cornerRadius(24)
+                                        }
+                                        
+                                        Button {
+                                            
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                        }
+                                        
+                                        Button {
+                                            
+                                        }label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                            }.padding(.vertical)
+                                        }
+                                    }
+                                },
+                                label: {
+                                    HStack(spacing: 20) {
+                                        Image("Lifestyle 1")
+                                        Text("Lifestyle")
+                                    }
+                                }
+                            ).foregroundColor(Color.black)
+                                .accentColor(Color.black)
                             
                             
+                            
+                        }
+                        
+                        
+                    }
+                    .padding(.horizontal, 50)
+                    
+                    Spacer()
+                    Text("> Next")
+                        .font(.system(size: 26))
+                        .foregroundColor(Color.gray)
+                        .onTapGesture{
+                            nextStage()
+                        }
+                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing)
+                        .padding(.horizontal, 50)
+                    
+                    
+                }
+                
+            }
+            if (createProfileStage == 6) {
+                VStack {
+                    
+                    Image("logo")
+                        .resizable()
+                        .frame(width: 150, height: 150, alignment: .center)
+                        .padding(.top, 200)
+                        .padding(.bottom, 100)
+                    
+                    Text("Find out when you get matches!").font(.system(size: 28)).foregroundColor(Color.primaryColor)
+                        .padding(.bottom, 50)
+                    
+                    Button {
+                        self.showPushNotificationModal=true
+                    } label: {
+                        HStack{
+                            Spacer()
+                            Text("Turn on Notifications")
+                                .foregroundColor(.white)
+                                .font(.system(size: 24))
+                                .padding(.vertical, 20)
+                            Spacer()
+                        }
+                        .background(Color.primaryColor)
+                        .cornerRadius(12)
+                    }.padding(.bottom, 30)
+                        .JMModal(showModal: $showPushNotificationModal, for: [.notification, .photo], onAppear: {}, onDisappear: {nextStage()})
+                        .setPermissionComponent(for: .photo,
+                                                description: "We want you to upload a picture of yourself")
+                        .setPermissionComponent(for: .notification,
+                                                description: "We want to send you notification when you get matches")
+                        .changeHeaderDescriptionTo("Yolk needs certain permissions in order for all the features to work. See description for each permission")
+                    
+                    
+                    Text("NVM for now").font(.system(size: 18)).foregroundColor(Color.gray)
+                        .onTapGesture{
+                            nextStage()
+                        }
+                    
+                }.padding(.horizontal, 50)
+            }
+            if (createProfileStage == 7) {
+                
+                VStack {
+                    Text(self.addProfileImageMsg)
+                        .foregroundColor(Color.primaryColor)
+                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing)
+                        .font(.system(size: 14))
+                    
+                    Button {
+                        isShowingPhotoPicker.toggle()
+                    } label: {
+                        
+                        VStack{
+                            if let image = self.image {
+                                Image(uiImage:image)
+                                    .resizable()
+                                    .frame(width: 180, height: 180)
+                                    .scaledToFill()
+                                    .cornerRadius(90)
+                            }
+                            else {
+                                Image("plus_photo")
+                                    .font(.system(size: 64))
+                                    .padding()
+                            }
+                        }
+                        
+                    }.padding(.top, 50)
+                    
+                    Text(self.first)
+                        .font(.system(size: 36))
+                        .foregroundColor(Color.primaryColor)
+                    
+                    
+                    HStack{
+                        
+                        
+                        
+                        if (self.show_class) {
                             Button {
-                                handleSubmit()
+                                
                             } label: {
                                 HStack{
-                                        Spacer()
-                                        Text("Done")
-                                            .foregroundColor(.white)
-                                            .font(.system(size: 24))
-                                        Spacer()
-                                }
-                                    .background(Color.primaryColor)
-                                    .cornerRadius(24)
-                                    .padding(.leading, (UIScreen.main.bounds.width*0.5))
-                            }
-                            
-                            Text(self.addProfileImageMsg)
-                                .foregroundColor(Color.primaryColor)
-                                .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing)
-                                .font(.system(size: 14))
-
-                            Button {
-                                isShowingPhotoPicker.toggle()
-                            } label: {
-
-                                VStack{
-                                    if let image = self.image {
-                                        Image(uiImage:image)
-                                            .resizable()
-                                            .frame(width: 180, height: 180)
-                                            .scaledToFill()
-                                            .cornerRadius(90)
-                                    }
-                                    else {
-                                        Image("plus_photo")
-                                            .font(.system(size: 64))
-                                            .padding()
-                                    }
-                                }
-
-                            }.padding(.top, 50)
-
-                            Text(self.first)
-                                .font(.system(size: 36))
-                                .foregroundColor(Color.primaryColor)
-
-
-                            HStack{
-
-                                
-                                
-                                if (self.show_class) {
-                                    Button {
-
-                                    } label: {
-                                        HStack{
-                                                Spacer()
-                                            Text(self.grad_year == "2022" ? "Senior": self.grad_year == "2023" ? "Junior" : self.grad_year == "2024" ? "Sophomore": "Freshman")
-                                                    .foregroundColor(.white)
-                                                    .font(.system(size: 24))
-                                                Spacer()
-
-
-                                        }
-                                            .background(Color.primaryColor)
-                                            .cornerRadius(24)
-                                    }.padding(.horizontal, UIScreen.main.bounds.width*0.2)
-                                }
-                                
-
-                                
-
-                            }
-
-                            Group {
-                                Toggle("Display class standing", isOn: $show_class)
-                                    .font(.system(size: 24))
-                                    .foregroundColor(Color.primaryColor)
-                                    .tint(Color.primaryColor)
-
-                                Text("Add a short bio about yourself")
-                                    .font(.system(size: 20))
-                                    .italic()
-                                    .foregroundColor(Color.primaryColor)
-                                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-
-                                
-                                TextEditor(text: $bio)
-                                    .overlay(RoundedRectangle(cornerRadius: 10.0).strokeBorder(Color.primaryColor, style: StrokeStyle(lineWidth: 2.0)))
-                                    .frame(width: UIScreen.main.bounds.width*0.8, height: UIScreen.main.bounds.height*0.2, alignment: .leading)
-
-
-                                Text("View a sample bio")
-                                    .font(.system(size: 16))
-                                    .foregroundColor(Color.gray)
-                                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-
-                                HStack {
-                                    Image("tangya_profile_pic")
-                                        .resizable()
-                                        .frame(width: 80, height: 80)
-
                                     Spacer()
-
-                                    Text("Third-year college student daydreaming about the next start-up idea. Interested in VC, tech, and coffee. Study international affairs and economics. ")
-                                        .font(.system(size: 12))
-                                        .foregroundColor(Color.black)
+                                    Text(self.grad_year == "2022" ? "Senior": self.grad_year == "2023" ? "Junior" : self.grad_year == "2024" ? "Sophomore": "Freshman")
+                                        .foregroundColor(.white)
+                                        .font(.system(size: 24))
+                                    Spacer()
+                                    
+                                    
                                 }
-                            }.padding(.vertical, 5)
+                                .background(Color.primaryColor)
+                                .cornerRadius(24)
+                            }.padding(.horizontal, UIScreen.main.bounds.width*0.2)
+                        }
+                        
+                        
+                        
+                        
+                    }
+                    
+                    Group {
+                        Toggle("Display class year", isOn: $show_class)
+                            .font(.system(size: 24))
+                            .foregroundColor(Color.primaryColor)
+                            .tint(Color.primaryColor)
+                        
+                        Text("Add a short bio about yourself")
+                            .font(.system(size: 20))
+                            .italic()
+                            .foregroundColor(Color.primaryColor)
+                            .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                        
+                        
+                        TextEditor(text: $bio)
+                            .overlay(RoundedRectangle(cornerRadius: 10.0).strokeBorder(Color.primaryColor, style: StrokeStyle(lineWidth: 2.0)))
+                            .frame(width: UIScreen.main.bounds.width*0.8, height: UIScreen.main.bounds.height*0.15, alignment: .leading)
+                        
+                        
+                        Text("Sample Bio")
+                            .font(.system(size: 24, weight:.bold))
+                            .foregroundColor(Color.gray)
+                            .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                        
+                        HStack {
+                            Image("tangya_profile_pic")
+                                .resizable()
+                                .frame(width: 80, height: 80)
                             
+                            Spacer()
                             
-                        }.padding(.horizontal, 50)
-                            .fullScreenCover(isPresented: $isShowingPhotoPicker, onDismiss: nil) {
-                                ImagePicker(image: $image)
-                            }
-                            
-                }
+                            Text("Tangya is a Junior studying in IS + Econ and daydreaming about the next start-up idea. Passionate in photography, scuba diving and coffee.")
+                                .font(.system(size: 14))
+                                .foregroundColor(Color.black)
+                        }
+                    }.padding(.vertical, 5)
+                    
+                    Spacer()
+                    
+                    Button {
+                        handleSubmit()
+                    } label: {
+                        HStack{
+                            Spacer()
+                            Text("Done")
+                                .foregroundColor(.white)
+                                .font(.system(size: 24))
+                                .padding()
+                            Spacer()
+                        }
+                        .background(Color.primaryColor)
+                        .cornerRadius(18)
+                        .padding(.leading, (UIScreen.main.bounds.width*0.5))
+                    }
+                    
+                }.padding(.horizontal, 50)
+                    .fullScreenCover(isPresented: $isShowingPhotoPicker, onDismiss: nil) {
+                        ImagePicker(image: $image)
+                    }
+                
             }
             
-
+            
+            
             
         }
     }
@@ -2066,7 +2103,7 @@ struct SurveyView: View {
         createProfileStage = createProfileStage - 1
     }
     
-
+    
     
     private func handleSubmit() {
         
@@ -2087,13 +2124,13 @@ struct SurveyView: View {
                 print("Failed to push image to Storage: \(err)")
                 return
             }
-
+            
             storage_ref.downloadURL { url, err in
                 if let err = err {
                     print("Failed to retrieve downloadURL: \(err)")
                     return
                 }
-
+                
                 ref.updateData([
                     "profileImageUrl": url?.absoluteString ?? ""
                 ]) { err in
@@ -2101,7 +2138,7 @@ struct SurveyView: View {
                         print("Error updating document: \(err)")
                     }
                 }
-
+                
                 print("Successfully stored image with url: \(url?.absoluteString ?? "")")
                 
                 var profile: [String: Any] = [:]
@@ -2122,7 +2159,7 @@ struct SurveyView: View {
                 profile["class_standing"] = self.grad_year == "2022" ? "Senior": self.grad_year == "2023" ? "Junior" : self.grad_year == "2024" ? "Sophomore": "Freshman"
                 profile["display_class"] = self.show_class
                 
-
+                
                 ref.updateData([
                     "profile": profile
                 ]) { err in
@@ -2137,14 +2174,14 @@ struct SurveyView: View {
                             }
                             vm.fetchRecentMessages()
                             vm.fetchCurrentUser()
+                        }
                     }
                 }
-            }
             }
         }
         
     }
-
+    
 }
 
 struct Card: View {
@@ -2155,15 +2192,15 @@ struct Card: View {
                 .foregroundColor(Color.primaryColor)
                 .font(.system(size: 36))
                 .padding(.bottom, 300)
-                
+            
         }.frame(
             minWidth: 0,
             maxWidth: .infinity,
             minHeight: 0,
             maxHeight: .infinity,
             alignment: .center
-          )
-          .background(Color.white)
+        )
+        .background(Color.white)
     }
 }
 

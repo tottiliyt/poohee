@@ -22,25 +22,6 @@ struct WelcomeView: View {
                         .frame(width: 180, height: 180, alignment: .center)
                         .padding(.vertical, 40)
                     
-                    Button {
-                        
-                    }label: {
-                        HStack{
-                            
-                            NavigationLink(destination: LoginView(didCompleteLoginProcess: {
-                                didCompleteLoginProcess()
-                            })) {
-                                Spacer()
-                                Text("Sign in with JHU email")
-                                    .foregroundColor(.white)
-                                    .font(.system(size: 24))
-                                Spacer()
-                            }
-                            
-                        }.padding(.vertical)
-                            .background(Color.primaryColor)
-                            .cornerRadius(24)
-                    }
                     
                     Button {
 
@@ -51,8 +32,8 @@ struct WelcomeView: View {
                                 didCompleteLoginProcess()
                             })){
                                 Spacer()
-                                Text("Register")
-                                    .foregroundColor(.black)
+                                Text("Register with JHU email")
+                                    .foregroundColor(.white)
                                     .font(.system(size: 24))
 
                                 Spacer()
@@ -60,9 +41,30 @@ struct WelcomeView: View {
                             
 
                         }.padding(.vertical)
-                            .background(Color(.init(white: 0, alpha: 0.05)))
-                            .cornerRadius(24)
+                            .background(Color.primaryColor)
+                            .cornerRadius(20)
                     }
+                    
+                    Button {
+                        
+                    }label: {
+                        HStack{
+                            
+                            NavigationLink(destination: LoginView(didCompleteLoginProcess: {
+                                didCompleteLoginProcess()
+                            })) {
+                                Spacer()
+                                Text("Sign In")
+                                    .foregroundColor(.black)
+                                    .font(.system(size: 24))
+                                Spacer()
+                            }
+                            
+                        }.padding(.vertical)
+                            .background(Color.buttonGray)
+                            .cornerRadius(20)
+                    }
+                    
                     
                     
                 }
