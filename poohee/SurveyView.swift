@@ -15,7 +15,7 @@ struct SurveyView: View {
     @ObservedObject var vm: HomeViewModel
     
     
-    @State private var createProfileStage = 5
+    @State private var createProfileStage = 7
     @State private var friend = false
     @State private var career = false
     @State private var first = ""
@@ -104,9 +104,9 @@ struct SurveyView: View {
                          "Systems Engineering",
                          "Writing Seminars"]
     
-    let political_option = ["Select", "Democratic", "Independent", "Republican", "Other Affiliation", "Unaffiliated"]
+    let political_option = ["Select", "Democratic", "Republican", "Libertarian", "Socialist", "Other", "Unaffiliated"]
     
-    let religious_option = ["Select","Buddhist", "Christian", "Hindu", "Muslim", "Sikh","Other religion", "Unaffiliated"]
+    let religious_option = ["Select","Christian", "Jewish", "Buddhist", "Hindu", "Muslim", "Sikh","Other", "Unaffiliated"]
     
     @State private var question_list = [
         "I like to stick with people I know at social events",
@@ -2131,16 +2131,6 @@ struct SurveyView: View {
                     return
                 }
                 
-                ref.updateData([
-                    "profileImageUrl": url?.absoluteString ?? ""
-                ]) { err in
-                    if let err = err {
-                        print("Error updating document: \(err)")
-                    }
-                }
-                
-                print("Successfully stored image with url: \(url?.absoluteString ?? "")")
-                
                 var profile: [String: Any] = [:]
                 
                 profile["first_name"] = self.first
@@ -2150,7 +2140,7 @@ struct SurveyView: View {
                 profile["last_name"] = self.last
                 profile["political"] = self.political
                 profile["religious"] = self.religious
-                
+                profile["profileImageUrl"] = url?.absoluteString ?? ""
                 profile["career_interests"] = self.career_interests
                 profile["hobbies"] = self.hobbies
                 profile["majors"] = [self.first_major, self.second_major]

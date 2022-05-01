@@ -20,14 +20,17 @@ struct OtherUserProfileView: View {
                 
                 
                 
-                WebImage(url: URL(string: vm.recipientProfileImageUrl ?? ""))
+                WebImage(url: URL(string: vm.recipientProfile?.profileImageUrl ?? ""))
                     .resizable()
                     .scaledToFill()
                     .frame(width: 200, height: 200)
                     .clipped()
                     .cornerRadius(200)
+                    .overlay(RoundedRectangle(cornerRadius: 200)
+                        .stroke(lineWidth: 2)
+                        .foregroundColor(Color.secondaryColor)
+                    )
                     .padding(.bottom, 20)
-                    
                 
 
                 Text(vm.recipientProfile?.first_name ?? "")

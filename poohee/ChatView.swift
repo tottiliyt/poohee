@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Firebase
+import SDWebImageSwiftUI
 
 class ChatViewModel: ObservableObject {
     
@@ -18,7 +19,6 @@ class ChatViewModel: ObservableObject {
     @Published var recipientId = ""
     @Published var chat : Chat
     @Published var recipientProfile : Profile?
-    @Published var recipientProfileImageUrl : String?
     @Published var recipientMeetNum : Int?
     @Published var profile: Profile?
     @Published var recipientChoices = [false]
@@ -112,8 +112,6 @@ class ChatViewModel: ObservableObject {
                 return
 
             }
-            
-            self.recipientProfileImageUrl = data["profileImageUrl"] as? String ?? ""
             self.recipientMeetNum = data["num_meet"] as? Int ?? 0
             
             self.recipientProfile = Profile(uid: self.recipientId, data: data["profile"] as? Dictionary<String, Any> ?? [:])
@@ -285,19 +283,28 @@ struct ChatView: View {
                 OtherUserProfileView(vm: vm)
             } label: {
                 HStack{
-                    Image(systemName: "person.fill")
-                        .font(.system(size: 30))
-                        .foregroundColor(Color.gray)
-                        .frame(width: 40, height: 40, alignment: .center)
-                        .padding(4)
-                        .overlay(RoundedRectangle(cornerRadius: 60)
+                    
+                    WebImage(url: URL(string: vm.recipientProfile?.profileImageUrl ?? ""))
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 40, height: 40)
+                        .clipped()
+                        .cornerRadius(60)
+                        .overlay(RoundedRectangle(cornerRadius: 44)
                             .stroke(lineWidth: 2)
                             .foregroundColor(Color.primaryColor)
                         )
+                        
                     
-                    Text("\(chat.firstName)")
-                        .font(.system(size:25))
-                        .foregroundColor(Color.gray)
+                    HStack{
+                        Text("\(chat.firstName)")
+                            .font(.system(size:25))
+                            .foregroundColor(Color.black)
+                        Text(">")
+                            .font(.system(size:25))
+                            .foregroundColor(Color.gray)
+                    }
+                    
                 }
                 .padding(.bottom)
                 

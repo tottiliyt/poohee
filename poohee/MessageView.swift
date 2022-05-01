@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
 
 struct MessageView: View {
     
@@ -65,7 +66,7 @@ struct MessageView: View {
                         
                     } else {
                         VStack (alignment: .center){
-                            Text("\(vm.profile?.first_name ?? ""),you have a new match!")
+                            Text("\(vm.profile?.first_name ?? ""), you have a new match!")
                                 .font(.system(size: 30, weight: .bold))
                             
                             Button(action: {
@@ -122,12 +123,14 @@ struct MessageView: View {
                         ChatView(chat: chat)
                     }, label: {
                         HStack(spacing: 16){
-                            Image(systemName: "person.fill")
-                                .font(.system(size: 32))
-                                .foregroundColor(Color.chatPink)
-                                .padding(8)
-                                .overlay(RoundedRectangle(cornerRadius: 44)
-                                    .stroke(lineWidth: 1)
+                            WebImage(url: URL(string: chat.profileImageUrl))
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 48, height: 48)
+                                .clipped()
+                                .cornerRadius(60)
+                                .overlay(RoundedRectangle(cornerRadius: 60)
+                                    .stroke(lineWidth: 2)
                                     .foregroundColor(Color.chatPink)
                                 )
                             

@@ -85,14 +85,17 @@ struct ProfileView: View {
                             .onReceive(vm.$profile_img_url) { _ in
                                 loadImageFromFirebase()
                             }
+                            .overlay(RoundedRectangle(cornerRadius: 200)
+                                .stroke(lineWidth: 2)
+                                .foregroundColor(Color.secondaryColor)
+                            )
+                            
                             
                         
 
                         Text(vm.profile?.first_name ?? "")
                             .font(.system(size: 36))
                             .foregroundColor(Color.secondaryColor)
-                            
-                        
                         
                         HStack{
                             
@@ -312,7 +315,7 @@ struct ProfileView: View {
     }
     
     private func loadImageFromFirebase(){
-        self.imageURL = URL(string: vm.user?.profileImageUrl ?? "")
+        self.imageURL = URL(string: vm.profile?.profileImageUrl ?? "")
     }
     
     

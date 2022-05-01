@@ -21,7 +21,6 @@ class HomeViewModel: ObservableObject {
     @Published var profile_img_url = ""
     @Published var matchIsAvailable = false
     
-    
     init() {
         
         DispatchQueue.main.async {
@@ -75,11 +74,8 @@ class HomeViewModel: ObservableObject {
 
 
             let email = data["email"] as? String ?? ""
-            let profile_image_url = data["profileImageUrl"] as? String ?? ""
             let matching = data["matching"] as? String ?? ""
             let num_meet = data["num_meet"] as? Int ?? 0
-            
-            self.profile_img_url = data["profileImageUrl"] as? String ?? ""
             
             print("fetched url is \(self.profile_img_url)")
 
@@ -91,8 +87,10 @@ class HomeViewModel: ObservableObject {
             }
 
             self.profile = Profile(uid: self.uid, data: data["profile"] as? Dictionary<String, Any> ?? [:])
+            
+            self.profile_img_url = self.profile?.profileImageUrl ?? ""
 
-            self.user = User(uid: self.uid, email: email, profileImageUrl: profile_image_url, matching: matching, current_match: data["current_match"] as? String ?? "", match_similarity: data["match_similarity"] as? String ?? "", available: data["available"] as? Bool ?? false, new_match: data["new_match"] as? Bool ?? false, profile: self.profile!, num_meet: num_meet)
+            self.user = User(uid: self.uid, email: email, matching: matching, current_match: data["current_match"] as? String ?? "", match_similarity: data["match_similarity"] as? String ?? "", available: data["available"] as? Bool ?? false, new_match: data["new_match"] as? Bool ?? false, profile: self.profile!, num_meet: num_meet)
             
             self.fetchMatch()
             
