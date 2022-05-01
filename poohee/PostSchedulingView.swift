@@ -11,7 +11,6 @@ struct PostSchedulingView: View {
     @State var message = ""
     @ObservedObject var vm : ChatViewModel
     
-    
     var body: some View {
         VStack{
             ScrollView {
@@ -40,13 +39,12 @@ struct PostSchedulingView: View {
             .background(Color.white)
 
             HStack{
-                TextField("Message", text: $message)
-                    .padding()
-                    .overlay(
-                            RoundedRectangle(cornerRadius: 14)
-                                .stroke(Color.primaryColor, lineWidth: 2)
-                        )
+                TextEditor(text: $message)
+                    .padding(3.5)
+                    .overlay(RoundedRectangle(cornerRadius: 10.0).strokeBorder(Color.primaryColor, style: StrokeStyle(lineWidth: 2.0)))
+                    .frame(width: UIScreen.main.bounds.width*0.7, height: UIScreen.main.bounds.height*0.05, alignment: .leading)
                     .padding(.horizontal)
+                
                 
                 Button{
                     vm.send(text: self.message, stage: 2)
