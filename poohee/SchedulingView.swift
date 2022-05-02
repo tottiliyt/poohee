@@ -53,24 +53,41 @@ struct SchedulingView: View {
                 HStack{
                     Spacer()
                     
+                    
                     Button{
-                        cancelMatching.toggle()
+                        if vm.messages.count == 1 && !canceled {
+                            cancelMatching.toggle()
+                        }
+                        
                     } label: {
                         Image("EggYellow")
                     }
                     .padding(.trailing)
                     
-                    Button{
-                        scheduling.toggle()
-                    } label: {
-                        Text("Schedule")
-                        .foregroundColor(Color.white)
-                        .font(.system(size: 35, weight: .bold))
-                        .padding()
-                        .frame(width: 300, height: 50)
-                        .background(Color.primaryColor)
-                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                    if vm.messages.count > 1 || canceled {
+                        Text("Canceled")
+                            .foregroundColor(Color.white)
+                            .font(.system(size: 35, weight: .bold))
+                            .padding()
+                            .frame(width: 300, height: 50)
+                            .background(Color.primaryColor)
+                            .clipShape(RoundedRectangle(cornerRadius: 20))
+                        
+                    } else {
+                        Button{
+                            scheduling.toggle()
+                        } label: {
+                            Text("Schedule")
+                            .foregroundColor(Color.white)
+                            .font(.system(size: 35, weight: .bold))
+                            .padding()
+                            .frame(width: 300, height: 50)
+                            .background(Color.primaryColor)
+                            .clipShape(RoundedRectangle(cornerRadius: 20))
+                        }
                     }
+                    
+                    
                     
                     Spacer()
                     
