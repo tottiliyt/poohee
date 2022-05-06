@@ -201,7 +201,7 @@ struct SurveyView: View {
                         HStack{
                             
                             Spacer()
-                            Text("Meet Summer Buddies!")
+                            Text("Expand My Network!")
                                 .foregroundColor(.white)
                                 .font(.system(size: 28))
                             Spacer()
@@ -214,9 +214,8 @@ struct SurveyView: View {
                     
                 }
                 .padding(.horizontal, 50)
-                
-                
             }
+            
             if(createProfileStage == 1) {
                 VStack{
                     Button {

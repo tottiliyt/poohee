@@ -147,7 +147,7 @@ struct OtherUserProfileView: View {
                             HStack{
 
                                     Spacer()
-                                    Text("Meet Like-minded People (Career/Academic)!")
+                                    Text("Expand My Network!")
                                     .foregroundColor(.white)
                                         .font(.system(size: 25))
                                     Spacer()

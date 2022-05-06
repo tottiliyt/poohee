@@ -40,22 +40,13 @@ struct GoalView: View {
             
             
             Button {
-                bothToggle()
-            }label: {
-                Text("Actually both!")
-                    .foregroundColor(Color.gray)
-                    .font(.system(size: 36))
-            }
-            
-            
-            Button {
                 career.toggle()
             }label: {
                 HStack{
                     
 
                         Spacer()
-                        Text("Meet Like-minded People (Career/Academic)")
+                        Text("Expand My Network")
                             .foregroundColor(.white)
                             .font(.system(size: 26))
                         Spacer()
