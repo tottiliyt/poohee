@@ -2025,7 +2025,7 @@ struct SurveyView: View {
                         Toggle("Display class year", isOn: $show_class)
                             .font(.system(size: 24))
                             .foregroundColor(Color.primaryColor)
-                            .tint(Color.primaryColor)
+                            .toggleStyle(SwitchToggleStyle(tint: Color.primaryColor))
                         
                         Text("Add a short bio about yourself")
                             .font(.system(size: 20))

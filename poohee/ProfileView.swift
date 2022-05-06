@@ -29,9 +29,6 @@ struct ProfileView: View {
     
     var body: some View {
         
-        
-        
-        
         ScrollView {
             GeometryReader { geo in
                 ZStack {

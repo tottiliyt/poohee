@@ -18,8 +18,6 @@ struct LoginView: View {
     @State var inVerifyView = false
     @State var verification_fail = false
     @State var inForgetPassword = false
-    @FocusState private var emailFocused: Bool
-    @FocusState private var passwordFocused: Bool
     
     var body: some View {
         ScrollView {
@@ -73,7 +71,6 @@ struct LoginView: View {
 
 
                         TextField("JHU Email (xxxx@jh.edu)", text: $forget_email)
-                            .focused($emailFocused)
                             .keyboardType(.emailAddress)
                             .autocapitalization(.none)
                             .padding()
@@ -123,7 +120,6 @@ struct LoginView: View {
 
 
                         TextField("JHU Email (xxxx@jh.edu)", text: $email)
-                            .focused($emailFocused)
                             .keyboardType(.emailAddress)
                             .autocapitalization(.none)
                             .padding()
@@ -132,7 +128,6 @@ struct LoginView: View {
 
                         
                         SecureField("Password", text: $password)
-                            .focused($passwordFocused)
                             .autocapitalization(.none)
                             .padding()
                             .background(RoundedRectangle(cornerRadius: 8).stroke( Color.primaryColor))
@@ -179,15 +174,6 @@ struct LoginView: View {
                 
             }
                     
-        }
-        .onTapGesture {
-            if emailFocused{
-                emailFocused = false
-            }
-            
-            if passwordFocused{
-                passwordFocused = false
-            }
         }
 
                 

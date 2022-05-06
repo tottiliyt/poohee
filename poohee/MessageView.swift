@@ -54,7 +54,7 @@ struct MessageView: View {
                                         .foregroundColor(Color.black)
                                         .font(.system(size: 30, weight: .bold))
                                         .padding()
-                                        .background()
+                                        .background(Color.white)
                                         .clipShape(RoundedRectangle(cornerRadius: 20))
                                 })
                                 .padding(.horizontal)
@@ -77,7 +77,7 @@ struct MessageView: View {
                                     .font(.system(size: 30, weight: .bold))
                                     .padding()
                                     .frame(width: 175, height: 60)
-                                    .background()
+                                    .background(Color.white)
                                     .clipShape(RoundedRectangle(cornerRadius: 20))
                             })
                             

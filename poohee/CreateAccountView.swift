@@ -18,8 +18,6 @@ struct CreateAccountView: View {
     @State var msg = ""
     @State var inVerifyView = false
     @State var verificationStage = 0
-    @FocusState private var emailFocused: Bool
-    @FocusState private var passwordFocused: Bool
     
     var body: some View {
         ScrollView {
@@ -93,7 +91,6 @@ struct CreateAccountView: View {
 
 
                         TextField("JHU Email (xxxx@jh.edu)", text: $email)
-                            .focused($emailFocused)
                             .keyboardType(.emailAddress)
                             .autocapitalization(.none)
                             .padding()
@@ -102,11 +99,12 @@ struct CreateAccountView: View {
 
                         
                         SecureField("Password", text: $password)
-                            .focused($passwordFocused)
                             .autocapitalization(.none)
                             .padding()
                             .background(RoundedRectangle(cornerRadius: 8).stroke( Color.primaryColor))
                             .disableAutocorrection(true)
+                        
+                        
                         
                         ZStack{
                             Text("\n")
@@ -145,15 +143,6 @@ struct CreateAccountView: View {
                     }.padding(.horizontal, 50)
             }
         }
-        .onTapGesture {
-            if emailFocused{
-                emailFocused = false
-            }
-            
-            if passwordFocused{
-                passwordFocused = false
-            }
-        }
                 
 
             
@@ -172,10 +161,10 @@ struct CreateAccountView: View {
             return
         }
         
-        if (!(email.hasSuffix("@jh.edu") || email.hasSuffix("@jhu.edu"))) {
+        /*if (!(email.hasSuffix("@jh.edu") || email.hasSuffix("@jhu.edu"))) {
             msg = "Email must end with @jh.edu"
             return
-        }
+        }*/
         
         
         FirebaseManager.shared.auth.createUser(withEmail: email, password: password) {

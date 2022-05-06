@@ -123,7 +123,7 @@ struct HomePopUp: View {
                 
             }
             .padding(30)
-            .background()
+            .background(Color.white)
             .cornerRadius(25)
             .padding()
             
