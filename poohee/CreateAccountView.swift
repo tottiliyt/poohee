@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Firebase
+import FirebaseFunctions
 
 
 struct CreateAccountView: View {
@@ -18,6 +19,8 @@ struct CreateAccountView: View {
     @State var msg = ""
     @State var inVerifyView = false
     @State var verificationStage = 0
+    @State var verificationCode = ""
+    @State var code = ""
     
     var body: some View {
         ScrollView {
@@ -29,10 +32,36 @@ struct CreateAccountView: View {
                         .frame(width: 250, height: 250, alignment: .center)
                         .padding(.vertical, 40)
                     
-                    Text(verificationStage == 0 ? "Please check your inbox/spam" : verificationStage == 1 ? "Verification failed" : "We re-sent a link to your JHU email")
+                    Text(verificationStage == 0 ? "Please check your inbox/spam" : verificationStage == 1 ? "Verification failed, incorrect verification code" : "We re-sent a link to your JHU email")
                         .foregroundColor(Color.primaryColor)
-                        .font(.system(size: 36))
+                        .font(.system(size: 26))
                     
+                    TextField("Verification Code", text: $code)
+                        .keyboardType(.numberPad)
+                        .padding()
+                        .background(RoundedRectangle(cornerRadius: 8).stroke( Color.primaryColor))
+                        .disableAutocorrection(true)
+                        .padding(.vertical, 12)
+                    
+                    Text(msg)
+                        .foregroundColor(Color.primaryColor)
+                        .font(.system(size: 16))
+                    
+                    Button {
+                        verify()
+                    }label: {
+                        HStack{
+                        
+                                Spacer()
+                                Text("Submit code")
+                                    .foregroundColor(.white)
+                                    .font(.system(size: 24))
+                                Spacer()
+
+                        }.padding(.vertical, 12)
+                            .background(Color.primaryColor)
+                            .cornerRadius(24)
+                    }
                     
                     Button {
                         resendVerificationEmail()
@@ -52,22 +81,9 @@ struct CreateAccountView: View {
                     }
                     .padding(.vertical)
                     
-                    
-                    Button {
-                        verify()
-                    }label: {
-                        HStack{
-                        
-                                Spacer()
-                                Text("I have verified my JHU email")
-                                    .foregroundColor(.white)
-                                    .font(.system(size: 24))
-                                Spacer()
 
-                        }.padding(.vertical, 12)
-                            .background(Color.primaryColor)
-                            .cornerRadius(24)
-                    }
+                    
+
                 }
                 .padding(.horizontal, 50)
             }
@@ -149,6 +165,10 @@ struct CreateAccountView: View {
                 
     }
     
+    func makeCode(email:String) -> String {
+        String(String(email.hashValue).suffix(6))
+    }
+    
     private func createAccount() {
         
         if (email == "") {
@@ -156,8 +176,8 @@ struct CreateAccountView: View {
             return
         }
         
-        if (password == "") {
-            msg = "Password can't be empty"
+        if (password.count < 6) {
+            msg = "Password needs to be at least 6 characters in length"
             return
         }
         
@@ -166,19 +186,11 @@ struct CreateAccountView: View {
             return
         }*/
         
+        verificationCode = makeCode(email: email)
+        sendVerificationEmail()
+        inVerifyView.toggle()
         
-        FirebaseManager.shared.auth.createUser(withEmail: email, password: password) {
-            result, error in
-            if let error = error {
-                msg = error.localizedDescription
-                print("failed to create user: \(error)")
-                return
-            }
-            print("account create")
-            storeUserInfo()
-            sendVerificationEmail()
-            inVerifyView.toggle()
-        }
+
         
         
         
@@ -187,63 +199,61 @@ struct CreateAccountView: View {
     
     private func verify() {
         
-        FirebaseManager.shared.auth.currentUser?.reload() {
-            error in
-            if let error = error {
-                print("reload failed" + error.localizedDescription)
-                return
-            }
-            guard let verified = FirebaseManager.shared.auth.currentUser?.isEmailVerified else {
-                print("can't verify")
-                verificationStage = 1
-                return
-            }
-            
-            print(verified)
-            
-            if (verified == false) {
-                verificationStage = 1
-            } else {
-                inVerifyView.toggle()
-                didCompleteLoginProcess()
+        let verified = (makeCode(email: email) == code)
+        
+        if (verified == false) {
+            verificationStage = 1
+        } else {
+            FirebaseManager.shared.auth.createUser(withEmail: email, password: password) {
+                result, error in
+                if let error = error {
+                    msg = error.localizedDescription
+                    print("failed to create user: \(error)")
+                    return
+                }
+                print("account create")
+                FirebaseManager.shared.auth.currentUser?.reload() {
+                    error in
+                    if let error = error {
+                        print("reload failed" + error.localizedDescription)
+                        return
+                    }
+                    inVerifyView.toggle()
+                    storeUserInfo()
+                    didCompleteLoginProcess()
+
+                }
+                
             }
         }
+        
+
+        
     }
     
     private func resendVerificationEmail() {
-        if FirebaseManager.shared.auth.currentUser != nil {
 
-            FirebaseManager.shared.auth.currentUser?.sendEmailVerification { error in
-                if let error = error {
-                    print("email sent fail" + error.localizedDescription)
-                    return
-                }
-                print("email sent success")
-                verificationStage = 2
-                
-              // ...
-            }
-        } else {
-            print("current user is null")
-            return
+            
+    Functions.functions().httpsCallable("sendVerificationEmail").call(["code": verificationCode, "email": email]) { result, error in
+        if let error = error as NSError? {
+            print(error)
         }
+        print("email sent success")
+        verificationStage = 2
+      }
+          
     }
     
     private func sendVerificationEmail() {
-        if FirebaseManager.shared.auth.currentUser != nil {
 
-            FirebaseManager.shared.auth.currentUser?.sendEmailVerification { error in
-                if let error = error {
-                    print("email sent fail" + error.localizedDescription)
-                    return
-                }
-                print("email sent success")
-              // ...
-            }
-        } else {
-            print("current user is null")
-            return
+
+    Functions.functions().httpsCallable("sendVerificationEmail").call(["code": verificationCode, "email": email]) { result, error in
+        if let error = error as NSError? {
+            print(error)
         }
+        print("email sent success")
+      }
+        
     }
     
     private func storeUserInfo(){
@@ -253,7 +263,7 @@ struct CreateAccountView: View {
         
         guard let fcmToken = Messaging.messaging().fcmToken else { return }
         
-        let userData = ["email": self.email, "profile": [:], "matching": "On", "profileImageUrl": "", "num_meet": 0, "fcmToken": fcmToken] as [String : Any]
+        let userData = ["email": self.email, "profile": [:], "matching": "On", "profileImageUrl": "", "num_meet": 0, "fcmToken": fcmToken, "verificationCode": self.verificationCode] as [String : Any]
         
         FirebaseManager.shared.firestore.collection("users")
             .document(uid).setData(userData) { err in

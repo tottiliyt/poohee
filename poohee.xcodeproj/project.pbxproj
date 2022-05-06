@@ -37,6 +37,7 @@
 		B944F0CA27F15FD300805A43 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B944F0C927F15FD300805A43 /* Preview Assets.xcassets */; };
 		B96A1C8F27F8D30400DEBC48 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96A1C8E27F8D30400DEBC48 /* WelcomeView.swift */; };
 		B99291BD27FFA2FA00774CEB /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B99291BC27FFA2FA00774CEB /* ImagePicker.swift */; };
+		B9A2C4D32825B3B600E438E4 /* FirebaseFunctions in Frameworks */ = {isa = PBXBuildFile; productRef = B9A2C4D22825B3B600E438E4 /* FirebaseFunctions */; };
 		B9D2ACA327FCCC4700D71ADA /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D2ACA227FCCC4700D71ADA /* UserModel.swift */; };
 		B9D2ACA527FCCCE700D71ADA /* ProfileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D2ACA427FCCCE700D71ADA /* ProfileModel.swift */; };
 		B9DBE8BC27F8FD0100F29992 /* SurveyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9DBE8BB27F8FD0100F29992 /* SurveyView.swift */; };
@@ -94,6 +95,7 @@
 				51C24AEE281263AD003DD485 /* FirebaseMessaging in Frameworks */,
 				51C24AE8281263AD003DD485 /* FirebaseAnalytics in Frameworks */,
 				51C24AF3281263EE003DD485 /* PermissionsSwiftUINotification in Frameworks */,
+				B9A2C4D32825B3B600E438E4 /* FirebaseFunctions in Frameworks */,
 				51C24AEA281263AD003DD485 /* FirebaseAuth in Frameworks */,
 				51C24AF828126405003DD485 /* SDWebImageSwiftUI in Frameworks */,
 				51C24AF0281263AD003DD485 /* FirebaseStorage in Frameworks */,
@@ -110,6 +112,7 @@
 			children = (
 				B944F0C127F15FCF00805A43 /* poohee */,
 				B944F0C027F15FCF00805A43 /* Products */,
+				B9A2C4D12825B3B600E438E4 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -167,6 +170,13 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		B9A2C4D12825B3B600E438E4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		B9D2ACA127FCCC3900D71ADA /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -203,6 +213,7 @@
 				51C24AF2281263EE003DD485 /* PermissionsSwiftUINotification */,
 				51C24AF4281263EE003DD485 /* PermissionsSwiftUIPhoto */,
 				51C24AF728126405003DD485 /* SDWebImageSwiftUI */,
+				B9A2C4D22825B3B600E438E4 /* FirebaseFunctions */,
 			);
 			productName = poohee;
 			productReference = B944F0BF27F15FCF00805A43 /* poohee.app */;
@@ -342,7 +353,7 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
@@ -396,7 +407,7 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
@@ -511,7 +522,7 @@
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 8.0.0;
+				minimumVersion = 9.0.0;
 			};
 		};
 		51C24AF1281263EE003DD485 /* XCRemoteSwiftPackageReference "PermissionsSwiftUI" */ = {
@@ -572,6 +583,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 51C24AF628126405003DD485 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
 			productName = SDWebImageSwiftUI;
+		};
+		B9A2C4D22825B3B600E438E4 /* FirebaseFunctions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 51C24AE6281263AD003DD485 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFunctions;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

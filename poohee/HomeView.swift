@@ -90,7 +90,7 @@ class HomeViewModel: ObservableObject {
             
             self.profile_img_url = self.profile?.profileImageUrl ?? ""
 
-            self.user = User(uid: self.uid, email: email, matching: matching, current_match: data["current_match"] as? String ?? "", match_similarity: data["match_similarity"] as? String ?? "", available: data["available"] as? Bool ?? false, new_match: data["new_match"] as? Bool ?? false, profile: self.profile!, num_meet: num_meet)
+            self.user = User(uid: self.uid, email: email, matching: matching, current_match: data["current_match"] as? String ?? "", match_similarity: data["match_similarity"] as? String ?? "", verificationCode: data["verificationCode"] as? String ?? "", available: data["available"] as? Bool ?? false, new_match: data["new_match"] as? Bool ?? false, profile: self.profile!, num_meet: num_meet)
             
             self.fetchMatch()
             

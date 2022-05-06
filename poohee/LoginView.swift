@@ -6,6 +6,7 @@
 //
 import SwiftUI
 import Firebase
+import FirebaseFunctions
 
 struct LoginView: View {
     let didCompleteLoginProcess: () -> ()
@@ -21,38 +22,7 @@ struct LoginView: View {
     
     var body: some View {
         ScrollView {
-            if (inVerifyView) {
-                
-                VStack {
-                    Image("logo")
-                        .resizable()
-                        .frame(width: 250, height: 250, alignment: .center)
-                        .padding(.vertical)
-                    
-                    Text(verification_fail ? "Verification failed" : "Please check your email inbox/spam")
-                        .foregroundColor(Color.primaryColor)
-                        .font(.system(size: 36))
-                        .padding(.vertical)
-                        .padding(.bottom)
-                    
-                    
-                    Button {
-                        verify()
-                    }label: {
-                        HStack{
-                                Text(verification_fail ? "Resend link" : "I have verified my JHU email")
-                                    .foregroundColor(.white)
-                                    .font(.system(size: 30))
 
-                        }.padding()
-                            .background(Color.primaryColor)
-                            .cornerRadius(24)
-                    }
-                }
-                .padding(.horizontal)
-                .padding()
-            }
-            else {
                 
                 if (inForgetPassword) {
                     VStack{
@@ -172,11 +142,9 @@ struct LoginView: View {
                 }
                 
                 
-            }
+            
                     
         }
-
-                
     }
     
     
@@ -191,47 +159,12 @@ struct LoginView: View {
                 msg = "Failed to send reset password link, please try again"
             } else {
                 inForgetPassword = false
-                msg = "Reset password link has been sent successfully"
+                msg = "Reset password link has been sent successfully. It might take a few mintues to deliver"
             }
         }
         
 
     }
-    
-    private func verify() {
-        
-        if (verification_fail) {
-            verification_fail = false
-        }
-        
-        print(FirebaseManager.shared.auth.currentUser?.isEmailVerified ?? "haha")
-        
-        if ((FirebaseManager.shared.auth.currentUser?.isEmailVerified) != true) {
-            verification_fail = true
-            sendVerificationEmail()
-        } else {
-            inVerifyView.toggle()
-            didCompleteLoginProcess()
-        }
-    }
-    
-    private func sendVerificationEmail() {
-        if FirebaseManager.shared.auth.currentUser != nil {
-
-            FirebaseManager.shared.auth.currentUser?.sendEmailVerification { error in
-                if let error = error {
-                    print("email sent fail" + error.localizedDescription)
-                    return
-                }
-                print("email sent success")
-              // ...
-            }
-        } else {
-            print("current user is null")
-            return
-        }
-    }
-    
     
     
     private func login() {
@@ -246,7 +179,7 @@ struct LoginView: View {
             return
         }
         
-        if (!(email.hasSuffix("@jh.edu") || email.hasSuffix("@jhu.edu"))) {
+        if (!email.hasSuffix("@jh.edu")) {
             msg = "Email must end with @jh.edu"
             return
         }
@@ -268,10 +201,7 @@ struct LoginView: View {
                     print("reload failed" + error.localizedDescription)
                     return
                 }
-                if (FirebaseManager.shared.auth.currentUser?.isEmailVerified != true) {
-                    inVerifyView = true
-                }
-                else {
+
                     guard let uid = FirebaseManager.shared.auth.currentUser?.uid else {
                         return
                     }
@@ -287,7 +217,7 @@ struct LoginView: View {
                         }
                     }
                     didCompleteLoginProcess()
-                }
+                
             }
             
 

@@ -26,6 +26,7 @@ struct ProfileView: View {
             }
         }
     }
+    @State private var logoutactionsheetisopen = false
     
     var body: some View {
         
@@ -48,7 +49,7 @@ struct ProfileView: View {
                         HStack {
                             
                             Button {
-                                vm.logout()
+                                logoutactionsheetisopen.toggle()
                             } label: {
                                 Image("logout").resizable().frame(width: 30, height:30)
                             }
@@ -267,11 +268,11 @@ struct ProfileView: View {
                                         HStack{
                                             Spacer()
                                             VStack{
-                                                Text("Meet Summer")
+                                                Text("Meet Like-minded People")
                                                 .foregroundColor(vm.profile?.goal == "career" ? .white : .gray)
                                                 .font(.system(size: 15))
                                                 
-                                                Text("Buddies")
+                                                Text("(Career/Academic)!")
                                                 .foregroundColor(vm.profile?.goal == "career" ? .white : .gray)
                                                 .font(.system(size: 15))
 
@@ -306,6 +307,11 @@ struct ProfileView: View {
                     
                        
                 }
+            }
+            .actionSheet(isPresented: $logoutactionsheetisopen) {
+                .init(title: Text("Do you want to sign out?"), buttons: [.destructive(Text("Sign Out"), action: {
+                    vm.logout()
+                }), .cancel()])
             }
         }
         
