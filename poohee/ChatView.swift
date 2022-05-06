@@ -244,10 +244,10 @@ class ChatViewModel: ObservableObject {
                 }
             }
             if x == -1{
-                send(text: "Oops, looks like your availabilities in the upcoming days don't quite match up. Maybe figuring out a time to meet up next week could be your first icebreaker 😇", stage: 1)
+                send(text: "Oops, looks like your availabilities in the upcoming days don't quite match up. Maybe figuring out a time + a public place to meet up next week could be your first icebreaker 😇", stage: 1)
             } else {
                 print("got here")
-                send(text: "😇 You guys have agreed to meet on  \(weekdays[(self.matchDay + x/4 + 1) % 7]) for \(meals[x%4])! You can now message each other freely. Be the first to break the ice by finding out with each other a place to meet!", stage: 1)
+                send(text: "😇 You guys have agreed to meet on  \(weekdays[(self.matchDay + x/4 + 1) % 7]) for \(meals[x%4])! You can now message each other freely. Be the first to break the ice by suggesting a restaurant/coffee shop to meet up at!", stage: 1)
             }
             
         }
