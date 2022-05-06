@@ -15,7 +15,7 @@ struct SurveyView: View {
     @ObservedObject var vm: HomeViewModel
     
     
-    @State private var createProfileStage = 4
+    @State private var createProfileStage = 5
     @State private var friend = false
     @State private var career = false
     @State private var first = ""
@@ -116,17 +116,17 @@ struct SurveyView: View {
         "Real traveling isn’t planned",
         "I have cried over movie scenes",
         "Men and women can just be friends",
-        "I procrastinate more than others around me",
+        "It’s important for me to live up to the expectation of the society",
         "I wonder what the meaning of life is sometimes",
         "I am a straight shooter",
-        "I like to be the center of attention",
+        "I like to take the risks that make life exciting",
         "I like to talk about theoretical things with my friends",
-        "I get sentimental over small things",
+        "It’s important for me to have the power that money can bring",
         "I keep myself busy with tasks",
-        "I watch movies for the experience not the meaning behind them",
-        "Mistakes I made a long time ago still bother me",
+        "It’s important to follow rules even when no one is watching",
+        "It’s important to not make anyone mad",
         "I like to analyze different interpretations of fiction",
-        "I feel comfortable striking up conversations with strangers"]
+        "I want to start a firm someday"]
     
     @State private var card_x : [CGFloat] = [CGFloat](repeating: 0, count: 18)
     @State private var current_question_num = 17
@@ -201,7 +201,7 @@ struct SurveyView: View {
                         HStack{
                             
                             Spacer()
-                            Text("Meet Summer Buddies!")
+                            Text("Expand My Network!")
                                 .foregroundColor(.white)
                                 .font(.system(size: 28))
                             Spacer()
@@ -214,9 +214,8 @@ struct SurveyView: View {
                     
                 }
                 .padding(.horizontal, 50)
-                
-                
             }
+            
             if(createProfileStage == 1) {
                 VStack{
                     Button {
@@ -288,6 +287,7 @@ struct SurveyView: View {
                                     }.frame(height: 150)
                                 }
                                 .foregroundColor(Color.gray)
+                                .padding(.leading, 5)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 0)
                                         .stroke(Color.primaryColor, lineWidth: 1)
@@ -296,7 +296,6 @@ struct SurveyView: View {
                                 .onTapGesture {
                                     withAnimation{self.gender_isExpanded.toggle()}
                                 }
-                                .padding(.top, -10)
                                 .padding(.bottom, 5)
                             }
                             
@@ -321,9 +320,11 @@ struct SurveyView: View {
                                                     }
                                             }
                                         }
-                                    }.frame(height: 150)
+                                    }
+                                    .frame(height: 150)
                                 }
                                 .foregroundColor(Color.gray)
+                                .padding(.leading, 5)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 0)
                                         .stroke(Color.primaryColor, lineWidth: 1)
@@ -332,7 +333,6 @@ struct SurveyView: View {
                                 .onTapGesture {
                                     withAnimation{self.grad_isExpanded.toggle()}
                                 }
-                                .padding(.top, -10)
                                 .padding(.bottom, 5)
                             }
                             
@@ -363,6 +363,7 @@ struct SurveyView: View {
                                     }.frame(height: 150)
                                 }
                                 .foregroundColor(Color.gray)
+                                .padding(.leading, 5)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 0)
                                         .stroke(Color.primaryColor, lineWidth: 1)
@@ -371,7 +372,6 @@ struct SurveyView: View {
                                 .onTapGesture {
                                     withAnimation{self.first_major_isExpanded.toggle()}
                                 }
-                                .padding(.top, -10)
                                 .padding(.bottom, 5)
                                 
                             }
@@ -408,6 +408,7 @@ struct SurveyView: View {
                                     }.frame(height: 150)
                                 }
                                 .foregroundColor(Color.gray)
+                                .padding(.leading, 5)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 0)
                                         .stroke(Color.primaryColor, lineWidth: 1)
@@ -416,7 +417,6 @@ struct SurveyView: View {
                                 .onTapGesture {
                                     withAnimation{self.second_major_isExpanded.toggle()}
                                 }
-                                .padding(.top, -10)
                                 .padding(.bottom, 5)
                                 
                             }
@@ -708,6 +708,7 @@ struct SurveyView: View {
                             }.frame(height: 150)
                         }
                         .foregroundColor(Color.gray)
+                        .padding(.leading, 5)
                         .overlay(
                             RoundedRectangle(cornerRadius: 0)
                                 .stroke(Color.primaryColor, lineWidth: 1)
@@ -716,7 +717,6 @@ struct SurveyView: View {
                         .onTapGesture {
                             withAnimation{self.religious_isExpanded.toggle()}
                         }
-                        .padding(.top, -10)
                         .padding(.bottom, 5)
                         
                         HStack {
@@ -749,6 +749,7 @@ struct SurveyView: View {
                             }.frame(height: 150)
                         }
                         .foregroundColor(Color.gray)
+                        .padding(.leading, 5)
                         .overlay(
                             RoundedRectangle(cornerRadius: 0)
                                 .stroke(Color.primaryColor, lineWidth: 1)
@@ -757,7 +758,6 @@ struct SurveyView: View {
                         .onTapGesture {
                             withAnimation{self.political_isExpanded.toggle()}
                         }
-                        .padding(.top, -10)
                         .padding(.bottom, 5)
                         
                         Spacer()
@@ -1995,9 +1995,6 @@ struct SurveyView: View {
                     
                     
                     HStack{
-                        
-                        
-                        
                         if (self.show_class) {
                             Button {
                                 
@@ -2035,7 +2032,8 @@ struct SurveyView: View {
                         
                         
                         TextEditor(text: $bio)
-                            .overlay(RoundedRectangle(cornerRadius: 10.0).strokeBorder(Color.primaryColor, style: StrokeStyle(lineWidth: 2.0)))
+                            .padding(8)
+                            .overlay(RoundedRectangle(cornerRadius: 20).strokeBorder(Color.primaryColor, style: StrokeStyle(lineWidth: 2.0)))
                             .frame(width: UIScreen.main.bounds.width*0.8, height: UIScreen.main.bounds.height*0.15, alignment: .leading)
                         
                         

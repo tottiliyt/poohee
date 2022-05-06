@@ -11,7 +11,8 @@ import SDWebImageSwiftUI
 struct ProfileView: View {
     
     @ObservedObject var vm : HomeViewModel
-    
+    @State var bio = ""
+    @State var editing = false
     let download_url = "apple.com"
     
     @State private var imageURL = URL(string: "")
@@ -30,20 +31,14 @@ struct ProfileView: View {
     
     var body: some View {
         
-        ScrollView {
+        //ScrollView {
+            
+            
             GeometryReader { geo in
+                
                 ZStack {
-                    if copied {
-                        Text("Download link copied")
-                            .padding()
-                            .font(.system(size: 16))
-                            .background(Color.primaryColor.cornerRadius(20))
-                            .foregroundColor(Color.white)
-                            .position(x: geo.frame(in: .local).width/2)
-                            .transition(.move(edge: .top))
-                            .padding(.top)
-                            .animation(Animation.easeInOut(duration: 1), value: copied)
-                    }
+                    
+                    
                     VStack() {
                         
                         HStack {
@@ -194,27 +189,72 @@ struct ProfileView: View {
                                 
                             }
                             
+                            
+                            
                             VStack (spacing: 7) {
-                                Text("Bio")
-                                    .font(.system(size: 24))
-                                    .bold()
-                                    .foregroundColor(Color.primaryColor)
-                                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-
-                                HStack (){
+                                HStack(){
+                                    Text("Bio")
+                                        .font(.system(size: 24))
+                                        .bold()
+                                        .foregroundColor(Color.primaryColor)
                                     
+                                    if !editing {
+                                        Button {
+                                            self.bio = vm.profile?.bio ?? ""
+                                            editing.toggle()
+                                        } label: {
+                                            Text("Edit")
+                                                .font(.system(size: 12))
+                                                .foregroundColor(Color.gray)
+                                            
+                                            
+                                        }
+                                    }
+                                    
+                                    
+                                    
+                                    Spacer()
+                                    
+                                    
+                                }
+                                
+                                
 
-                                        Spacer()
+                                VStack{
+                                    if editing {
+                                        TextEditor(text: $bio)
+                                            .font(.system(size: 16))
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .padding(8)
+                                            .overlay(
+                                            RoundedRectangle(cornerRadius: 20)
+                                                .stroke(Color.primaryColor, lineWidth: 2))
+                                        
+                                        Button {
+                                            updateBio()
+                                            editing.toggle()
+                                        } label: {
+                                            Text("Done")
+                                                .font(.system(size: 12, weight: .semibold))
+                                                .foregroundColor(Color.gray)
+                                            
+                                            
+                                        }
+                                        
+                                    } else {
                                         Text(vm.profile?.bio ?? "")
                                             .font(.system(size: 16))
                                             .frame(maxWidth: .infinity, alignment: .leading)
-                                            
                                             .padding()
                                             .overlay(
                                             RoundedRectangle(cornerRadius: 20)
                                                 .stroke(Color.primaryColor, lineWidth: 2)
                                             )
-                                        Spacer()
+                                        
+                                    }
+                                    
+
+                                        
 
                                     
                                 }
@@ -268,11 +308,11 @@ struct ProfileView: View {
                                         HStack{
                                             Spacer()
                                             VStack{
-                                                Text("Meet Like-minded People")
+                                                Text("Expand My")
                                                 .foregroundColor(vm.profile?.goal == "career" ? .white : .gray)
                                                 .font(.system(size: 15))
                                                 
-                                                Text("(Career/Academic)!")
+                                                Text("Network!")
                                                 .foregroundColor(vm.profile?.goal == "career" ? .white : .gray)
                                                 .font(.system(size: 15))
 
@@ -296,14 +336,23 @@ struct ProfileView: View {
                             
                         }
                         
-                        Image("logo")
-                            .resizable()
-                            .frame(width: 80, height: 80)
-                        
                         
 
                     }
                     .padding(.horizontal, 30)
+                    
+                    if copied {
+                        Text("Download link copied")
+                            .padding()
+                            .font(.system(size: 16))
+                            .background(Color.primaryColor.cornerRadius(20))
+                            .foregroundColor(Color.white)
+                            .position(x: geo.frame(in: .local).width/2)
+                            .transition(.move(edge: .top))
+                            .padding(.top)
+                            .animation(Animation.easeInOut(duration: 1), value: copied)
+                    }
+                    
                     
                        
                 }
@@ -357,6 +406,23 @@ struct ProfileView: View {
                 }
             }
         }
+    }
+    
+    private func updateBio(){
+        let ref = FirebaseManager.shared.firestore.collection("users").document(vm.uid)
+        vm.profile?.bio = self.bio
+        ref.updateData([
+            "profile.bio": self.bio
+        ]) { err in
+            if let err = err {
+                print("Error updating document: \(err)")
+            } else {
+                
+                vm.fetchCurrentUser()
+            }
+        }
+            
+
     }
     
 }
