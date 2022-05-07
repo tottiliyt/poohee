@@ -363,8 +363,6 @@ struct ProfileView: View {
                 }), .cancel()])
             }
         }
-        
-    }
     
     private func loadImageFromFirebase(){
         self.imageURL = URL(string: vm.profile?.profileImageUrl ?? "")
@@ -424,8 +422,9 @@ struct ProfileView: View {
             
 
     }
-    
 }
+    
+
 
 
 
