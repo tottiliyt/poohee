@@ -2594,21 +2594,23 @@ struct SurveyView: View {
                     
                     Spacer()
                     
-                    Button {
-                        handleSubmit()
-                    } label: {
-                        HStack{
-                            Spacer()
+                    HStack{
+                        Spacer()
+                        
+                        Button {
+                            handleSubmit()
+                        } label: {
+                            
+                                
                             Text("Done")
                                 .foregroundColor(.white)
                                 .font(.system(size: 24))
                                 .padding()
-                            Spacer()
+                                .background(Color.primaryColor)
+                                .cornerRadius(18)
                         }
-                        .background(Color.primaryColor)
-                        .cornerRadius(18)
-                        .padding(.leading, (UIScreen.main.bounds.width*0.5))
                     }
+                    
                     
                 }.padding(.horizontal, 50)
                     .fullScreenCover(isPresented: $isShowingPhotoPicker, onDismiss: nil) {
