@@ -15,7 +15,7 @@ struct SurveyView: View {
     @ObservedObject var vm: HomeViewModel
     
     
-    @State private var createProfileStage = 0
+    @State private var createProfileStage = 5
     
     @State private var career_interests = [Bool](repeating: false, count: 15)
     
@@ -27,7 +27,7 @@ struct SurveyView: View {
     @State private var grad_year = "Select"
     @State private var first_major = "Select"
     @State private var second_major = "Select"
-    @State private var hobbies = [Bool](repeating: false, count: 140)
+    @State private var hobbies = [Bool](repeating: false, count: 120)
    
     @State private var religious = "Select"
     @State private var political = "Select"
@@ -1876,7 +1876,9 @@ struct SurveyView: View {
                                 },
                                 label: {
                                     HStack(spacing: 20) {
-                                        Image("Business 1")
+                                        Image("Film")
+                                            .resizable()
+                                            .frame(width: 35, height: 35, alignment: .center)
                                         Text("Film & TV")
                                     }
                                 }
@@ -2079,7 +2081,9 @@ struct SurveyView: View {
                                 },
                                 label: {
                                     HStack(spacing: 20) {
-                                        Image("Career 1")
+                                        Image("Music")
+                                            .resizable()
+                                            .frame(width: 35, height: 35, alignment: .center)
                                         Text("Music")
                                     }
                                 }
