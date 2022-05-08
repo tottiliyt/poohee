@@ -15,7 +15,7 @@ struct SurveyView: View {
     @ObservedObject var vm: HomeViewModel
     
     
-    @State private var createProfileStage = 5
+    @State private var createProfileStage = 0
     @State private var friend = false
     @State private var career = false
     @State private var first = ""
@@ -38,6 +38,8 @@ struct SurveyView: View {
     @State private var grad_isExpanded = false
     @State private var political_isExpanded = false
     @State private var religious_isExpanded = false
+    @State private var show_agree = false
+    @State private var show_disagree = false
     
     
     let grad_year_option = ["Select",
@@ -865,9 +867,21 @@ struct SurveyView: View {
                                     
                                     self.card_x[i] = value.translation.width
                                     
+                                    if value.translation.width > 0 {
+                                        show_agree = true
+                                        show_disagree = false
+                                    } else if value.translation.width < 0  {
+                                        show_agree = false
+                                        show_disagree = true
+                                    } else {
+                                        show_agree = false
+                                        show_disagree = false
+                                    }
+                                    
                                 })
                                     .onEnded({(value) in
-                                        
+                                        show_agree = false
+                                        show_disagree = false
                                         if value.translation.width > 0 {
                                             
                                             if value.translation.width > 200 {
@@ -878,7 +892,8 @@ struct SurveyView: View {
                                                 self.card_x[i] = 0
                                             }
                                             
-                                        } else {
+                                        } else if value.translation.width < 0  {
+
                                             if value.translation.width < -200 {
                                                 self.card_x[i] = -600
                                                 current_question_num -= 1
@@ -909,6 +924,8 @@ struct SurveyView: View {
                                     self.questionnaire[current_question_num] = 0
                                     
                                 }
+                                .padding(.horizontal, -50)
+                                .padding()
                         } else{
                             Text("< Back")
                                 .foregroundColor(Color.gray)
@@ -917,15 +934,16 @@ struct SurveyView: View {
                                 .onTapGesture{
                                     
                                     prevStage()
-                                }
+                                }.padding(.horizontal, -50)
+                                .padding()
                         }
                         
+                        Text(show_agree ? "Agree" : show_disagree ? "Disagree" : "").foregroundColor(Color.primaryColor)
+                            .font(.system(size: 20))
+        
                         
                         
-                        Image("logo")
-                            .resizable()
-                            .frame(width: 200, height: 200, alignment: .center)
-                            .padding(.top, 400)
+
                         
                         Spacer()
                         
@@ -2176,10 +2194,16 @@ struct Card: View {
     @Binding var text: String
     var body: some View {
         VStack {
+            
+            
+            
             Text(text)
                 .foregroundColor(Color.primaryColor)
                 .font(.system(size: 36))
-                .padding(.bottom, 300)
+            
+            Image("logo")
+                .resizable()
+                .frame(width: 200, height: 200, alignment: .center)
             
         }.frame(
             minWidth: 0,
