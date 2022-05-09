@@ -42,7 +42,6 @@
 		B9D2ACA527FCCCE700D71ADA /* ProfileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D2ACA427FCCCE700D71ADA /* ProfileModel.swift */; };
 		B9DBE8BC27F8FD0100F29992 /* SurveyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9DBE8BB27F8FD0100F29992 /* SurveyView.swift */; };
 		B9DBE8C027F9370A00F29992 /* GoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9DBE8BF27F9370A00F29992 /* GoalView.swift */; };
-		B9DBE8C227F9372100F29992 /* PersonalInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9DBE8C127F9372100F29992 /* PersonalInfoView.swift */; };
 		B9DBE8C427F9376C00F29992 /* SelfIdView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9DBE8C327F9376C00F29992 /* SelfIdView.swift */; };
 		B9DBE8C627F937AA00F29992 /* PersonalityIntroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9DBE8C527F937AA00F29992 /* PersonalityIntroView.swift */; };
 		B9DBE8C827F937DF00F29992 /* PersonalityQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9DBE8C727F937DF00F29992 /* PersonalityQuestionView.swift */; };
@@ -79,7 +78,6 @@
 		B9D2ACA427FCCCE700D71ADA /* ProfileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileModel.swift; sourceTree = "<group>"; };
 		B9DBE8BB27F8FD0100F29992 /* SurveyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurveyView.swift; sourceTree = "<group>"; };
 		B9DBE8BF27F9370A00F29992 /* GoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalView.swift; sourceTree = "<group>"; };
-		B9DBE8C127F9372100F29992 /* PersonalInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalInfoView.swift; sourceTree = "<group>"; };
 		B9DBE8C327F9376C00F29992 /* SelfIdView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfIdView.swift; sourceTree = "<group>"; };
 		B9DBE8C527F937AA00F29992 /* PersonalityIntroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalityIntroView.swift; sourceTree = "<group>"; };
 		B9DBE8C727F937DF00F29992 /* PersonalityQuestionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalityQuestionView.swift; sourceTree = "<group>"; };
@@ -152,7 +150,6 @@
 				B96A1C8E27F8D30400DEBC48 /* WelcomeView.swift */,
 				B9DBE8BB27F8FD0100F29992 /* SurveyView.swift */,
 				B9DBE8BF27F9370A00F29992 /* GoalView.swift */,
-				B9DBE8C127F9372100F29992 /* PersonalInfoView.swift */,
 				B9DBE8C327F9376C00F29992 /* SelfIdView.swift */,
 				B9DBE8C527F937AA00F29992 /* PersonalityIntroView.swift */,
 				B9DBE8C727F937DF00F29992 /* PersonalityQuestionView.swift */,
@@ -276,7 +273,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				B9D2ACA527FCCCE700D71ADA /* ProfileModel.swift in Sources */,
-				B9DBE8C227F9372100F29992 /* PersonalInfoView.swift in Sources */,
 				51418EE128067C9600D19CBD /* InternalMatchingView.swift in Sources */,
 				51E8D23E281CE2BD001F92F3 /* OtherUserProfileView.swift in Sources */,
 				511B770A281F2CC300973630 /* CancelView.swift in Sources */,

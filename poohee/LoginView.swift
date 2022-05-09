@@ -77,7 +77,12 @@ struct LoginView: View {
                                 .cornerRadius(15)
                         }
                         
-                    }.padding(.horizontal, 50)
+                    }
+                    .padding(.horizontal, 50)
+                    .background(Color.white)
+                    .onTapGesture {
+                        hideKeyboard()
+                    }
                 }
                 else {
                     VStack{
@@ -151,7 +156,12 @@ struct LoginView: View {
                                 .cornerRadius(24)
                         }
                         
-                    }.padding(.horizontal, 50)
+                    }
+                    .padding(.horizontal, 50)
+                    .background(Color.white)
+                    .onTapGesture {
+                        hideKeyboard()
+                    }
                 }
                 
                 

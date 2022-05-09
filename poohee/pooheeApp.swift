@@ -127,3 +127,11 @@ extension Color {
     static let lightBlack = Color(red: 56/255, green: 56/255, blue: 56/255)
     static let lightBlue = Color(red: 130/255, green: 203/255, blue: 237/255)
 }
+
+#if canImport(UIKit)
+extension View {
+    func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+}
+#endif

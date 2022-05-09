@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
 
 struct SchedulingView: View {
     
@@ -16,12 +17,69 @@ struct SchedulingView: View {
     @State var canceling = false
     @Binding var scheduled: Bool
     @State var canceled = false
+    @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
         ZStack{
             VStack{
+                ZStack{
+                    
+                    NavigationLink{
+                        OtherUserProfileView(vm: vm)
+                    } label: {
+                        
+                        
+                            HStack{
+                                
+                                
+                                Spacer()
+                                
+                                WebImage(url: URL(string: vm.recipientProfile?.profileImageUrl ?? ""))
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 50, height: 50)
+                                    .clipped()
+                                    .cornerRadius(60)
+                                    .overlay(RoundedRectangle(cornerRadius: 60)
+                                        .stroke(lineWidth: 2)
+                                        .foregroundColor(Color.primaryColor)
+                                    )
+                                    
+                                
+                                HStack{
+                                    Text("\(vm.chat.firstName)")
+                                        .font(.system(size:25))
+                                        .foregroundColor(Color.black)
+                                    Text(">")
+                                        .font(.system(size:25))
+                                        .foregroundColor(Color.gray)
+                                }
+                                
+                                Spacer()
+                                
+                            }
+
+                    }
+                    
+                    HStack{
+                        Button{
+                            presentationMode.wrappedValue.dismiss()
+                        }label:{
+                            Text("<<")
+                                .font(.system(size: 25, weight:.semibold))
+                                .foregroundColor(Color.gray)
+                                .padding()
+                        }
+                        Spacer()
+                    }
+                    
+                    
+                    
+                }
+                .padding(.top, 50)
+                
                 ScrollView {
-                    ChatbotMessages(message: vm.messages[0], firstName: vm.chat.firstName)
+                    YolkBotMessages(similarities: vm.similarities, firstName: vm.chat.firstName)
                     
                     if vm.messages.count > 1{
                         SingleMessageView(message: vm.messages[1], recipientId: vm.recipientId)
@@ -65,23 +123,37 @@ struct SchedulingView: View {
                     .padding(.trailing)
                     
                     if vm.messages.count > 1 || canceled {
-                        Text("Canceled")
-                            .foregroundColor(Color.white)
-                            .font(.system(size: 35, weight: .bold))
-                            .padding()
-                            .frame(width: 300, height: 50)
+                        Button{
+                            
+                        }label: {
+                            HStack{
+                                Spacer()
+                                Text("Canceled")
+                                    .foregroundColor(Color.white)
+                                    .font(.system(size: 35, weight: .bold))
+                                    
+                                 Spacer()
+                            }
+                            .padding(.vertical, 5)
                             .background(Color.primaryColor)
                             .clipShape(RoundedRectangle(cornerRadius: 20))
+                        }
+                       
+                        
                         
                     } else {
                         Button{
                             scheduling.toggle()
                         } label: {
-                            Text("Schedule")
-                            .foregroundColor(Color.white)
-                            .font(.system(size: 35, weight: .bold))
-                            .padding()
-                            .frame(width: 300, height: 50)
+                            HStack{
+                                Spacer()
+                                Text("Schedule")
+                                    .foregroundColor(Color.white)
+                                    .font(.system(size: 35, weight: .bold))
+                                    
+                                 Spacer()
+                            }
+                            .padding(.vertical, 5)
                             .background(Color.primaryColor)
                             .clipShape(RoundedRectangle(cornerRadius: 20))
                         }
@@ -92,10 +164,12 @@ struct SchedulingView: View {
                     Spacer()
                     
                 }
-                .padding(.top)
-                .background(Color.chatGray)
-                    .ignoresSafeArea()
+                .padding(.top, 5)
+                .padding(.bottom, 25)
+                
             }
+            .background(Color.chatGray)
+                .ignoresSafeArea(.container)
             
             if scheduling{
                 SchedulingPopUp(show: $scheduling, vm: vm)
@@ -111,8 +185,8 @@ struct SchedulingView: View {
 }
 
 
-struct ChatbotMessages: View {
-    let message : ChatMessage
+struct YolkBotMessages: View {
+    let similarities : String
     let firstName: String
     
     var body: some View {
@@ -128,14 +202,14 @@ struct ChatbotMessages: View {
                     )
                     .padding(.leading)
                 
-                Text ("Chatbot")
+                Text ("YolkBot")
                     .foregroundColor(Color.secondaryColor)
                 Spacer()
             }
             
-            
             HStack{
                 Text("We have found your new friend - \(self.firstName)! You can check out their profile above")
+                    .fixedSize(horizontal: false, vertical: true)
                 .foregroundColor(Color.white)
                 .padding()
                 .background(Color.secondaryColor)
@@ -148,7 +222,8 @@ struct ChatbotMessages: View {
             .padding(.bottom, 9)
             
             HStack{
-                Text("😎 You guys are both \n\(self.message.text)")
+                Text("😎 You two are both \n\(similarities)")
+                    .fixedSize(horizontal: false, vertical: true)
                 .foregroundColor(Color.white)
                 .padding()
                 .background(Color.secondaryColor)
@@ -162,6 +237,7 @@ struct ChatbotMessages: View {
             
             HStack{
                 Text("Let's schedule a time to meet by clicking on the button below")
+                    .fixedSize(horizontal: false, vertical: true)
                 .foregroundColor(Color.white)
                 .padding()
                 .background(Color.secondaryColor)

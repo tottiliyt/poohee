@@ -87,6 +87,10 @@ struct CreateAccountView: View {
 
                 }
                 .padding(.horizontal, 50)
+                .background(Color.white)
+                .onTapGesture {
+                    hideKeyboard()
+                }
             }
             else {
                 
@@ -166,8 +170,13 @@ struct CreateAccountView: View {
 
                         
                         
-                    }.padding(.horizontal, 50).padding(.bottom, 50)
-                    
+                    }
+                    .padding(.horizontal, 50)
+                    .padding(.bottom, 50)
+                    .background(Color.white)
+                    .onTapGesture {
+                        hideKeyboard()
+                    }
             }
         }
                 

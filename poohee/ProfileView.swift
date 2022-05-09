@@ -340,6 +340,10 @@ struct ProfileView: View {
 
                     }
                     .padding(.horizontal, 30)
+                    .background(Color.white)
+                    .onTapGesture {
+                        hideKeyboard()
+                    }
                     
                     if copied {
                         Text("Download link copied")
@@ -386,9 +390,6 @@ struct ProfileView: View {
             ]) { err in
                 if let err = err {
                     print("Error updating document: \(err)")
-                } else {
-                    
-                    vm.fetchCurrentUser()
                 }
             }
         }
@@ -399,9 +400,6 @@ struct ProfileView: View {
             ]) { err in
                 if let err = err {
                     print("Error updating document: \(err)")
-                } else {
-                    
-                    vm.fetchCurrentUser()
                 }
             }
         }
@@ -415,16 +413,12 @@ struct ProfileView: View {
         ]) { err in
             if let err = err {
                 print("Error updating document: \(err)")
-            } else {
-                
-                vm.fetchCurrentUser()
             }
         }
             
 
     }
 }
-    
 
 
 

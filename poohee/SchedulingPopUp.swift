@@ -36,7 +36,7 @@ struct SchedulingPopUp: View {
                             .padding(.horizontal)
                             .padding(.bottom)
                         
-                        Text("We will get back to you guys as soon as \(self.vm.recipientProfile?.first_name ?? "") selects theirs also")
+                        Text("We will get back to you as soon as \(self.vm.recipientProfile?.first_name ?? "") selects theirs also")
                             .font(.system(size: 25))
                             .foregroundColor(Color.primaryColor)
                             .padding(.horizontal)

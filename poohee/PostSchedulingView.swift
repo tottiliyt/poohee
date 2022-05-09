@@ -6,19 +6,80 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
 
 struct PostSchedulingView: View {
     @State var message = ""
     @ObservedObject var vm : ChatViewModel
+    @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
+        
         VStack{
+            ZStack{
+                
+                NavigationLink{
+                    OtherUserProfileView(vm: vm)
+                } label: {
+                    
+                    
+                        HStack{
+                            
+                            
+                            Spacer()
+                            
+                            WebImage(url: URL(string: vm.recipientProfile?.profileImageUrl ?? ""))
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 50, height: 50)
+                                .clipped()
+                                .cornerRadius(60)
+                                .overlay(RoundedRectangle(cornerRadius: 60)
+                                    .stroke(lineWidth: 2)
+                                    .foregroundColor(Color.primaryColor)
+                                )
+                                
+                            
+                            HStack{
+                                Text("\(vm.chat.firstName)")
+                                    .font(.system(size:25))
+                                    .foregroundColor(Color.black)
+                                Text(">")
+                                    .font(.system(size:25))
+                                    .foregroundColor(Color.gray)
+                            }
+                            
+                            Spacer()
+                            
+                        }
+
+                }
+                
+                HStack{
+                    Button{
+                        presentationMode.wrappedValue.dismiss()
+                    }label:{
+                        Text("<<")
+                            .font(.system(size: 25, weight:.semibold))
+                            .foregroundColor(Color.gray)
+                            .padding()
+                    }
+                    Spacer()
+                }
+                
+                
+                
+            }
+            .padding(.top, 50)
+            
+            
+            
             ScrollView {
                 ScrollViewReader { scrollViewProxy in
                     VStack {
                         ForEach(vm.messages) { message in
                             if message.stage == 0 {
-                                ChatbotMessages(message: message, firstName: vm.chat.firstName)
+                                YolkBotMessages(similarities: vm.similarities, firstName: vm.chat.firstName)
                             } else {
                                 SingleMessageView(message: message, recipientId: vm.recipientId)
                             }
@@ -37,13 +98,16 @@ struct PostSchedulingView: View {
                 }
             }
             .background(Color.white)
+            .onTapGesture{
+                hideKeyboard()
+            }
 
             HStack{
                 TextEditor(text: $message)
                     .padding(3.5)
-                    .overlay(RoundedRectangle(cornerRadius: 10.0).strokeBorder(Color.primaryColor, style: StrokeStyle(lineWidth: 2.0)))
                     .frame(width: UIScreen.main.bounds.width*0.7, height: UIScreen.main.bounds.height*0.05, alignment: .leading)
-                    .padding(.horizontal)
+                    .overlay(RoundedRectangle(cornerRadius: 10.0).strokeBorder(Color.primaryColor, style: StrokeStyle(lineWidth: 2.0)))
+                    .padding(.trailing)
                 
                 
                 Button{
@@ -56,11 +120,13 @@ struct PostSchedulingView: View {
                 }
                 
             }
-            .padding(.vertical, 6)
+            .padding(.top, 5)
+            .padding(.bottom, 25)
             .padding(.horizontal)
-            .background(Color.chatGray)
-                .ignoresSafeArea()
         }
+        .background(Color.chatGray)
+            .ignoresSafeArea(.container)
+        
     }
 }
 
@@ -78,6 +144,7 @@ struct SingleMessageView : View{
                 HStack{
                     Text("\(message.text)")
                         .foregroundColor(Color.white)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
                 .padding()
                 .background(Color.secondaryColor)
@@ -94,6 +161,7 @@ struct SingleMessageView : View{
                 HStack{
                     Text("\(message.text)")
                         .foregroundColor(Color.white)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
                 .padding()
                 .background(Color.primaryColor)
@@ -108,6 +176,7 @@ struct SingleMessageView : View{
 
                 HStack{
                     Text("\(message.text)")
+                        .fixedSize(horizontal: false, vertical: true)
                         
                 }
                 .padding()
@@ -122,6 +191,7 @@ struct SingleMessageView : View{
         }
     }
 }
+
 
 struct PostMatchView_Previews: PreviewProvider {
     static var previews: some View {
