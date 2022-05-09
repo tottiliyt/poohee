@@ -37,24 +37,25 @@ struct OtherUserProfileView: View {
                         
                     
                     
-                    HStack{
                         
+                        
+                    
+                    HStack{
+                        Spacer()
                         Button {
                             
                         } label: {
-                            HStack{
-                                    Spacer()
+                            
                                 Text(vm.recipientProfile?.class_standing ?? "")
-                                        .foregroundColor(.white)
-                                        .font(.system(size: 24))
-                                    Spacer()
-
-                                
-                            }
+                                .foregroundColor(.white)
+                                .font(.system(size: 24))
+                                .padding(.horizontal)
                                 .background(Color.secondaryColor)
                                 .cornerRadius(24)
-                        }.padding(.horizontal, 80)
+                        }
+                        Spacer()
                     }
+                    
 
                     HStack {
                         Button {

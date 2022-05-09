@@ -15,7 +15,7 @@ struct SurveyView: View {
     @ObservedObject var vm: HomeViewModel
     
     
-    @State private var createProfileStage = 0
+    @State private var createProfileStage = 3
     
     @State private var career_interests = [Bool](repeating: false, count: 15)
     
@@ -430,8 +430,8 @@ struct SurveyView: View {
                     Text("What brings you to Yolk?")
                         .foregroundColor(Color.primaryColor)
                         .font(.system(size: 36))
-                        .padding()
-                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .center)
+                        .padding(.vertical)
+                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                     
                     Button {
                         friend = true
@@ -494,191 +494,199 @@ struct SurveyView: View {
                             .foregroundColor(Color.primaryColor)
                             .font(.system(size: 36))
                             .padding(.bottom)
+                            .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                         
-                        Group {
-                            Text("NAME")
-                                .foregroundColor(Color.primaryColor)
-                                .font(.system(size: 20))
-                                .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                            
-                            HStack{
-                                TextField("First", text: $first)
-                                    .font(.system(size: 18))
-                                    .multilineTextAlignment(.center)
-                                    .background(Color(.init(white: 0, alpha: 0.05)))
-                                    .cornerRadius(10)
-                                
-                                TextField("Last", text: $last)
-                                    .font(.system(size: 18))
-                                    .multilineTextAlignment(.center)
-                                    .background(Color(.init(white: 0, alpha: 0.05)))
-                                    .cornerRadius(10)
-                            }
-                            
-                            Text("Only your first name will be shared")
-                                .foregroundColor(Color.gray)
-                                .font(.system(size: 10))
-                                .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                                .padding(.bottom, 5)
-                            
+                        ScrollView {
                             Group {
-                                Text("GENDER")
+                                Text("NAME")
                                     .foregroundColor(Color.primaryColor)
                                     .font(.system(size: 20))
                                     .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                                 
-                                DisclosureGroup("\(gender)", isExpanded: $gender_isExpanded) {
-                                    ScrollView(showsIndicators: false) {
-                                        
-                                        VStack {
-                                            ForEach(gender_option, id: \.self) {
-                                                gender in
-                                                Text("\(gender)")
-                                                    .foregroundColor(Color.gray)
-                                                
-                                                    .onTapGesture {
-                                                        withAnimation{self.gender_isExpanded.toggle()}
-                                                        self.gender = gender
-                                                    }
-                                            }
-                                        }
-                                    }.frame(height: 150)
-                                }
-                                .foregroundColor(Color.gray)
-                                .padding(.leading, 5)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 0)
-                                        .stroke(Color.primaryColor, lineWidth: 1)
-                                )
-                                .buttonStyle(PlainButtonStyle()).accentColor(.clear).disabled(false)
-                                .onTapGesture {
-                                    withAnimation{self.gender_isExpanded.toggle()}
-                                }
-                                .padding(.bottom, 5)
-                            }
-                            
-                            
-                            Group {
-                                Text("GRADUATION YEAR")
-                                    .foregroundColor(Color.primaryColor)
-                                    .font(.system(size: 20))
-                                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                                
-                                DisclosureGroup("\(self.grad_year)", isExpanded: $grad_isExpanded) {
-                                    ScrollView(showsIndicators: false) {
-                                        
-                                        VStack {
-                                            ForEach(grad_year_option, id: \.self) {
-                                                grad in
-                                                Text("\(grad)")
-                                                    .foregroundColor(Color.gray)
-                                                    .onTapGesture {
-                                                        withAnimation{self.grad_isExpanded.toggle()}
-                                                        grad_year = grad
-                                                    }
-                                            }
-                                        }
-                                    }
-                                    .frame(height: 110)
-                                }
-                                .foregroundColor(Color.gray)
-                                .padding(.leading, 5)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 0)
-                                        .stroke(Color.primaryColor, lineWidth: 1)
-                                )
-                                .buttonStyle(PlainButtonStyle()).accentColor(.clear).disabled(false)
-                                .onTapGesture {
-                                    withAnimation{self.grad_isExpanded.toggle()}
-                                }
-                                .padding(.bottom, 5)
-                            }
-                            
-                            Group {
-                                HStack {
-                                    Text("PRIMARY MAJOR")
-                                        .foregroundColor(Color.primaryColor)
-                                        .font(.system(size: 20))
-                                }.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                                
-                                
-                                DisclosureGroup("\(first_major)", isExpanded: $first_major_isExpanded) {
-                                    ScrollView(showsIndicators: false)  {
-                                        
-                                        VStack {
-                                            ForEach(majors_option, id: \.self) {
-                                                major in
-                                                Text("\(major)")
-                                                    .foregroundColor(Color.gray)
-                                                
-                                                    .onTapGesture {
-                                                        withAnimation{self.first_major_isExpanded.toggle()}
-                                                        first_major = major
-                                                    }
-                                                
-                                            }
-                                        }
-                                    }.frame(height: 150)
-                                }
-                                .foregroundColor(Color.gray)
-                                .padding(.leading, 5)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 0)
-                                        .stroke(Color.primaryColor, lineWidth: 1)
-                                )
-                                .buttonStyle(PlainButtonStyle()).accentColor(.clear).disabled(false)
-                                .onTapGesture {
-                                    withAnimation{self.first_major_isExpanded.toggle()}
-                                }
-                                .padding(.bottom, 5)
-                                
-                            }
-                            
-                            Group {
-                                HStack {
-                                    Text("SECONDARY MAJOR")
-                                        .foregroundColor(Color.primaryColor)
-                                        .font(.system(size: 20))
+                                HStack{
+                                    TextField("First", text: $first)
+                                        .font(.system(size: 18))
+                                        .multilineTextAlignment(.center)
+                                        .background(Color(.init(white: 0, alpha: 0.05)))
+                                        .cornerRadius(10)
                                     
-                                    Text("(optional)")
-                                        .foregroundColor(Color.gray)
-                                        .font(.system(size: 10))
-                                        .padding(.top, 5)
-                                }.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                                    TextField("Last", text: $last)
+                                        .font(.system(size: 18))
+                                        .multilineTextAlignment(.center)
+                                        .background(Color(.init(white: 0, alpha: 0.05)))
+                                        .cornerRadius(10)
+                                }
+                                
+                                Text("Only your first name will be shared")
+                                    .foregroundColor(Color.gray)
+                                    .font(.system(size: 10))
+                                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                                    .padding(.bottom, 5)
+                                
+                                Group {
+                                    Text("GENDER")
+                                        .foregroundColor(Color.primaryColor)
+                                        .font(.system(size: 20))
+                                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                                    
+                                    DisclosureGroup("\(gender)", isExpanded: $gender_isExpanded) {
+                                        ScrollView(showsIndicators: false) {
+                                            
+                                            VStack {
+                                                ForEach(gender_option, id: \.self) {
+                                                    gender in
+                                                    Text("\(gender)")
+                                                        .foregroundColor(Color.gray)
+                                                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .center)
+                                                        .onTapGesture {
+                                                            withAnimation{self.gender_isExpanded.toggle()}
+                                                            self.gender = gender
+                                                        }
+                                                }
+                                            }
+                                        }.frame(height: 150)
+                                    }
+                                    .foregroundColor(Color.gray)
+                                    .padding(.leading, 5)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 0)
+                                            .stroke(Color.primaryColor, lineWidth: 1)
+                                    )
+                                    .buttonStyle(PlainButtonStyle()).accentColor(.clear).disabled(false)
+                                    .onTapGesture {
+                                        withAnimation{self.gender_isExpanded.toggle()}
+                                    }
+                                    .padding(.bottom, 5)
+                                }
                                 
                                 
-                                DisclosureGroup("\(second_major)", isExpanded: $second_major_isExpanded) {
-                                    ScrollView(showsIndicators: false) {
-                                        
-                                        VStack {
-                                            ForEach(majors_option, id: \.self) {
-                                                major in
-                                                Text("\(major)")
-                                                    .foregroundColor(Color.gray)
-                                                
-                                                    .onTapGesture {
-                                                        withAnimation{self.second_major_isExpanded.toggle()}
-                                                        second_major = major
-                                                    }
-                                                
+                                Group {
+                                    Text("GRADUATION YEAR")
+                                        .foregroundColor(Color.primaryColor)
+                                        .font(.system(size: 20))
+                                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                                    
+                                    DisclosureGroup("\(self.grad_year)", isExpanded: $grad_isExpanded) {
+                                        ScrollView(showsIndicators: false) {
+                                            
+                                            VStack {
+                                                ForEach(grad_year_option, id: \.self) {
+                                                    grad in
+                                                    Text("\(grad)")
+                                                        .foregroundColor(Color.gray)
+                                                        .onTapGesture {
+                                                            withAnimation{self.grad_isExpanded.toggle()}
+                                                            grad_year = grad
+                                                        }
+                                                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .center)
+                                                }
                                             }
                                         }
-                                    }.frame(height: 150)
+                                        .frame(height: 110)
+                                    }
+                                    .foregroundColor(Color.gray)
+                                    .padding(.leading, 5)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 0)
+                                            .stroke(Color.primaryColor, lineWidth: 1)
+                                    )
+                                    .buttonStyle(PlainButtonStyle()).accentColor(.clear).disabled(false)
+                                    .onTapGesture {
+                                        withAnimation{self.grad_isExpanded.toggle()}
+                                    }
+                                    .padding(.bottom, 5)
                                 }
-                                .foregroundColor(Color.gray)
-                                .padding(.leading, 5)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 0)
-                                        .stroke(Color.primaryColor, lineWidth: 1)
-                                )
-                                .buttonStyle(PlainButtonStyle()).accentColor(.clear).disabled(false)
-                                .onTapGesture {
-                                    withAnimation{self.second_major_isExpanded.toggle()}
-                                }
-                                .padding(.bottom, 5)
                                 
+                                Group {
+                                    HStack {
+                                        Text("PRIMARY MAJOR")
+                                            .foregroundColor(Color.primaryColor)
+                                            .font(.system(size: 20))
+                                    }.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                                    
+                                    
+                                    DisclosureGroup("\(first_major)", isExpanded: $first_major_isExpanded) {
+                                        ScrollView(showsIndicators: false)  {
+                                            
+                                            VStack {
+                                                ForEach(majors_option, id: \.self) {
+                                                    major in
+                                                    Text("\(major)")
+                                                        .foregroundColor(Color.gray)
+                                                    
+                                                        .onTapGesture {
+                                                            withAnimation{self.first_major_isExpanded.toggle()}
+                                                            first_major = major
+                                                        }
+                                                        .multilineTextAlignment(.center)
+                                                    
+                                                }
+                                            }
+                                        }.frame(height: 150)
+                                    }
+                                    .foregroundColor(Color.gray)
+                                    .padding(.leading, 5)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 0)
+                                            .stroke(Color.primaryColor, lineWidth: 1)
+                                    )
+                                    .buttonStyle(PlainButtonStyle()).accentColor(.clear).disabled(false)
+                                    .onTapGesture {
+                                        withAnimation{self.first_major_isExpanded.toggle()}
+                                    }
+                                    .padding(.bottom, 5)
+                                    
+                                }
+                                
+                                Group {
+                                    HStack {
+                                        Text("SECONDARY MAJOR")
+                                            .foregroundColor(Color.primaryColor)
+                                            .font(.system(size: 20))
+                                        
+                                        Text("(optional)")
+                                            .foregroundColor(Color.gray)
+                                            .font(.system(size: 10))
+                                            .padding(.top, 5)
+                                    }.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                                    
+                                    
+                                    DisclosureGroup("\(second_major)", isExpanded: $second_major_isExpanded) {
+                                        ScrollView(showsIndicators: false) {
+                                            
+                                            VStack {
+                                                ForEach(majors_option, id: \.self) {
+                                                    major in
+                                                    Text("\(major)")
+                                                        .foregroundColor(Color.gray)
+                                                    
+                                                        .onTapGesture {
+                                                            withAnimation{self.second_major_isExpanded.toggle()}
+                                                            second_major = major
+                                                        }
+                                                        .multilineTextAlignment(.center)
+                                                    
+                                                }
+                                            }
+                                        }.frame(height: 150)
+                                    }
+                                    .foregroundColor(Color.gray)
+                                    .padding(.leading, 5)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 0)
+                                            .stroke(Color.primaryColor, lineWidth: 1)
+                                    )
+                                    .buttonStyle(PlainButtonStyle()).accentColor(.clear).disabled(false)
+                                    .onTapGesture {
+                                        withAnimation{self.second_major_isExpanded.toggle()}
+                                    }
+                                    .padding(.bottom, 5)
+                                    
+                                }
                             }
                         }
+                        
+                        
                         
                         
                         ZStack{
@@ -744,6 +752,7 @@ struct SurveyView: View {
                             .foregroundColor(Color.primaryColor)
                             .font(.system(size: 36))
                             .padding(.bottom, 20)
+                            .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                         
                         
                         HStack {
@@ -884,12 +893,16 @@ struct SurveyView: View {
                             .foregroundColor(Color.primaryColor)
                             .font(.system(size: 36))
                             .padding(.bottom)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                         
                         
                         VStack(alignment:.leading, spacing: 20){
                             Text("Let’s now see who might share your unique sensibilities").foregroundColor(Color.gray)
                                 .font(.system(size: 24))
                                 .padding(.bottom)
+                                .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                                .fixedSize(horizontal: false, vertical: true)
                             
                             HStack{
                                 Text("If you").foregroundColor(Color.gray)
@@ -1075,6 +1088,7 @@ struct SurveyView: View {
                             .foregroundColor(Color.primaryColor)
                             .font(.system(size: 24))
                             .padding(.vertical)
+                            .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                         
                     ScrollView(showsIndicators: false) {
                         
@@ -2782,6 +2796,7 @@ struct SurveyView: View {
                     Text("Find out when you get matches!").font(.system(size: 28)).foregroundColor(Color.primaryColor)
                         .padding(.bottom, 50)
                     
+                    
                     Button {
                         self.showPushNotificationModal=true
                     } label: {
@@ -2814,10 +2829,7 @@ struct SurveyView: View {
             if (createProfileStage == 7) {
                 
                 VStack {
-                    Text(self.addProfileImageMsg)
-                        .foregroundColor(Color.primaryColor)
-                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing)
-                        .font(.system(size: 14))
+
                     
                     Button {
                         isShowingPhotoPicker.toggle()
@@ -2854,7 +2866,7 @@ struct SurveyView: View {
                                     Spacer()
                                     Text(self.grad_year == "2022" ? "Senior": self.grad_year == "2023" ? "Junior" : self.grad_year == "2024" ? "Sophomore": "Freshman")
                                         .foregroundColor(.white)
-                                        .font(.system(size: 24))
+                                        .font(.system(size: 20))
                                     Spacer()
                                     
                                     
@@ -2885,7 +2897,7 @@ struct SurveyView: View {
                         TextEditor(text: $bio)
                             .padding(8)
                             .overlay(RoundedRectangle(cornerRadius: 20).strokeBorder(Color.primaryColor, style: StrokeStyle(lineWidth: 2.0)))
-                            .frame(width: UIScreen.main.bounds.width*0.8, height: UIScreen.main.bounds.height*0.15, alignment: .leading)
+                            .frame(width: UIScreen.main.bounds.width*0.8, height: UIScreen.main.bounds.height*0.10, alignment: .leading)
                         
                         
                         Text("Sample Bio")
@@ -2908,6 +2920,12 @@ struct SurveyView: View {
                     
                     Spacer()
                     
+                    Text(self.addProfileImageMsg)
+                        .foregroundColor(Color.primaryColor)
+                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing)
+                        .font(.system(size: 14))
+                        .padding(.vertical)
+                    
                     HStack{
                         Spacer()
                         
@@ -2919,7 +2937,7 @@ struct SurveyView: View {
                             Text("Done")
                                 .foregroundColor(.white)
                                 .font(.system(size: 24))
-                                .padding()
+                                .padding(.horizontal)
                                 .background(Color.primaryColor)
                                 .cornerRadius(18)
                         }
@@ -2964,6 +2982,10 @@ struct SurveyView: View {
         
         if (self.image == nil) {
             self.addProfileImageMsg = "Please add a profile picture"
+            return
+        }
+        if (self.bio.count > 140) {
+            self.addProfileImageMsg = "The maximum length of the bio is 140 characters"
             return
         }
         
