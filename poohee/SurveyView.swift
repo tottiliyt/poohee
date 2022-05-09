@@ -13,6 +13,7 @@ import PermissionsSwiftUIPhoto
 struct SurveyView: View {
     
     @ObservedObject var vm: HomeViewModel
+    @Binding var firstTime: Bool
     
     
     @State private var createProfileStage = 3
@@ -759,6 +760,11 @@ struct SurveyView: View {
                             Text("CAREER INTERESTS")
                                 .foregroundColor(Color.primaryColor)
                                 .font(.system(size: 20))
+                            
+                            Text("(optional)")
+                                .foregroundColor(Color.gray)
+                                .font(.system(size: 10))
+                                .padding(.top, 5)
                         }.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                         
                         
@@ -2930,6 +2936,7 @@ struct SurveyView: View {
                         Spacer()
                         
                         Button {
+                            firstTime = true
                             handleSubmit()
                         } label: {
                             
