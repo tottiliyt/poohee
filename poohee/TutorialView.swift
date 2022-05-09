@@ -21,7 +21,7 @@ struct TutorialView: View {
                         .font(.system(size: 25))
                         .padding(.horizontal)
                     
-                    Text("You will be notified everytime we find a compatible match!")
+                    Text("You will be notified every time we find a compatible match!")
                         .font(.system(size: 25))
                         .padding(.horizontal)
                     

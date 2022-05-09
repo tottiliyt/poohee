@@ -16,7 +16,7 @@ struct SurveyView: View {
     @Binding var firstTime: Bool
     
     
-    @State private var createProfileStage = 3
+    @State private var createProfileStage = 0
     
     @State private var career_interests = [Bool](repeating: false, count: 15)
     
@@ -2835,9 +2835,11 @@ struct SurveyView: View {
                 }.padding(.horizontal, 50)
             }
             if (createProfileStage == 7) {
-                
-                VStack {
+                VStack{
+                    ScrollView{
+                        VStack {
 
+<<<<<<< Updated upstream
                     
                     Button {
                         isShowingPhotoPicker.toggle()
@@ -2867,18 +2869,94 @@ struct SurveyView: View {
                     
                     HStack{
                         if (self.show_class) {
+=======
+                            
+>>>>>>> Stashed changes
                             Button {
-                                
+                                isShowingPhotoPicker.toggle()
                             } label: {
-                                HStack{
-                                    Spacer()
-                                    Text(self.grad_year == "2022" ? "Senior": self.grad_year == "2023" ? "Junior" : self.grad_year == "2024" ? "Sophomore": "Freshman")
-                                        .foregroundColor(.white)
-                                        .font(.system(size: 20))
-                                    Spacer()
-                                    
-                                    
+                                
+                                VStack{
+                                    if let image = self.image {
+                                        Image(uiImage:image)
+                                            .resizable()
+                                            .frame(width: 180, height: 180)
+                                            .scaledToFill()
+                                            .cornerRadius(90)
+                                    }
+                                    else {
+                                        Image("plus_photo")
+                                            .font(.system(size: 64))
+                                    }
                                 }
+                                
+                            }.padding(.top, 50)
+                            
+                            Text(self.first)
+                                .font(.system(size: 36))
+                                .foregroundColor(Color.primaryColor)
+                            
+                            
+                            HStack{
+                                if (self.show_class) {
+                                    Button {
+                                        
+                                    } label: {
+                                        HStack{
+                                            Spacer()
+                                            Text(self.grad_year == "2022" ? "Senior": self.grad_year == "2023" ? "Junior" : self.grad_year == "2024" ? "Sophomore": "Freshman")
+                                                .foregroundColor(.white)
+                                                .font(.system(size: 20))
+                                            Spacer()
+                                            
+                                            
+                                        }
+                                        .background(Color.primaryColor)
+                                        .cornerRadius(24)
+                                    }.padding(.horizontal, UIScreen.main.bounds.width*0.2)
+                                }
+                                
+                                
+                                
+                                
+                            }
+                            
+                            Group {
+                                Toggle("Display class year", isOn: $show_class)
+                                    .font(.system(size: 24))
+                                    .foregroundColor(Color.primaryColor)
+                                    .toggleStyle(SwitchToggleStyle(tint: Color.primaryColor))
+                                
+                                Text("Add a short bio about yourself")
+                                    .font(.system(size: 20))
+                                    .italic()
+                                    .foregroundColor(Color.primaryColor)
+                                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                                
+                                
+                                TextEditor(text: $bio)
+                                    .padding(8)
+                                    .overlay(RoundedRectangle(cornerRadius: 20).strokeBorder(Color.primaryColor, style: StrokeStyle(lineWidth: 2.0)))
+                                    .frame(width: UIScreen.main.bounds.width*0.8, height: UIScreen.main.bounds.height*0.10, alignment: .leading)
+                                
+                                
+                                Text("Sample Bio")
+                                    .font(.system(size: 24, weight:.bold))
+                                    .foregroundColor(Color.gray)
+                                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                                
+                                HStack {
+                                    Image("tangya_profile_pic")
+                                        .resizable()
+                                        .frame(width: 80, height: 80)
+                                    
+                                    Spacer()
+                                    
+                                    Text("Tangya is a Junior studying in IS + Econ and daydreaming about the next start-up idea. Passionate in photography, scuba diving and coffee.")
+                                        .font(.system(size: 14))
+                                        .foregroundColor(Color.black)
+                                }
+<<<<<<< Updated upstream
                                 .background(Color.primaryColor)
                                 .cornerRadius(24)
                             }.padding(.horizontal, UIScreen.main.bounds.width*0.2)
@@ -2943,6 +3021,27 @@ struct SurveyView: View {
                         .font(.system(size: 14))
                     
                     
+=======
+                            }.padding(.vertical, 5)
+                            
+                            Spacer()
+                            
+                            Text(self.addProfileImageMsg)
+                                .foregroundColor(Color.primaryColor)
+                                .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing)
+                                .font(.system(size: 14))
+                                .padding(.vertical)
+                            
+                            
+                            
+                            
+                        }.padding(.horizontal, 50)
+                    }
+                    .background(Color.white)
+                    .onTapGesture {
+                        hideKeyboard()
+                    }
+>>>>>>> Stashed changes
                     
                     HStack{
                         Spacer()
@@ -2961,6 +3060,7 @@ struct SurveyView: View {
                                 .background(Color.primaryColor)
                                 .cornerRadius(12)
                         }
+<<<<<<< Updated upstream
                     }
                     .padding(.horizontal, -50)
                     .padding()
@@ -2972,14 +3072,14 @@ struct SurveyView: View {
                         hideKeyboard()
                     }
                     .fullScreenCover(isPresented: $isShowingPhotoPicker, onDismiss: nil) {
+=======
+                    }.padding(.horizontal, 50)
+                }
+                .fullScreenCover(isPresented: $isShowingPhotoPicker, onDismiss: nil) {
+>>>>>>> Stashed changes
                         ImagePicker(image: $image)
-                    }
-                
+                }
             }
-            
-            
-            
-            
         }
     }
     
