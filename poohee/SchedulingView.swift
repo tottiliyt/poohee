@@ -222,7 +222,7 @@ struct YolkBotMessages: View {
             .padding(.bottom, 9)
             
             HStack{
-                Text("😎 You two are both \n\(similarities)")
+                Text("😎 You two are both interested in\n\(similarities)")
                     .fixedSize(horizontal: false, vertical: true)
                 .foregroundColor(Color.white)
                 .padding()
