@@ -23,8 +23,8 @@ struct SchedulingPopUp: View {
     
     
     var body: some View {
-        VStack (alignment: .center){
-            Spacer()
+        ZStack (){
+            
             
             VStack (alignment: .center, spacing: 8){
                 if done {
@@ -69,9 +69,9 @@ struct SchedulingPopUp: View {
                                     selected = i
                                 }, label: {
                                     Text("\(weekdays[(vm.matchDay+i+1)%7])")
-                                        .font(.system(size: 23, weight: .semibold))
+                                        .font(.system(size: 20, weight: .semibold))
                                         .foregroundColor(i == self.selected ? Color.white: Color.gray)
-                                        .frame(width: 60, height: 60)
+                                        .frame(width: 50, height: 50)
                                         .background(i == self.selected ? Color.primaryColor: Color.chatGray)
                                         .clipShape(RoundedRectangle(cornerRadius: 15))
                                         .padding(.horizontal,3)
@@ -80,11 +80,11 @@ struct SchedulingPopUp: View {
                                 if selected == i {
                                     Image("Triangle")
                                         .resizable()
-                                        .frame(width: 25, height: 20, alignment: .center)
+                                        .frame(width: 23, height: 17, alignment: .center)
                                 } else {
                                     Image("a")
                                         .resizable()
-                                        .frame(width: 25, height: 20, alignment: .center)
+                                        .frame(width: 23, height: 17, alignment: .center)
                                 }
                             }
 
@@ -122,7 +122,6 @@ struct SchedulingPopUp: View {
             .cornerRadius(25)
             .padding(.horizontal, 36)
             
-            Spacer(minLength: 220)
         }
         .frame(maxWidth:.infinity, maxHeight: .infinity)
         .background(Color.primary.opacity(0.01)
@@ -148,11 +147,12 @@ struct SchedulingPopUp: View {
                     Text("\(meals[j])")
                         .font(.system(size: 20, weight: .semibold))
                         .foregroundColor(schedulingChoices[selected*4+j] ? Color.white: Color.gray)
-                        .frame(width: 285, height: 40)
+                        .frame(width: 240, height: 40)
                         .background(schedulingChoices[selected*4+j] ? self.colors[j]: Color.chatGray)
                         .clipShape(RoundedRectangle(cornerRadius: 15))
-                        .padding(.horizontal,5)
+                        
                 })
+                .padding(2)
                 
             }
             

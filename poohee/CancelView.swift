@@ -19,8 +19,7 @@ struct CancelView: View {
     
     
     var body: some View {
-        VStack (alignment: .center){
-            Spacer()
+        ZStack (){
             
             VStack (alignment: .center, spacing: 8){
                 
@@ -69,8 +68,6 @@ struct CancelView: View {
             .background(Color.lightBlack)
             .cornerRadius(25)
             .padding(.horizontal, 36)
-            
-            Spacer(minLength: 250)
         }
         .frame(maxWidth:.infinity, maxHeight: .infinity)
         .background(Color.primary.opacity(0.25)
