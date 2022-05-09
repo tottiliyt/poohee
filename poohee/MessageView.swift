@@ -114,6 +114,13 @@ struct MessageView: View {
     private var messageQueue: some View {
         ScrollView{
             VStack{
+                if vm.chats.count == 0{
+                    Text("You don't have any matches yet")
+                        .font(.system(size: 20))
+                        .foregroundColor(Color.gray)
+                        .padding(.vertical)
+                }
+                
                 ForEach(vm.chats) {chat in
                     
                     NavigationLink (destination: {
