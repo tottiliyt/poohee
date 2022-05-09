@@ -277,73 +277,84 @@ struct HomeView: View {
     @State var isMessageMode = true
     @State var isPopUp = false
     @State var accepted = false
+    @State var firstTime = false
     
     var body: some View {
         
         if (!vm.isProfileFinished) {
 
-            SurveyView(vm : vm)
+            SurveyView(vm : vm, firstTime: $firstTime)
             
         } else {
             NavigationView{
-                VStack(spacing:0){
-                    ZStack{
-                        if isMessageMode {
-                            MessageView(isPopUp: $isPopUp, vm : vm)
-                        } else {
-                            ProfileView(vm : vm)
+                ZStack {
+                    VStack(spacing:0){
+                        ZStack{
+                            if isMessageMode {
+                                MessageView(isPopUp: $isPopUp, vm : vm)
+                            } else {
+                                ProfileView(vm : vm)
+                            }
                         }
-                    }
-                    
-                    HStack(){
-                        Button(action: {
-                            isMessageMode = true
-                        }, label: {
-                            HStack(spacing:0){
-                                Spacer()
-                                if isMessageMode{
-                                    Image("MessageWhite")
-                                        .resizable()
-                                        .frame(width:47, height:47)
-                                } else {
-                                    Image("MessageGrey")
-                                        .resizable()
-                                        .frame(width:47, height:47)
-                                }
-                                
-                                Spacer()
-                            }
-                            .padding(.vertical, 21)
-                                .background(isMessageMode ? Color.primaryColor: Color.white)
-                                .cornerRadius(20)
-                        })
                         
-                        Button(action: {
-                            isMessageMode = false
-                        }, label: {
-                            HStack(spacing:0){
-                                Spacer()
-                                if isMessageMode{
-                                    Image("ProfileGrey")
-                                        .font(.system(size: 100))
-                                } else {
-                                    Image("ProfileWhite")
-                                        .font(.system(size: 100))
-                                }
+                        HStack(){
+                            Button(action: {
+                                isMessageMode = true
+                            }, label: {
+                                HStack(spacing:0){
+                                    Spacer()
+                                    if isMessageMode{
+                                        Image("MessageWhite")
+                                            .resizable()
+                                            .frame(width:47, height:47)
+                                    } else {
+                                        Image("MessageGrey")
+                                            .resizable()
+                                            .frame(width:47, height:47)
+                                    }
                                     
-                                Spacer()
-                            }
-                            .padding(.vertical, 20)
-                                .background(isMessageMode ? Color.white: Color.secondaryColor)
-                                .cornerRadius(20)
+                                    Spacer()
+                                }
+                                .padding(.vertical, 21)
+                                    .background(isMessageMode ? Color.primaryColor: Color.white)
+                                    .cornerRadius(20)
+                            })
                             
-                        })
-                       
+                            Button(action: {
+                                isMessageMode = false
+                            }, label: {
+                                HStack(spacing:0){
+                                    Spacer()
+                                    if isMessageMode{
+                                        Image("ProfileGrey")
+                                            .font(.system(size: 100))
+                                    } else {
+                                        Image("ProfileWhite")
+                                            .font(.system(size: 100))
+                                    }
+                                        
+                                    Spacer()
+                                }
+                                .padding(.vertical, 20)
+                                    .background(isMessageMode ? Color.white: Color.secondaryColor)
+                                    .cornerRadius(20)
+                                
+                            })
+                           
+                        }
+                        
                     }
                     
+                    
+                    if firstTime{
+                        TutorialView(show:$firstTime)
+                    }
                 }
                 .ignoresSafeArea(.all, edges: .bottom)
                 .navigationBarHidden(true)
+                
+                
+                
             }
         }
         

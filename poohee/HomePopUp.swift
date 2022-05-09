@@ -72,19 +72,25 @@ struct HomePopUp: View {
     var body: some View {
         
         ZStack{
+            
+            
             VStack (alignment: .center, spacing: 20){
                 
-                Text("Hey \(vm.profile?.first_name ?? ""),")
-                    .font(.system(size: 25))
-                    .padding(.horizontal)
+                VStack(alignment: .leading, spacing: 20){
+                    Text("Hey \(vm.profile?.first_name ?? ""),")
+                        .font(.system(size: 25))
+                        .padding(.horizontal)
+                    
+                    Text("we are trying to match you with someone.")
+                        .font(.system(size: 25))
+                        .padding(.horizontal)
+                    
+                    Text("Would you be available anytime in the next 4 days?")
+                        .font(.system(size: 25))
+                        .padding(.horizontal)
+                    
+                }
                 
-                Text("we are trying to match you with someone.")
-                    .font(.system(size: 25))
-                    .padding(.horizontal)
-                
-                Text("Would you be available anytime in the next 4 days?")
-                    .font(.system(size: 25))
-                    .padding(.horizontal)
                 
                 Button(action: {
                     updateNewMatch(new_match: false)

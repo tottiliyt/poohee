@@ -13,6 +13,7 @@ import PermissionsSwiftUIPhoto
 struct SurveyView: View {
     
     @ObservedObject var vm: HomeViewModel
+    @Binding var firstTime: Bool
     
     
     @State private var createProfileStage = 3
@@ -754,18 +755,20 @@ struct SurveyView: View {
                             .padding(.bottom, 20)
                             .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                         
-                        ScrollView {
-                            HStack {
-                                Text("CAREER INTERESTS")
-                                    .foregroundColor(Color.primaryColor)
-                                    .font(.system(size: 20))
-                            }.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                        
+                        HStack {
+                            Text("CAREER INTERESTS")
+                                .foregroundColor(Color.primaryColor)
+                                .font(.system(size: 20))
                             
-                            
+                            Text("(optional)")
+                                .foregroundColor(Color.gray)
+                                .font(.system(size: 10))
+                                .padding(.top, 5)
+                        }.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                        
                             careerSelector
                                 
-                                
-                            
                             HStack {
                                 Text("RELIGIOUS AFFILIATION")
                                     .foregroundColor(Color.primaryColor)
@@ -2945,6 +2948,7 @@ struct SurveyView: View {
                         Spacer()
                         
                         Button {
+                            firstTime = true
                             handleSubmit()
                         } label: {
                             

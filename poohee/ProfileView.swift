@@ -138,6 +138,71 @@ struct ProfileView: View {
                             
                         
                         Group {
+                            VStack (spacing: 7) {
+                                HStack(){
+                                    Text("Bio")
+                                        .font(.system(size: 24))
+                                        .bold()
+                                        .foregroundColor(Color.primaryColor)
+                                    
+                                    if !editing {
+                                        Button {
+                                            self.bio = vm.profile?.bio ?? ""
+                                            editing.toggle()
+                                        } label: {
+                                            Text("Edit")
+                                                .font(.system(size: 12))
+                                                .foregroundColor(Color.gray)
+                                            
+                                            
+                                        }
+                                    }
+                                    
+                                    Spacer()
+                                    
+                                }
+                                .padding(.top, 1)
+
+                                VStack{
+                                    if editing {
+                                        TextEditor(text: $bio)
+                                            .font(.system(size: 16))
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .padding(8)
+                                            .overlay(
+                                            RoundedRectangle(cornerRadius: 20)
+                                                .stroke(Color.primaryColor, lineWidth: 2))
+                                        
+                                        Button {
+                                            updateBio()
+                                            editing.toggle()
+                                        } label: {
+                                            Text("Done")
+                                                .font(.system(size: 12, weight: .semibold))
+                                                .foregroundColor(Color.gray)
+                                            
+                                            
+                                        }
+                                        
+                                    } else {
+                                        Text(vm.profile?.bio ?? "")
+                                            .font(.system(size: 16))
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .padding()
+                                            .overlay(
+                                            RoundedRectangle(cornerRadius: 20)
+                                                .stroke(Color.primaryColor, lineWidth: 2)
+                                            )
+                                        
+                                    }
+                                    
+
+                                        
+
+                                    
+                                }
+                            }
+                            
                             HStack {
                                 VStack {
                                     Text("Invite more friends!")
@@ -186,77 +251,6 @@ struct ProfileView: View {
                                         
                                 }.padding(.top, 35)
                                 
-                            }
-                            
-                            
-                            
-                            VStack (spacing: 7) {
-                                HStack(){
-                                    Text("Bio")
-                                        .font(.system(size: 24))
-                                        .bold()
-                                        .foregroundColor(Color.primaryColor)
-                                    
-                                    if !editing {
-                                        Button {
-                                            self.bio = vm.profile?.bio ?? ""
-                                            editing.toggle()
-                                        } label: {
-                                            Text("Edit")
-                                                .font(.system(size: 12))
-                                                .foregroundColor(Color.gray)
-                                            
-                                            
-                                        }
-                                    }
-                                    
-                                    
-                                    
-                                    Spacer()
-                                    
-                                    
-                                }
-                                
-                                
-
-                                VStack{
-                                    if editing {
-                                        TextEditor(text: $bio)
-                                            .font(.system(size: 16))
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                            .padding(8)
-                                            .overlay(
-                                            RoundedRectangle(cornerRadius: 20)
-                                                .stroke(Color.primaryColor, lineWidth: 2))
-                                        
-                                        Button {
-                                            updateBio()
-                                            editing.toggle()
-                                        } label: {
-                                            Text("Done")
-                                                .font(.system(size: 12, weight: .semibold))
-                                                .foregroundColor(Color.gray)
-                                            
-                                            
-                                        }
-                                        
-                                    } else {
-                                        Text(vm.profile?.bio ?? "")
-                                            .font(.system(size: 16))
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                            .padding()
-                                            .overlay(
-                                            RoundedRectangle(cornerRadius: 20)
-                                                .stroke(Color.primaryColor, lineWidth: 2)
-                                            )
-                                        
-                                    }
-                                    
-
-                                        
-
-                                    
-                                }
                             }
                             
                             VStack (spacing: 7) {
