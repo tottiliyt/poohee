@@ -15,7 +15,7 @@ struct SurveyView: View {
     @ObservedObject var vm: HomeViewModel
     
     
-    @State private var createProfileStage = 5
+    @State private var createProfileStage = 0
     
     @State private var career_interests = [Bool](repeating: false, count: 15)
     
@@ -123,7 +123,7 @@ struct SurveyView: View {
         "Real traveling isn’t planned",
         "I have cried over movie scenes",
         "Men and women can just be friends",
-        "It’s important for me to live up to the expectation of the society",
+        "It’s important for me to live up to societal expectations",
         "I wonder what the meaning of life is sometimes",
         "I am a straight shooter",
         "I like to take the risks that make life exciting",
@@ -423,8 +423,6 @@ struct SurveyView: View {
                 
             })
         }
-        
-        
         else {
             if (createProfileStage == 0) {
                 VStack(spacing:50) {
@@ -712,8 +710,14 @@ struct SurveyView: View {
                         
                         
                         
-                    }.padding(.horizontal, 50)
+                    }
+                    .padding(.horizontal, 50)
+                    .background(Color.white)
+                    .onTapGesture {
+                        hideKeyboard()
+                    }
                 }
+                
                 
                 
                 
@@ -845,20 +849,9 @@ struct SurveyView: View {
                         Spacer()
                         
                         Button {
-                            var notFilledOut = true
-                            for b in career_interests {
-                                if b {
-                                    notFilledOut = false
-                                }
-                            }
+
+                            nextStage()
                             
-                            if notFilledOut {
-                                self.requiredmsg2 = "Please fill out all required fields"
-                            }
-                            else {
-                                nextStage()
-                                self.requiredmsg2 = ""
-                            }
                         }label: {
                             Text("> Next")
                                 .foregroundColor(Color.gray)
@@ -2635,6 +2628,10 @@ struct SurveyView: View {
                     
                     
                 }.padding(.horizontal, 50)
+                    .background(Color.white)
+                    .onTapGesture {
+                        hideKeyboard()
+                    }
                     .fullScreenCover(isPresented: $isShowingPhotoPicker, onDismiss: nil) {
                         ImagePicker(image: $image)
                     }
@@ -2758,6 +2755,8 @@ struct Card: View {
         .background(Color.white)
     }
 }
+
+
 
 struct SurveyView_Previews: PreviewProvider {
     static var previews: some View {

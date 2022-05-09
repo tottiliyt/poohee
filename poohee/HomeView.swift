@@ -254,9 +254,6 @@ class HomeViewModel: ObservableObject {
             ]) { err in
                 if let err = err {
                     print("Error updating document: \(err)")
-                } else {
-                    
-                    self.fetchCurrentUser()
                 }
             }
         }
@@ -267,9 +264,6 @@ class HomeViewModel: ObservableObject {
             ]) { err in
                 if let err = err {
                     print("Error updating document: \(err)")
-                } else {
-                    
-                    self.fetchCurrentUser()
                 }
             }
         }

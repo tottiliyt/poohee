@@ -9,7 +9,19 @@ import SwiftUI
 import Firebase
 import SDWebImageSwiftUI
 
+extension UINavigationController {
+    override open func viewDidLoad() {
+        super.viewDidLoad()
+
+    let standard = UINavigationBarAppearance()
+        standard.backgroundColor = UIColor(Color.chatGray) //When you scroll or you have title (small one)
+
+    navigationBar.standardAppearance = standard
+ }
+}
+
 class ChatViewModel: ObservableObject {
+    
     
     @Published var errorMessage = "successfully stored message"
     @Published var messages = [ChatMessage]()
@@ -19,10 +31,12 @@ class ChatViewModel: ObservableObject {
     @Published var recipientId = ""
     @Published var chat : Chat
     @Published var recipientProfile : Profile?
-    @Published var recipientMeetNum : Int?
+    @Published var recipientNumMeet : Int?
+    @Published var numMeet : Int?
     @Published var profile: Profile?
     @Published var recipientChoices = [false]
     @Published var needMoreChoices = false
+    @Published var similarities = ""
     
     
     let date = Date()
@@ -74,13 +88,32 @@ class ChatViewModel: ObservableObject {
                     }
                     
                 })
+                self.fetchSimilarities()
                 
             }
+
         DispatchQueue.main.async {
             self.count += 1
         }
         
+        
     }
+    private func fetchSimilarities(){
+        let first = self.messages[0].text
+        var array = [Character]()
+        for c in first {
+            if c == "," {
+                array.append("\n")
+            } else {
+                array.append(c)
+            }
+            
+        }
+        self.similarities = String(array)
+        
+        
+    }
+    
     
     private func fetchProfiles(){
         FirebaseManager.shared.firestore.collection("users").document(self.uid).getDocument { snapshot, error in
@@ -95,6 +128,7 @@ class ChatViewModel: ObservableObject {
                 return
 
             }
+            self.numMeet = data["num_meet"] as? Int ?? 0
             
             self.profile = Profile(uid: self.uid, data: data["profile"] as? Dictionary<String, Any> ?? [:])
             
@@ -112,7 +146,7 @@ class ChatViewModel: ObservableObject {
                 return
 
             }
-            self.recipientMeetNum = data["num_meet"] as? Int ?? 0
+            self.recipientNumMeet = data["num_meet"] as? Int ?? 0
             
             self.recipientProfile = Profile(uid: self.recipientId, data: data["profile"] as? Dictionary<String, Any> ?? [:])
             
@@ -244,10 +278,12 @@ class ChatViewModel: ObservableObject {
                 }
             }
             if x == -1{
-                send(text: "Oops, looks like your availabilities in the upcoming days don't quite match up. Maybe figuring out a time + a public place to meet up next week could be your first icebreaker 😇", stage: 1)
+                send(text: "Oops, looks like your availabilities in the upcoming days don't quite match up. Maybe figuring out a time + a public place to meet could be your first icebreaker 😇", stage: 1)
+                updateNumMeet()
             } else {
                 print("got here")
-                send(text: "😇 You guys have agreed to meet on  \(weekdays[(self.matchDay + x/4 + 1) % 7]) for \(meals[x%4])! You can now message each other freely. Be the first to break the ice by suggesting a restaurant/coffee shop to meet up at!", stage: 1)
+                send(text: "😇 You two have agreed to meet on  \(weekdays[(self.matchDay + x/4 + 1) % 7]) for \(meals[x%4])! You can now message each other freely. Be the first to break the ice by suggesting a restaurant/coffee shop to meet up at!", stage: 1)
+                updateNumMeet()
             }
             
         }
@@ -259,6 +295,32 @@ class ChatViewModel: ObservableObject {
         print(self.errorMessage)
     }
     
+    private func updateNumMeet(){
+        let ref = FirebaseManager.shared.firestore.collection("users").document(self.uid)
+        let newNumMeet = (self.numMeet ?? 0) + 1
+        ref.updateData([
+            "num_meet": newNumMeet
+        ]) { err in
+            if let err = err {
+                print("Error updating document: \(err)")
+            }
+        }
+        
+        let recipientRef = FirebaseManager.shared.firestore.collection("users").document(self.recipientId)
+        let recipientNewNumMeet = (self.recipientNumMeet ?? 0) + 1
+        recipientRef.updateData([
+            "num_meet": recipientNewNumMeet
+        ]) { err in
+            if let err = err {
+                print("Error updating document: \(err)")
+            } else {
+                self.fetchProfiles()
+            }
+        }
+            
+
+    }
+    
 }
 
 struct ChatView: View {
@@ -267,61 +329,35 @@ struct ChatView: View {
     @ObservedObject var vm : ChatViewModel
     @State var scheduled = false
     
+    
     init(chat: Chat){
         self.chat = chat
         vm = .init(chat: chat)
         let expiration = vm.chat.timestamp.dateValue().addingTimeInterval(259200)
-        if (Date() > expiration)  && !scheduled {
-            vm.send(text: "", stage: 1)
+        if (Date() > expiration)  && vm.chat.stage <= 0 {
+            vm.send(text: "Looks like at least one of you has been quite busy in the past few days. If you would still like to meet up, figuring out a time + a public place to meet could be your first icebreaker 😇", stage: 1)
         }
+        
+        
     }
     
     var body: some View {
-        
-        VStack (spacing: 0){
-            NavigationLink{
-                OtherUserProfileView(vm: vm)
-            } label: {
-                HStack{
-                    
-                    WebImage(url: URL(string: vm.recipientProfile?.profileImageUrl ?? ""))
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 40, height: 40)
-                        .clipped()
-                        .cornerRadius(60)
-                        .overlay(RoundedRectangle(cornerRadius: 44)
-                            .stroke(lineWidth: 2)
-                            .foregroundColor(Color.primaryColor)
-                        )
-                        
-                    
-                    HStack{
-                        Text("\(chat.firstName)")
-                            .font(.system(size:25))
-                            .foregroundColor(Color.black)
-                        Text(">")
-                            .font(.system(size:25))
-                            .foregroundColor(Color.gray)
-                    }
-                    
-                }
-                .padding(.bottom)
-                
-            }
-            
-            if scheduled {
-                PostSchedulingView(vm: vm)
-            } else if vm.chat.stage <= 0 {
-                SchedulingView(vm:vm, scheduled: $scheduled)
-            } else {
-                PostSchedulingView(vm: vm)
-            }
+        if scheduled {
+            PostSchedulingView(vm: vm)
+            //SchedulingView(vm:vm, scheduled: $scheduled)
+                .navigationBarHidden(true)
+        } else if vm.chat.stage <= 0 {
+            SchedulingView(vm:vm, scheduled: $scheduled)
+                .navigationBarHidden(true)
+        } else {
+            PostSchedulingView(vm: vm)
+            //SchedulingView(vm:vm, scheduled: $scheduled)
+                .navigationBarHidden(true)
         }
-        .background(Color.chatGray)
-        .navigationBarTitleDisplayMode(.inline)
-        
+            
     }
+    
+    
 }
 
 struct ChatView_Previews: PreviewProvider {

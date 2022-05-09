@@ -160,10 +160,13 @@ struct MessageView: View {
                             
                             Spacer()
                             
-                            Text("\(chat.timeAgo)")
-                                .font(.system(size: 14, weight:
-                                        .semibold))
-                                .foregroundColor(Color.black)
+                            VStack{
+                                Text("\(chat.timeAgo)")
+                                    .font(.system(size: 14))
+                                    .foregroundColor(Color(.lightGray))
+                                Spacer()
+                            }
+                            
                             
                         }
                     })

@@ -70,7 +70,12 @@ struct LoginView: View {
                                 .cornerRadius(15)
                         }
                         
-                    }.padding(.horizontal, 50)
+                    }
+                    .padding(.horizontal, 50)
+                    .background(Color.white)
+                    .onTapGesture {
+                        hideKeyboard()
+                    }
                 }
                 else {
                     VStack{
@@ -138,7 +143,12 @@ struct LoginView: View {
                                 .cornerRadius(24)
                         }
                         
-                    }.padding(.horizontal, 50)
+                    }
+                    .padding(.horizontal, 50)
+                    .background(Color.white)
+                    .onTapGesture {
+                        hideKeyboard()
+                    }
                 }
                 
                 
@@ -179,10 +189,10 @@ struct LoginView: View {
             return
         }
         
-        if (!email.hasSuffix("@jh.edu")) {
+        /*if (!email.hasSuffix("@jh.edu")) {
             msg = "Email must end with @jh.edu"
             return
-        }
+        }*/
         
         FirebaseManager.shared.auth.signIn(withEmail: email, password: password) {
             result, error in
