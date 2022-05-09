@@ -747,6 +747,7 @@ struct SurveyView: View {
                     }
                     .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                     .padding()
+                    .padding(.horizontal, -50)
                     
                     VStack{
                         Text("Are any of these also important?")
