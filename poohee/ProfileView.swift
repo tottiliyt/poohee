@@ -4,7 +4,6 @@
 //
 //  Created by Will Zhao on 4/8/22.
 //
-
 import SwiftUI
 import SDWebImageSwiftUI
 
@@ -31,7 +30,6 @@ struct ProfileView: View {
     
     var body: some View {
         
-        //ScrollView {
             
             
             GeometryReader { geo in
@@ -66,277 +64,282 @@ struct ProfileView: View {
                                 .background(vm.user?.matching == "On" ? Color.primaryColor : Color.secondaryColor)
                                     .cornerRadius(12)
                             }
-                        }.padding(.bottom)
-                        
-                        
-                        WebImage(url: imageURL)
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 120, height: 120)
-                            .clipped()
-                            .cornerRadius(200)
-                            .onReceive(vm.$profile_img_url) { _ in
-                                loadImageFromFirebase()
-                            }
-                            .overlay(RoundedRectangle(cornerRadius: 200)
-                                .stroke(lineWidth: 2)
-                                .foregroundColor(Color.secondaryColor)
-                            )
-                            
-                            
-                        
-
-                        Text(vm.profile?.first_name ?? "")
-                            .font(.system(size: 36))
-                            .foregroundColor(Color.secondaryColor)
-                        
-
-                        HStack{
-                            Spacer()
-                            Button {
-                                
-                            } label: {
-                                
-                                    Text(vm.profile?.class_standing ?? "")
-                                    .foregroundColor(.white)
-                                    .font(.system(size: 24))
-                                    .padding(.horizontal)
-                                    .background(Color.secondaryColor)
-                                    .cornerRadius(24)
-                            }
-                            Spacer()
                         }
-
-
-                        HStack {
-                            Button {
-                            }label: {
-                                HStack{
+                        .padding(.horizontal, 30)
+                        .padding(.bottom)
+                            
+                        
+                        
+                        ScrollView(showsIndicators: false){
+                            VStack{
+                                WebImage(url: imageURL)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 120, height: 120)
+                                    .clipped()
+                                    .cornerRadius(200)
+                                    .onReceive(vm.$profile_img_url) { _ in
+                                        loadImageFromFirebase()
+                                    }
+                                    .overlay(RoundedRectangle(cornerRadius: 200)
+                                        .stroke(lineWidth: 2)
+                                        .foregroundColor(Color.secondaryColor)
+                                    )
+                                    
+                                    
                                 
+
+                                Text(vm.profile?.first_name ?? "")
+                                    .font(.system(size: 36))
+                                    .foregroundColor(Color.secondaryColor)
+                                
+
+                                HStack{
+                                    Spacer()
+                                    Button {
                                         
-                                    Text(String(vm.user?.num_meet ?? 0))
+                                    } label: {
+                                        
+                                            Text(vm.profile?.class_standing ?? "")
                                             .foregroundColor(.white)
                                             .font(.system(size: 24))
-                                            .padding(6)
-                                            .padding(.horizontal, 4)
-                                        
-                                    
-                                }
-                                    .background(Color.secondaryColor)
-                                    .cornerRadius(10)
-                                    
-                                    
-                            }
-                            
-                            
-                            Text("Meetups already ")
-                                .font(.system(size: 24))
-                                .foregroundColor(Color.secondaryColor)
-                                
-                            
-                        }.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                            
-                        
-                        Group {
-                            VStack (spacing: 7) {
-                                HStack(){
-                                    Text("Bio")
-                                        .font(.system(size: 24))
-                                        .bold()
-                                        .foregroundColor(Color.primaryColor)
-                                    
-                                    if !editing {
-                                        Button {
-                                            self.bio = vm.profile?.bio ?? ""
-                                            editing.toggle()
-                                        } label: {
-                                            Text("Edit")
-                                                .font(.system(size: 12))
-                                                .foregroundColor(Color.gray)
-                                            
-                                            
-                                        }
+                                            .padding(.horizontal)
+                                            .background(Color.secondaryColor)
+                                            .cornerRadius(24)
                                     }
-                                    
                                     Spacer()
-                                    
                                 }
-                                .padding(.top, 1)
 
-                                VStack{
-                                    if editing {
-                                        TextEditor(text: $bio)
-                                            .font(.system(size: 16))
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                            .padding(8)
-                                            .overlay(
-                                            RoundedRectangle(cornerRadius: 20)
-                                                .stroke(Color.primaryColor, lineWidth: 2))
-                                        
-                                        Button {
-                                            updateBio()
-                                            editing.toggle()
-                                        } label: {
-                                            Text("Done")
-                                                .font(.system(size: 12, weight: .semibold))
-                                                .foregroundColor(Color.gray)
-                                            
-                                            
-                                        }
-                                        
-                                    } else {
-                                        Text(vm.profile?.bio ?? "")
-                                            .font(.system(size: 16))
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                            .padding()
-                                            .overlay(
-                                            RoundedRectangle(cornerRadius: 20)
-                                                .stroke(Color.primaryColor, lineWidth: 2)
-                                            )
-                                        
-                                    }
-                                    
 
-                                        
-
-                                    
-                                }
-                            }
-                            
-                            HStack {
-                                VStack {
-                                    Text("Invite more friends!")
-                                        .foregroundColor(Color.primaryColor)
-                                        .font(.system(size: 23, weight: .heavy))
-                                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                                    Text("apps.apple.com/app/id1617502146")
-                                        .foregroundColor(Color.black)
-                                        .background(Color.buttonGray)
-                                        .font(.system(size: 12))
-                                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                                    Text("Hey! I’m trying out this super cool app called Yolk where you can meet new ppl in the community!")
-                                        .foregroundColor(Color.primaryColor)
-                                        .font(.system(size: 9))
-                                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                                }
-                                Button {
-                                }label: {
-                                    HStack{
-                                    
-                                            
-                                            Text("COPY")
-                                                .foregroundColor(.white)
-                                                .font(.system(size: 15))
-                                                .padding(6)
-                                                .padding(.vertical, 12)
-                                                .onTapGesture{
-                                                    UIPasteboard.general.string = self.download_url
-                                                    withAnimation {
-                                                        copied = true
-                                                    }
-                                                }
-                                            
-                                        
-                                    }
-                                        .background(Color.primaryColor)
-                                        .cornerRadius(10)
-                                        
-                                }.padding(.top, 20)
-                                
-                                Button {
-                                    actionSheet()
-                                }label: {
-
-                                    Image("share").resizable().frame(width: 40, height:40)
-                                        
-                                }.padding(.top, 35)
-                                
-                            }
-                            
-                            VStack (spacing: 7) {
-                                HStack {
-                                    Text("Goal")
-                                        .font(.system(size: 24))
-                                        .bold()
-                                        .foregroundColor(Color.primaryColor)
-
-                                    Text("(Click to change)")
-                                        .font(.system(size: 12))
-                                        .foregroundColor(Color.gray)
-
-                                }                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                                
                                 HStack {
                                     Button {
-                                        if (vm.profile?.goal == "career") {
-                                            updateGoal()
-                                        }
-                                        
-                                    }label: {
-                                        HStack {
-                                            Spacer()
-                                            VStack{
-                                                    Text("Make New")
-                                                        .foregroundColor(vm.profile?.goal == "friend" ? .white : .gray)
-                                                        .font(.system(size: 15))
-                                                Text("Friends!")
-                                                    .foregroundColor(vm.profile?.goal == "friend" ? .white : .gray)
-                                                    .font(.system(size: 15))
-
-                                                
-                                            }
-                                            Spacer()
-                                        }
-                                        .padding()
-                                        .background(vm.profile?.goal == "friend" ? Color.primaryColor : Color.buttonGray)
-                                        .cornerRadius(15)
-                                    }
-                                    
-                                    
-                                    Button {
-                                        if (vm.profile?.goal == "friend") {
-                                            updateGoal()
-                                        }
                                     }label: {
                                         HStack{
-                                            Spacer()
-                                            VStack{
-                                                Text("Expand My")
-                                                .foregroundColor(vm.profile?.goal == "career" ? .white : .gray)
-                                                .font(.system(size: 15))
-                                                
-                                                Text("Network!")
-                                                .foregroundColor(vm.profile?.goal == "career" ? .white : .gray)
-                                                .font(.system(size: 15))
-
-                                                    
-                                                    
-                                                
-                                            }
-                                            Spacer()
-                                        }
-                                        .padding()
-                                        .background(vm.profile?.goal == "career" ? Color.secondaryColor : Color.buttonGray)
-                                        .cornerRadius(15)
                                         
+                                                
+                                            Text(String(vm.user?.num_meet ?? 0))
+                                                    .foregroundColor(.white)
+                                                    .font(.system(size: 24))
+                                                    .padding(6)
+                                                    .padding(.horizontal, 4)
+                                                
+                                            
+                                        }
+                                            .background(Color.secondaryColor)
+                                            .cornerRadius(10)
+                                            
+                                            
                                     }
                                     
                                     
+                                    Text("Meetups already ")
+                                        .font(.system(size: 24))
+                                        .foregroundColor(Color.secondaryColor)
+                                        
                                     
-                                }
+                                }.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                                    
+                                
+                                Group {
+                                    VStack (spacing: 7) {
+                                        HStack(){
+                                            Text("Bio")
+                                                .font(.system(size: 24))
+                                                .bold()
+                                                .foregroundColor(Color.primaryColor)
+                                            
+                                            if !editing {
+                                                Button {
+                                                    self.bio = vm.profile?.bio ?? ""
+                                                    editing.toggle()
+                                                } label: {
+                                                    Text("Edit")
+                                                        .font(.system(size: 12))
+                                                        .foregroundColor(Color.gray)
+                                                    
+                                                    
+                                                }
+                                            }
+                                            
+                                            Spacer()
+                                            
+                                        }
+                                        .padding(.top, 1)
+
+                                        VStack{
+                                            if editing {
+                                                TextEditor(text: $bio)
+                                                    .font(.system(size: 16))
+                                                    .padding(8)
+                                                    .overlay(RoundedRectangle(cornerRadius: 20).strokeBorder(Color.primaryColor, style: StrokeStyle(lineWidth: 2.0)))
+                                                    .frame(width: UIScreen.main.bounds.width*0.85, height: UIScreen.main.bounds.height*0.11, alignment: .leading)
+                                                    
+                                                
+                                                Button {
+                                                    updateBio()
+                                                    editing.toggle()
+                                                } label: {
+                                                    Text("Done")
+                                                        .font(.system(size: 12, weight: .semibold))
+                                                        .foregroundColor(Color.gray)
+                                                    
+                                                    
+                                                }
+                                                
+                                            } else {
+                                                Text(vm.profile?.bio ?? "")
+                                                    .font(.system(size: 16))
+                                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                                    .padding()
+                                                    .overlay(
+                                                    RoundedRectangle(cornerRadius: 20)
+                                                        .stroke(Color.primaryColor, lineWidth: 2)
+                                                    )
+                                                
+                                            }
+                                            
+
+                                                
+
+                                            
+                                        }
+                                    }
+                                    
+                                    HStack {
+                                        VStack {
+                                            Text("Invite more friends!")
+                                                .foregroundColor(Color.primaryColor)
+                                                .font(.system(size: 23, weight: .heavy))
+                                                .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                                            Text("apps.apple.com/app/id1617502146")
+                                                .foregroundColor(Color.black)
+                                                .background(Color.buttonGray)
+                                                .font(.system(size: 12))
+                                                .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                                            Text("Hey! I’m trying out this super cool app called Yolk where you can meet new ppl in the community!")
+                                                .foregroundColor(Color.primaryColor)
+                                                .font(.system(size: 9))
+                                                .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                                        }
+                                        Button {
+                                        }label: {
+                                            HStack{
+                                            
+                                                    
+                                                    Text("COPY")
+                                                        .foregroundColor(.white)
+                                                        .font(.system(size: 15))
+                                                        .padding(6)
+                                                        .padding(.vertical, 12)
+                                                        .onTapGesture{
+                                                            UIPasteboard.general.string = self.download_url
+                                                            withAnimation {
+                                                                copied = true
+                                                            }
+                                                        }
+                                                    
+                                                
+                                            }
+                                                .background(Color.primaryColor)
+                                                .cornerRadius(10)
+                                                
+                                        }.padding(.top, 20)
+                                        
+                                        Button {
+                                            actionSheet()
+                                        }label: {
+
+                                            Image("share").resizable().frame(width: 40, height:40)
+                                                
+                                        }.padding(.top, 35)
+                                        
+                                    }
+                                    
+                                    VStack (spacing: 7) {
+                                        HStack {
+                                            Text("Goal")
+                                                .font(.system(size: 24))
+                                                .bold()
+                                                .foregroundColor(Color.primaryColor)
+
+                                            Text("(Click to change)")
+                                                .font(.system(size: 12))
+                                                .foregroundColor(Color.gray)
+
+                                        }                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                                        
+                                        HStack {
+                                            Button {
+                                                if (vm.profile?.goal == "career") {
+                                                    updateGoal()
+                                                }
+                                                
+                                            }label: {
+                                                HStack {
+                                                    Spacer()
+                                                    VStack{
+                                                            Text("Make New")
+                                                                .foregroundColor(vm.profile?.goal == "friend" ? .white : .gray)
+                                                                .font(.system(size: 15))
+                                                        Text("Friends!")
+                                                            .foregroundColor(vm.profile?.goal == "friend" ? .white : .gray)
+                                                            .font(.system(size: 15))
+
+                                                        
+                                                    }
+                                                    Spacer()
+                                                }
+                                                .padding()
+                                                .background(vm.profile?.goal == "friend" ? Color.primaryColor : Color.buttonGray)
+                                                .cornerRadius(15)
+                                            }
+                                            
+                                            
+                                            Button {
+                                                if (vm.profile?.goal == "friend") {
+                                                    updateGoal()
+                                                }
+                                            }label: {
+                                                HStack{
+                                                    Spacer()
+                                                    VStack{
+                                                        Text("Expand My")
+                                                        .foregroundColor(vm.profile?.goal == "career" ? .white : .gray)
+                                                        .font(.system(size: 15))
+                                                        
+                                                        Text("Network!")
+                                                        .foregroundColor(vm.profile?.goal == "career" ? .white : .gray)
+                                                        .font(.system(size: 15))
+
+                                                            
+                                                            
+                                                        
+                                                    }
+                                                    Spacer()
+                                                }
+                                                .padding()
+                                                .background(vm.profile?.goal == "career" ? Color.secondaryColor : Color.buttonGray)
+                                                .cornerRadius(15)
+                                                
+                                            }
+                                            
+                                            
+                                            
+                                        }
+                                    }
                             }
-                            
-                            
+                        }
+                            .padding(.horizontal, 30)
+                            .background(Color.white)
+                            .onTapGesture {
+                                hideKeyboard()
+                            }
                         }
                         
                         
 
                     }
-                    .padding(.horizontal, 30)
-                    .background(Color.white)
-                    .onTapGesture {
-                        hideKeyboard()
-                    }
+                    
                     
                     if copied {
                         Text("Download link copied")

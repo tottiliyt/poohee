@@ -16,7 +16,7 @@ struct SurveyView: View {
     @Binding var firstTime: Bool
     
     
-    @State private var createProfileStage = 3
+    @State private var createProfileStage = 0
     
     @State private var career_interests = [Bool](repeating: false, count: 15)
     
@@ -878,9 +878,6 @@ struct SurveyView: View {
                     
                     
                 }
-                
-                
-            }
             if (createProfileStage == 3) {
                 VStack{
                     Button {
@@ -2836,113 +2833,126 @@ struct SurveyView: View {
             }
             if (createProfileStage == 7) {
                 
-                VStack {
+                
+                
+                VStack{
+                    ScrollView(showsIndicators: false){
+                        VStack {
 
-                    
-                    Button {
-                        isShowingPhotoPicker.toggle()
-                    } label: {
-                        
-                        VStack{
-                            if let image = self.image {
-                                Image(uiImage:image)
-                                    .resizable()
-                                    .frame(width: UIScreen.main.bounds.height*0.15, height: UIScreen.main.bounds.height*0.15)
-                                    .scaledToFill()
-                                    .cornerRadius(90)
-                            }
-                            else {
-                                Image("plus_photo")
-                                    .font(.system(size: 64))
-                                    .padding()
-                            }
-                        }
-                        
-                    }.padding(.top, UIScreen.main.bounds.height*0.05)
-                    
-                    Text(self.first)
-                        .font(.system(size: 36))
-                        .foregroundColor(Color.primaryColor)
-                    
-                    
-                    HStack{
-                        if (self.show_class) {
-                            Button {
-                                
-                            } label: {
-                                HStack{
-                                    Spacer()
-                                    Text(self.grad_year == "2022" ? "Senior": self.grad_year == "2023" ? "Junior" : self.grad_year == "2024" ? "Sophomore": "Freshman")
-                                        .foregroundColor(.white)
-                                        .font(.system(size: 20))
-                                    Spacer()
-                                    
-                                    
-                                }
-                                .background(Color.primaryColor)
-                                .cornerRadius(24)
-                            }.padding(.horizontal, UIScreen.main.bounds.width*0.2)
-                        }
-                        
-                        
-                        
-                        
-                    }
-                    
-                    Group {
-                        Toggle("Display class year", isOn: $show_class)
-                            .font(.system(size: 24))
-                            .foregroundColor(Color.primaryColor)
-                            .toggleStyle(SwitchToggleStyle(tint: Color.primaryColor))
-                        
-                        Text("Add a short bio about yourself")
-                            .font(.system(size: 20))
-                            .italic()
-                            .foregroundColor(Color.primaryColor)
-                            .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                        
-                        
-                        TextEditor(text: $bio)
-                            .padding(8)
-                            .overlay(RoundedRectangle(cornerRadius: 20).strokeBorder(Color.primaryColor, style: StrokeStyle(lineWidth: 2.0)))
-                            .frame(width: UIScreen.main.bounds.width*0.8, height: UIScreen.main.bounds.height*0.10, alignment: .leading)
-                        
-                        
-                        Text("Sample Bio")
-                            .font(.system(size: 22, weight:.bold))
-                            .foregroundColor(Color.gray)
-                            .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                            .fixedSize(horizontal: false, vertical: true)
-                        
-                        HStack {
                             
-                            VStack{
-                                Image("tangya_profile_pic")
-                                    .resizable()
-                                    .frame(width: UIScreen.main.bounds.height*0.08, height: UIScreen.main.bounds.height*0.08)
-                                Spacer()
+                            Button {
+                                isShowingPhotoPicker.toggle()
+                            } label: {
+                                
+                                VStack{
+                                    if let image = self.image {
+                                        Image(uiImage:image)
+                                            .resizable()
+                                            .frame(width: UIScreen.main.bounds.height*0.15, height: UIScreen.main.bounds.height*0.15)
+                                            .scaledToFill()
+                                            .cornerRadius(90)
+                                    }
+                                    else {
+                                        Image("plus_photo")
+                                            .font(.system(size: 64))
+                                    }
+                                }
+                                
+                            }.padding(.top, UIScreen.main.bounds.height*0.05)
+                            
+                            Text(self.first)
+                                .font(.system(size: 36))
+                                .foregroundColor(Color.primaryColor)
+                            
+                            
+                            HStack{
+                                if (self.show_class) {
+                                    Button {
+                                        
+                                    } label: {
+                                        HStack{
+                                            Spacer()
+                                            Text(self.grad_year == "2022" ? "Senior": self.grad_year == "2023" ? "Junior" : self.grad_year == "2024" ? "Sophomore": "Freshman")
+                                                .foregroundColor(.white)
+                                                .font(.system(size: 20))
+                                            Spacer()
+                                            
+                                            
+                                        }
+                                        .background(Color.primaryColor)
+                                        .cornerRadius(24)
+                                    }.padding(.horizontal, UIScreen.main.bounds.width*0.2)
+                                }
+                                
+                                
+                                
+                                
                             }
+                            
+                            Group {
+                                Toggle("Display class year", isOn: $show_class)
+                                    .font(.system(size: 24))
+                                    .foregroundColor(Color.primaryColor)
+                                    .toggleStyle(SwitchToggleStyle(tint: Color.primaryColor))
+                                
+                                Text("Add a short bio about yourself")
+                                    .font(.system(size: 20))
+                                    .italic()
+                                    .foregroundColor(Color.primaryColor)
+                                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                                
+                                
+                                TextEditor(text: $bio)
+                                    .padding(8)
+                                    .overlay(RoundedRectangle(cornerRadius: 20).strokeBorder(Color.primaryColor, style: StrokeStyle(lineWidth: 2.0)))
+                                    .frame(width: UIScreen.main.bounds.width*0.8, height: UIScreen.main.bounds.height*0.10, alignment: .leading)
+                                
+                                
+                                Text("Sample Bio")
+                                    .font(.system(size: 22, weight:.bold))
+                                    .foregroundColor(Color.gray)
+                                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                
+                                HStack {
+                                    
+                                    VStack{
+                                        Image("tangya_profile_pic")
+                                            .resizable()
+                                            .frame(width: UIScreen.main.bounds.height*0.08, height: UIScreen.main.bounds.height*0.08)
+                                        Spacer()
+                                    }
 
+                                    
+                                    Spacer()
+                                    
+                                    ScrollView {
+                                        Text("Tangya is a Junior studying in IS + Econ and daydreaming about the next start-up idea. Passionate in photography, scuba diving and coffee.")
+                                            .font(.system(size: 14))
+                                            .foregroundColor(Color.black)
+                                    }
+                                }
+                            }.padding(.vertical, 5)
                             
                             Spacer()
                             
-                            ScrollView {
-                                Text("Tangya is a Junior studying in IS + Econ and daydreaming about the next start-up idea. Passionate in photography, scuba diving and coffee.")
-                                    .font(.system(size: 14))
-                                    .foregroundColor(Color.black)
+                            
+                            Text(self.addProfileImageMsg)
+                                .foregroundColor(Color.primaryColor)
+                                .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing)
+                                .font(.system(size: 14))
+                            
+                            
+                            
+                            
+                            
+                            
+                        }.padding(.horizontal, 50)
+                            .background(Color.white)
+                            .onTapGesture {
+                                hideKeyboard()
                             }
-                        }
-                    }.padding(.vertical, 5)
-                    
-                    Spacer()
-                    
-                    
-                    Text(self.addProfileImageMsg)
-                        .foregroundColor(Color.primaryColor)
-                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing)
-                        .font(.system(size: 14))
-                    
-                    
+                    }
                     
                     HStack{
                         Spacer()
@@ -2962,18 +2972,12 @@ struct SurveyView: View {
                                 .cornerRadius(12)
                         }
                     }
-                    .padding(.horizontal, -50)
                     .padding()
-                    
-                    
-                }.padding(.horizontal, 50)
-                    .background(Color.white)
-                    .onTapGesture {
-                        hideKeyboard()
-                    }
-                    .fullScreenCover(isPresented: $isShowingPhotoPicker, onDismiss: nil) {
-                        ImagePicker(image: $image)
-                    }
+                }
+                .fullScreenCover(isPresented: $isShowingPhotoPicker, onDismiss: nil) {
+                    ImagePicker(image: $image)
+                }
+  
                 
             }
             
