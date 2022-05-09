@@ -80,6 +80,7 @@ struct CreateAccountView: View {
                             .cornerRadius(24)
                     }
                     .padding(.vertical)
+                    .padding(.bottom, 50)
                     
 
                     
@@ -105,13 +106,22 @@ struct CreateAccountView: View {
                             .padding(.bottom, 30)
 
 
+                        HStack {
+                            TextField("JHED", text: $email)
+                                .keyboardType(.emailAddress)
+                                .autocapitalization(.none)
+                                .padding()
+                                .background(RoundedRectangle(cornerRadius: 8).stroke( Color.primaryColor))
+                                .disableAutocorrection(true)
+                            
+                            Text("@jh.edu")
+                                .foregroundColor(Color.primaryColor)
+                                .font(.system(size: 24))
+                            
+                                
+                        }
+                        
 
-                        TextField("JHU Email (xxxx@jh.edu)", text: $email)
-                            .keyboardType(.emailAddress)
-                            .autocapitalization(.none)
-                            .padding()
-                            .background(RoundedRectangle(cornerRadius: 8).stroke( Color.primaryColor))
-                            .disableAutocorrection(true)
 
                         
                         SecureField("Password", text: $password)
@@ -156,7 +166,8 @@ struct CreateAccountView: View {
 
                         
                         
-                    }.padding(.horizontal, 50)
+                    }.padding(.horizontal, 50).padding(.bottom, 50)
+                    
             }
         }
                 
@@ -181,10 +192,6 @@ struct CreateAccountView: View {
             return
         }
         
-        /*if (!(email.hasSuffix("@jh.edu") || email.hasSuffix("@jhu.edu"))) {
-            msg = "Email must end with @jh.edu"
-            return
-        }*/
         
         verificationCode = makeCode(email: email)
         sendVerificationEmail()
@@ -204,7 +211,7 @@ struct CreateAccountView: View {
         if (verified == false) {
             verificationStage = 1
         } else {
-            FirebaseManager.shared.auth.createUser(withEmail: email, password: password) {
+            FirebaseManager.shared.auth.createUser(withEmail: email + "@jh.edu", password: password) {
                 result, error in
                 if let error = error {
                     msg = error.localizedDescription
@@ -234,7 +241,7 @@ struct CreateAccountView: View {
     private func resendVerificationEmail() {
 
             
-    Functions.functions().httpsCallable("sendVerificationEmail").call(["code": verificationCode, "email": email]) { result, error in
+    Functions.functions().httpsCallable("sendVerificationEmail").call(["code": verificationCode, "email": email + "@jh.edu"]) { result, error in
         if let error = error as NSError? {
             print(error)
         }
@@ -247,7 +254,7 @@ struct CreateAccountView: View {
     private func sendVerificationEmail() {
 
 
-    Functions.functions().httpsCallable("sendVerificationEmail").call(["code": verificationCode, "email": email]) { result, error in
+    Functions.functions().httpsCallable("sendVerificationEmail").call(["code": verificationCode, "email": email+"@jh.edu"]) { result, error in
         if let error = error as NSError? {
             print(error)
         }
@@ -263,7 +270,7 @@ struct CreateAccountView: View {
         
         guard let fcmToken = Messaging.messaging().fcmToken else { return }
         
-        let userData = ["email": self.email, "profile": [:], "matching": "On", "profileImageUrl": "", "num_meet": 0, "fcmToken": fcmToken, "verificationCode": self.verificationCode] as [String : Any]
+        let userData = ["email": email + "@jh.edu", "profile": [:], "matching": "On", "profileImageUrl": "", "num_meet": 0, "fcmToken": fcmToken, "verificationCode": self.verificationCode] as [String : Any]
         
         FirebaseManager.shared.firestore.collection("users")
             .document(uid).setData(userData) { err in

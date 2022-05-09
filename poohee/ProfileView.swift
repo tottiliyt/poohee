@@ -13,7 +13,7 @@ struct ProfileView: View {
     @ObservedObject var vm : HomeViewModel
     @State var bio = ""
     @State var editing = false
-    let download_url = "apple.com"
+    let download_url = "https://apps.apple.com/app/id1617502146"
     
     @State private var imageURL = URL(string: "")
     @State private var copied = false {
@@ -145,7 +145,7 @@ struct ProfileView: View {
                                         .foregroundColor(Color.primaryColor)
                                         .font(.system(size: 23, weight: .heavy))
                                         .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                                    Text("appstore.com")
+                                    Text("https://apps.apple.com/app/id1617502146")
                                         .foregroundColor(Color.black)
                                         .background(Color.buttonGray)
                                         .font(.system(size: 16))

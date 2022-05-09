@@ -37,15 +37,22 @@ struct LoginView: View {
                             .foregroundColor(.primaryColor)
                             .padding(.bottom, 30)
                             .disableAutocorrection(true)
-
-
-
-                        TextField("JHU Email (xxxx@jh.edu)", text: $forget_email)
-                            .keyboardType(.emailAddress)
-                            .autocapitalization(.none)
-                            .padding()
-                            .background(RoundedRectangle(cornerRadius: 8).stroke( Color.primaryColor))
-                            .disableAutocorrection(true)
+                        
+                        
+                        HStack {
+                            TextField("JHED", text: $forget_email)
+                                .keyboardType(.emailAddress)
+                                .autocapitalization(.none)
+                                .padding()
+                                .background(RoundedRectangle(cornerRadius: 8).stroke( Color.primaryColor))
+                                .disableAutocorrection(true)
+                            
+                            Text("@jh.edu")
+                                .foregroundColor(Color.primaryColor)
+                                .font(.system(size: 24))
+                            
+                                
+                        }
                         
                         ZStack{
                             Text("\n")
@@ -88,14 +95,20 @@ struct LoginView: View {
                             .disableAutocorrection(true)
 
 
-
-                        TextField("JHU Email (xxxx@jh.edu)", text: $email)
-                            .keyboardType(.emailAddress)
-                            .autocapitalization(.none)
-                            .padding()
-                            .background(RoundedRectangle(cornerRadius: 8).stroke( Color.primaryColor))
-                            .disableAutocorrection(true)
-
+                        HStack {
+                            TextField("JHED", text: $email)
+                                .keyboardType(.emailAddress)
+                                .autocapitalization(.none)
+                                .padding()
+                                .background(RoundedRectangle(cornerRadius: 8).stroke( Color.primaryColor))
+                                .disableAutocorrection(true)
+                            
+                            Text("@jh.edu")
+                                .foregroundColor(Color.primaryColor)
+                                .font(.system(size: 24))
+                            
+                                
+                        }
                         
                         SecureField("Password", text: $password)
                             .autocapitalization(.none)
@@ -154,7 +167,7 @@ struct LoginView: View {
     
     private func sendResetPasswordLink(){
         
-        FirebaseManager.shared.auth.sendPasswordReset(withEmail: forget_email) { error in
+        FirebaseManager.shared.auth.sendPasswordReset(withEmail: forget_email + "@jh.edu") { error in
             if let error = error {
                 msg = "Failed to send reset password link, please try again"
             } else {
@@ -179,12 +192,8 @@ struct LoginView: View {
             return
         }
         
-        if (!email.hasSuffix("@jh.edu")) {
-            msg = "Email must end with @jh.edu"
-            return
-        }
         
-        FirebaseManager.shared.auth.signIn(withEmail: email, password: password) {
+        FirebaseManager.shared.auth.signIn(withEmail: email + "@jh.edu", password: password) {
             result, error in
             if let error = error {
                 
@@ -223,25 +232,6 @@ struct LoginView: View {
 
             
         }
-//
-//        var verified =
-//
-//        if FirebaseManager.shared.auth.currentUser != nil {
-//
-//            var verified =FirebaseManager.shared.auth.currentUser.
-//
-//            FirebaseManager.shared.auth.currentUser?.sendEmailVerification { error in
-//                if let error = error {
-//                    print("email sent fail")
-//                    return
-//                }
-//                print("email sent success")
-//              // ...
-//            }
-//        } else {
-//            print("current user is null")
-//            return
-//        }
 
     }
 }

@@ -15,7 +15,7 @@ struct SurveyView: View {
     @ObservedObject var vm: HomeViewModel
     
     
-    @State private var createProfileStage = 5
+    @State private var createProfileStage = 0
     
     @State private var career_interests = [Bool](repeating: false, count: 15)
     
@@ -43,6 +43,7 @@ struct SurveyView: View {
     @State private var religious_isExpanded = false
     @State private var show_agree = false
     @State private var show_disagree = false
+    @State private var hobbie_count = 0
     
     
     @State private var career_options = ["Healthcare", "Engineering", "Academia","Law","Consulting","Marketing","Journalism","Finance","Tech","StartUps","Arts","Nursing","Education","Government","Military"]
@@ -466,7 +467,7 @@ struct SurveyView: View {
                                 .font(.system(size: 28))
                             Spacer()
                             
-                        }.padding(.vertical, 50)
+                        }.padding(.vertical, 65)
                             .background(Color.secondaryColor)
                             .cornerRadius(15)
                         
@@ -529,7 +530,7 @@ struct SurveyView: View {
                                     .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                                 
                                 DisclosureGroup("\(gender)", isExpanded: $gender_isExpanded) {
-                                    ScrollView {
+                                    ScrollView(showsIndicators: false) {
                                         
                                         VStack {
                                             ForEach(gender_option, id: \.self) {
@@ -566,7 +567,7 @@ struct SurveyView: View {
                                     .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                                 
                                 DisclosureGroup("\(self.grad_year)", isExpanded: $grad_isExpanded) {
-                                    ScrollView {
+                                    ScrollView(showsIndicators: false) {
                                         
                                         VStack {
                                             ForEach(grad_year_option, id: \.self) {
@@ -580,7 +581,7 @@ struct SurveyView: View {
                                             }
                                         }
                                     }
-                                    .frame(height: 150)
+                                    .frame(height: 110)
                                 }
                                 .foregroundColor(Color.gray)
                                 .padding(.leading, 5)
@@ -604,7 +605,7 @@ struct SurveyView: View {
                                 
                                 
                                 DisclosureGroup("\(first_major)", isExpanded: $first_major_isExpanded) {
-                                    ScrollView {
+                                    ScrollView(showsIndicators: false)  {
                                         
                                         VStack {
                                             ForEach(majors_option, id: \.self) {
@@ -649,7 +650,7 @@ struct SurveyView: View {
                                 
                                 
                                 DisclosureGroup("\(second_major)", isExpanded: $second_major_isExpanded) {
-                                    ScrollView {
+                                    ScrollView(showsIndicators: false) {
                                         
                                         VStack {
                                             ForEach(majors_option, id: \.self) {
@@ -764,7 +765,7 @@ struct SurveyView: View {
                         }.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                         
                         DisclosureGroup("\(religious)", isExpanded: $religious_isExpanded) {
-                            ScrollView {
+                            ScrollView(showsIndicators: false) {
                                 
                                 VStack {
                                     ForEach(religious_option, id: \.self) {
@@ -805,7 +806,7 @@ struct SurveyView: View {
                         }.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                         
                         DisclosureGroup("\(political)", isExpanded: $political_isExpanded) {
-                            ScrollView {
+                            ScrollView(showsIndicators: false) {
                                 
                                 VStack {
                                     ForEach(political_option, id: \.self) {
@@ -977,7 +978,7 @@ struct SurveyView: View {
                                         show_disagree = false
                                         if value.translation.width > 0 {
                                             
-                                            if value.translation.width > 200 {
+                                            if value.translation.width > 150 {
                                                 self.card_x[i] = 600
                                                 current_question_num -= 1
                                                 self.questionnaire[i] = 1
@@ -987,7 +988,7 @@ struct SurveyView: View {
                                             
                                         } else if value.translation.width < 0  {
 
-                                            if value.translation.width < -200 {
+                                            if value.translation.width < -150 {
                                                 self.card_x[i] = -600
                                                 current_question_num -= 1
                                                 self.questionnaire[i] = -1
@@ -1082,13 +1083,18 @@ struct SurveyView: View {
                             .font(.system(size: 24))
                             .padding(.vertical)
                         
-                    ScrollView{
+                    ScrollView(showsIndicators: false) {
                         
                         DisclosureGroup(
                             isExpanded: $lifestyleIsExpanded,
                             content: {
                                 HStack {
                                     Button {
+                                        
+                                        if (hobbie_count >= 10 && hobbies[(lifestyleIndex+0)] == false) {
+                                            return
+                                        }
+                                        hobbies[(lifestyleIndex+0)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                         hobbies[(lifestyleIndex+0)].toggle()
                                         
                                     }label: {
@@ -1105,6 +1111,10 @@ struct SurveyView: View {
                                     }
                                     
                                     Button {
+                                        if (hobbie_count >= 10 && hobbies[(lifestyleIndex+1)] == false) {
+                                            return
+                                        }
+                                        hobbies[(lifestyleIndex+1)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                         hobbies[(lifestyleIndex+1)].toggle()
                                     }label: {
                                         HStack{
@@ -1120,6 +1130,10 @@ struct SurveyView: View {
                                     }
                                     
                                     Button {
+                                        if (hobbie_count >= 10 && hobbies[(lifestyleIndex+2)] == false) {
+                                            return
+                                        }
+                                        hobbies[(lifestyleIndex+2)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                         hobbies[(lifestyleIndex+2)].toggle()
                                     }label: {
                                         HStack{
@@ -1136,6 +1150,11 @@ struct SurveyView: View {
                                 }
                                 HStack {
                                     Button {
+                                        if (hobbie_count >= 10 && hobbies[(lifestyleIndex+3)] == false) {
+                                            return
+                                        }
+                                        hobbies[(lifestyleIndex+3)] ? (hobbie_count -= 1) : (hobbie_count += 1)
+                                        
                                         hobbies[(lifestyleIndex+3)].toggle()
                                         
                                     }label: {
@@ -1152,6 +1171,10 @@ struct SurveyView: View {
                                     }
                                     
                                     Button {
+                                        if (hobbie_count >= 10 && hobbies[(lifestyleIndex+4)] == false) {
+                                            return
+                                        }
+                                        hobbies[(lifestyleIndex+4)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                         hobbies[(lifestyleIndex+4)].toggle()
                                     }label: {
                                         HStack{
@@ -1167,6 +1190,10 @@ struct SurveyView: View {
                                     }
                                     
                                     Button {
+                                        if (hobbie_count >= 10 && hobbies[(lifestyleIndex+5)] == false) {
+                                            return
+                                        }
+                                        hobbies[(lifestyleIndex+5)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                         hobbies[(lifestyleIndex+5)].toggle()
                                     }label: {
                                         HStack{
@@ -1191,6 +1218,10 @@ struct SurveyView: View {
                                 
                                 HStack {
                                     Button {
+                                        if (hobbie_count >= 10 && hobbies[(lifestyleIndex+6)] == false) {
+                                            return
+                                        }
+                                        hobbies[(lifestyleIndex+6)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                         hobbies[(lifestyleIndex+6)].toggle()
                                         
                                     }label: {
@@ -1213,6 +1244,10 @@ struct SurveyView: View {
                                     }
                                     
                                     Button {
+                                        if (hobbie_count >= 10 && hobbies[(lifestyleIndex+7)] == false) {
+                                            return
+                                        }
+                                        hobbies[(lifestyleIndex+7)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                         hobbies[(lifestyleIndex+7)].toggle()
                                     }label: {
                                         HStack{
@@ -1228,6 +1263,10 @@ struct SurveyView: View {
                                     }
                                     
                                     Button {
+                                        if (hobbie_count >= 10 && hobbies[(lifestyleIndex+8)] == false) {
+                                            return
+                                        }
+                                        hobbies[(lifestyleIndex+8)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                         hobbies[(lifestyleIndex+8)].toggle()
                                     }label: {
                                         HStack{
@@ -1249,6 +1288,10 @@ struct SurveyView: View {
                                 
                                 HStack {
                                     Button {
+                                        if (hobbie_count >= 10 && hobbies[(lifestyleIndex+9)] == false) {
+                                            return
+                                        }
+                                        hobbies[(lifestyleIndex+9)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                         hobbies[(lifestyleIndex+9)].toggle()
                                         
                                     }label: {
@@ -1271,6 +1314,10 @@ struct SurveyView: View {
                                     }
                                     
                                     Button {
+                                        if (hobbie_count >= 10 && hobbies[(lifestyleIndex+10)] == false) {
+                                            return
+                                        }
+                                        hobbies[(lifestyleIndex+10)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                         hobbies[(lifestyleIndex+10)].toggle()
                                     }label: {
                                         HStack{
@@ -1286,6 +1333,10 @@ struct SurveyView: View {
                                     }
                                     
                                     Button {
+                                        if (hobbie_count >= 10 && hobbies[(lifestyleIndex+11)] == false) {
+                                            return
+                                        }
+                                        hobbies[(lifestyleIndex+11)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                         hobbies[(lifestyleIndex+11)].toggle()
                                     }label: {
                                         HStack{
@@ -1306,6 +1357,10 @@ struct SurveyView: View {
                                 
                                 HStack {
                                     Button {
+                                        if (hobbie_count >= 10 && hobbies[(lifestyleIndex+12)] == false) {
+                                            return
+                                        }
+                                        hobbies[(lifestyleIndex+12)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                         hobbies[(lifestyleIndex+12)].toggle()
                                         
                                     }label: {
@@ -1322,6 +1377,10 @@ struct SurveyView: View {
                                     }
                                     
                                     Button {
+                                        if (hobbie_count >= 10 && hobbies[(lifestyleIndex+13)] == false) {
+                                            return
+                                        }
+                                        hobbies[(lifestyleIndex+13)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                         hobbies[(lifestyleIndex+13)].toggle()
                                     }label: {
                                         HStack{
@@ -1337,6 +1396,10 @@ struct SurveyView: View {
                                     }
                                     
                                     Button {
+                                        if (hobbie_count >= 10 && hobbies[(lifestyleIndex+14)] == false) {
+                                            return
+                                        }
+                                        hobbies[(lifestyleIndex+14)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                         hobbies[(lifestyleIndex+14)].toggle()
                                     }label: {
                                         HStack{
@@ -1369,6 +1432,10 @@ struct SurveyView: View {
                                 content: {
                                     HStack {
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(sportIndex+0)] == false) {
+                                                return
+                                            }
+                                            hobbies[(sportIndex+0)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(sportIndex+0)].toggle()
                                             
                                         }label: {
@@ -1385,6 +1452,10 @@ struct SurveyView: View {
                                         }
                                         
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(sportIndex+1)] == false) {
+                                                return
+                                            }
+                                            hobbies[(sportIndex+1)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(sportIndex+1)].toggle()
                                         }label: {
                                             HStack{
@@ -1400,6 +1471,10 @@ struct SurveyView: View {
                                         }
                                         
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(sportIndex+2)] == false) {
+                                                return
+                                            }
+                                            hobbies[(sportIndex+2)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(sportIndex+2)].toggle()
                                         }label: {
                                             HStack{
@@ -1416,6 +1491,10 @@ struct SurveyView: View {
                                     }
                                     HStack {
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(sportIndex+3)] == false) {
+                                                return
+                                            }
+                                            hobbies[(sportIndex+3)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(sportIndex+3)].toggle()
                                             
                                         }label: {
@@ -1432,6 +1511,10 @@ struct SurveyView: View {
                                         }
                                         
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(sportIndex+4)] == false) {
+                                                return
+                                            }
+                                            hobbies[(sportIndex+4)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(sportIndex+4)].toggle()
                                         }label: {
                                             HStack{
@@ -1447,6 +1530,10 @@ struct SurveyView: View {
                                         }
                                         
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(sportIndex+5)] == false) {
+                                                return
+                                            }
+                                            hobbies[(sportIndex+5)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(sportIndex+5)].toggle()
                                         }label: {
                                             HStack{
@@ -1463,6 +1550,10 @@ struct SurveyView: View {
                                     }
                                     HStack {
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(sportIndex+6)] == false) {
+                                                return
+                                            }
+                                            hobbies[(sportIndex+6)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(sportIndex+6)].toggle()
                                             
                                         }label: {
@@ -1479,6 +1570,10 @@ struct SurveyView: View {
                                         }
                                         
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(sportIndex+7)] == false) {
+                                                return
+                                            }
+                                            hobbies[(sportIndex+7)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(sportIndex+7)].toggle()
                                         }label: {
                                             HStack{
@@ -1500,6 +1595,10 @@ struct SurveyView: View {
                                         }
                                         
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(sportIndex+8)] == false) {
+                                                return
+                                            }
+                                            hobbies[(sportIndex+8)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(sportIndex+8)].toggle()
                                         }label: {
                                             HStack{
@@ -1516,6 +1615,10 @@ struct SurveyView: View {
                                     }
                                     HStack {
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(sportIndex+9)] == false) {
+                                                return
+                                            }
+                                            hobbies[(sportIndex+9)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(sportIndex+9)].toggle()
                                             
                                         }label: {
@@ -1532,6 +1635,10 @@ struct SurveyView: View {
                                         }
                                         
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(sportIndex+10)] == false) {
+                                                return
+                                            }
+                                            hobbies[(sportIndex+10)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(sportIndex+10)].toggle()
                                         }label: {
                                             HStack{
@@ -1552,6 +1659,10 @@ struct SurveyView: View {
                                         }
                                         
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(sportIndex+11)] == false) {
+                                                return
+                                            }
+                                            hobbies[(sportIndex+11)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(sportIndex+11)].toggle()
                                         }label: {
                                             HStack{
@@ -1568,6 +1679,10 @@ struct SurveyView: View {
                                     }
                                     HStack {
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(sportIndex+12)] == false) {
+                                                return
+                                            }
+                                            hobbies[(sportIndex+12)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(sportIndex+12)].toggle()
                                             
                                         }label: {
@@ -1584,6 +1699,10 @@ struct SurveyView: View {
                                         }
                                         
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(sportIndex+13)] == false) {
+                                                return
+                                            }
+                                            hobbies[(sportIndex+13)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(sportIndex+13)].toggle()
                                         }label: {
                                             HStack{
@@ -1599,6 +1718,10 @@ struct SurveyView: View {
                                         }
                                         
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(sportIndex+14)] == false) {
+                                                return
+                                            }
+                                            hobbies[(sportIndex+14)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(sportIndex+14)].toggle()
                                         }label: {
                                             HStack{
@@ -1616,6 +1739,10 @@ struct SurveyView: View {
                                     
                                     HStack {
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(sportIndex+15)] == false) {
+                                                return
+                                            }
+                                            hobbies[(sportIndex+15)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(sportIndex+15)].toggle()
                                             
                                         }label: {
@@ -1637,6 +1764,10 @@ struct SurveyView: View {
                                         }
                                         
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(sportIndex+16)] == false) {
+                                                return
+                                            }
+                                            hobbies[(sportIndex+16)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(sportIndex+16)].toggle()
                                         }label: {
                                             HStack{
@@ -1652,6 +1783,10 @@ struct SurveyView: View {
                                         }
                                         
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(sportIndex+17)] == false) {
+                                                return
+                                            }
+                                            hobbies[(sportIndex+17)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(sportIndex+17)].toggle()
                                         }label: {
                                             HStack{
@@ -1681,6 +1816,10 @@ struct SurveyView: View {
                                 content: {
                                     HStack {
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(filmIndex+0)] == false) {
+                                                return
+                                            }
+                                            hobbies[(filmIndex+0)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(filmIndex + 0)].toggle()
                                             
                                         }label: {
@@ -1697,6 +1836,10 @@ struct SurveyView: View {
                                         }
                                         
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(filmIndex+1)] == false) {
+                                                return
+                                            }
+                                            hobbies[(filmIndex+1)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(filmIndex + 1)].toggle()
                                         }label: {
                                             HStack{
@@ -1712,6 +1855,10 @@ struct SurveyView: View {
                                         }
                                         
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(filmIndex+2)] == false) {
+                                                return
+                                            }
+                                            hobbies[(filmIndex+2)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(filmIndex + 2)].toggle()
                                         }label: {
                                             HStack{
@@ -1728,6 +1875,10 @@ struct SurveyView: View {
                                     }
                                     HStack {
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(filmIndex+3)] == false) {
+                                                return
+                                            }
+                                            hobbies[(filmIndex+3)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(filmIndex + 3)].toggle()
                                             
                                         }label: {
@@ -1744,6 +1895,10 @@ struct SurveyView: View {
                                         }
                                         
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(filmIndex+4)] == false) {
+                                                return
+                                            }
+                                            hobbies[(filmIndex+4)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(filmIndex + 4)].toggle()
                                         }label: {
                                             HStack{
@@ -1759,6 +1914,10 @@ struct SurveyView: View {
                                         }
                                         
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(filmIndex+5)] == false) {
+                                                return
+                                            }
+                                            hobbies[(filmIndex+5)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(filmIndex + 5)].toggle()
                                         }label: {
                                             HStack{
@@ -1775,6 +1934,10 @@ struct SurveyView: View {
                                     }
                                     HStack {
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(filmIndex+6)] == false) {
+                                                return
+                                            }
+                                            hobbies[(filmIndex+6)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(filmIndex + 6)].toggle()
                                             
                                         }label: {
@@ -1791,6 +1954,10 @@ struct SurveyView: View {
                                         }
                                         
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(filmIndex+7)] == false) {
+                                                return
+                                            }
+                                            hobbies[(filmIndex+7)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(filmIndex + 7)].toggle()
                                         }label: {
                                             HStack{
@@ -1811,6 +1978,10 @@ struct SurveyView: View {
                                         }
                                         
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(filmIndex+8)] == false) {
+                                                return
+                                            }
+                                            hobbies[(filmIndex+8)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(filmIndex + 8)].toggle()
                                         }label: {
                                             HStack{
@@ -1828,6 +1999,10 @@ struct SurveyView: View {
                                     
                                     HStack {
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(filmIndex+9)] == false) {
+                                                return
+                                            }
+                                            hobbies[(filmIndex+9)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(filmIndex + 9)].toggle()
                                             
                                         }label: {
@@ -1844,6 +2019,10 @@ struct SurveyView: View {
                                         }
                                         
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(filmIndex+10)] == false) {
+                                                return
+                                            }
+                                            hobbies[(filmIndex+10)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(filmIndex + 10)].toggle()
                                         }label: {
                                             HStack{
@@ -1859,6 +2038,10 @@ struct SurveyView: View {
                                         }
                                         
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(filmIndex+11)] == false) {
+                                                return
+                                            }
+                                            hobbies[(filmIndex+11)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(filmIndex + 11)].toggle()
                                         }label: {
                                             HStack{
@@ -1890,6 +2073,10 @@ struct SurveyView: View {
                                 content: {
                                     HStack {
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(musicIndex+0)] == false) {
+                                                return
+                                            }
+                                            hobbies[(musicIndex+0)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(musicIndex+0)].toggle()
                                             
                                         }label: {
@@ -1906,6 +2093,10 @@ struct SurveyView: View {
                                         }
                                         
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(musicIndex+1)] == false) {
+                                                return
+                                            }
+                                            hobbies[(musicIndex+1)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(musicIndex+1)].toggle()
                                         }label: {
                                             HStack{
@@ -1921,6 +2112,10 @@ struct SurveyView: View {
                                         }
                                         
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(musicIndex+2)] == false) {
+                                                return
+                                            }
+                                            hobbies[(musicIndex+2)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(musicIndex+2)].toggle()
                                         }label: {
                                             HStack{
@@ -1937,6 +2132,10 @@ struct SurveyView: View {
                                     }
                                     HStack {
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(musicIndex+3)] == false) {
+                                                return
+                                            }
+                                            hobbies[(musicIndex+3)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(musicIndex+3)].toggle()
                                             
                                         }label: {
@@ -1953,6 +2152,10 @@ struct SurveyView: View {
                                         }
                                         
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(musicIndex+4)] == false) {
+                                                return
+                                            }
+                                            hobbies[(musicIndex+4)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(musicIndex+4)].toggle()
                                         }label: {
                                             HStack{
@@ -1968,6 +2171,10 @@ struct SurveyView: View {
                                         }
                                         
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(musicIndex+5)] == false) {
+                                                return
+                                            }
+                                            hobbies[(musicIndex+5)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(musicIndex+5)].toggle()
                                         }label: {
                                             HStack{
@@ -1984,6 +2191,10 @@ struct SurveyView: View {
                                     }
                                     HStack {
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(musicIndex+6)] == false) {
+                                                return
+                                            }
+                                            hobbies[(musicIndex+6)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(musicIndex+6)].toggle()
                                             
                                         }label: {
@@ -2000,6 +2211,10 @@ struct SurveyView: View {
                                         }
                                         
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(musicIndex+7)] == false) {
+                                                return
+                                            }
+                                            hobbies[(musicIndex+7)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(musicIndex+7)].toggle()
                                         }label: {
                                             HStack{
@@ -2015,6 +2230,10 @@ struct SurveyView: View {
                                         }
                                         
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(musicIndex+8)] == false) {
+                                                return
+                                            }
+                                            hobbies[(musicIndex+8)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(musicIndex+8)].toggle()
                                         }label: {
                                             HStack{
@@ -2032,6 +2251,10 @@ struct SurveyView: View {
                                     
                                     HStack {
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(musicIndex+9)] == false) {
+                                                return
+                                            }
+                                            hobbies[(musicIndex+9)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(musicIndex+9)].toggle()
                                             
                                         }label: {
@@ -2048,6 +2271,10 @@ struct SurveyView: View {
                                         }
                                         
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(musicIndex+10)] == false) {
+                                                return
+                                            }
+                                            hobbies[(musicIndex+10)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(musicIndex+10)].toggle()
                                         }label: {
                                             HStack{
@@ -2095,6 +2322,10 @@ struct SurveyView: View {
                             content: {
                                 HStack {
                                     Button {
+                                        if (hobbie_count >= 10 && hobbies[(artIndex+0)] == false) {
+                                            return
+                                        }
+                                        hobbies[(artIndex+0)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                         hobbies[(artIndex+0)].toggle()
                                         
                                     }label: {
@@ -2111,6 +2342,10 @@ struct SurveyView: View {
                                     }
                                     
                                     Button {
+                                        if (hobbie_count >= 10 && hobbies[(artIndex+1)] == false) {
+                                            return
+                                        }
+                                        hobbies[(artIndex+1)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                         hobbies[(artIndex+1)].toggle()
                                     }label: {
                                         HStack{
@@ -2126,6 +2361,10 @@ struct SurveyView: View {
                                     }
                                     
                                     Button {
+                                        if (hobbie_count >= 10 && hobbies[(artIndex+2)] == false) {
+                                            return
+                                        }
+                                        hobbies[(artIndex+2)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                         hobbies[(artIndex+2)].toggle()
                                     }label: {
                                         HStack{
@@ -2148,6 +2387,10 @@ struct SurveyView: View {
                                 
                                 HStack {
                                     Button {
+                                        if (hobbie_count >= 10 && hobbies[(artIndex+3)] == false) {
+                                            return
+                                        }
+                                        hobbies[(artIndex+3)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                         hobbies[(artIndex+3)].toggle()
                                         
                                     }label: {
@@ -2164,6 +2407,10 @@ struct SurveyView: View {
                                     }
                                     
                                     Button {
+                                        if (hobbie_count >= 10 && hobbies[(artIndex+4)] == false) {
+                                            return
+                                        }
+                                        hobbies[(artIndex+4)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                         hobbies[(artIndex+4)].toggle()
                                     }label: {
                                         HStack{
@@ -2179,6 +2426,10 @@ struct SurveyView: View {
                                     }
                                     
                                     Button {
+                                        if (hobbie_count >= 10 && hobbies[(artIndex+5)] == false) {
+                                            return
+                                        }
+                                        hobbies[(artIndex+5)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                         hobbies[(artIndex+5)].toggle()
                                     }label: {
                                         HStack{
@@ -2209,6 +2460,10 @@ struct SurveyView: View {
                                 content: {
                                     HStack {
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(socialIndex+0)] == false) {
+                                                return
+                                            }
+                                            hobbies[(socialIndex+0)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(socialIndex+0)].toggle()
                                             
                                         }label: {
@@ -2230,6 +2485,10 @@ struct SurveyView: View {
                                         }
                                         
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(socialIndex+1)] == false) {
+                                                return
+                                            }
+                                            hobbies[(socialIndex+1)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(socialIndex+1)].toggle()
                                         }label: {
                                             HStack{
@@ -2250,6 +2509,10 @@ struct SurveyView: View {
                                         }
                                         
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(socialIndex+2)] == false) {
+                                                return
+                                            }
+                                            hobbies[(socialIndex+2)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(socialIndex+2)].toggle()
                                         }label: {
                                             HStack{
@@ -2266,6 +2529,10 @@ struct SurveyView: View {
                                     }
                                     HStack {
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(socialIndex+3)] == false) {
+                                                return
+                                            }
+                                            hobbies[(socialIndex+3)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(socialIndex+3)].toggle()
                                             
                                         }label: {
@@ -2287,6 +2554,10 @@ struct SurveyView: View {
                                         }
                                         
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(socialIndex+4)] == false) {
+                                                return
+                                            }
+                                            hobbies[(socialIndex+4)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(socialIndex+4)].toggle()
                                         }label: {
                                             HStack{
@@ -2307,6 +2578,10 @@ struct SurveyView: View {
                                         }
                                         
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(socialIndex+5)] == false) {
+                                                return
+                                            }
+                                            hobbies[(socialIndex+5)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(socialIndex+5)].toggle()
                                         }label: {
                                             HStack{
@@ -2326,6 +2601,10 @@ struct SurveyView: View {
                                     
                                     HStack {
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(socialIndex+6)] == false) {
+                                                return
+                                            }
+                                            hobbies[(socialIndex+6)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(socialIndex+6)].toggle()
                                             
                                         }label: {
@@ -2347,6 +2626,10 @@ struct SurveyView: View {
                                         }
                                         
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(socialIndex+7)] == false) {
+                                                return
+                                            }
+                                            hobbies[(socialIndex+7)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(socialIndex+7)].toggle()
                                         }label: {
                                             HStack{
@@ -2367,6 +2650,10 @@ struct SurveyView: View {
                                         }
                                         
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(socialIndex+8)] == false) {
+                                                return
+                                            }
+                                            hobbies[(socialIndex+8)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(socialIndex+8)].toggle()
                                         }label: {
                                             HStack{
@@ -2391,6 +2678,10 @@ struct SurveyView: View {
                                     
                                     HStack {
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(socialIndex+9)] == false) {
+                                                return
+                                            }
+                                            hobbies[(socialIndex+9)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(socialIndex+9)].toggle()
                                             
                                         }label: {
@@ -2407,6 +2698,10 @@ struct SurveyView: View {
                                         }
                                         
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(socialIndex+10)] == false) {
+                                                return
+                                            }
+                                            hobbies[(socialIndex+10)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(socialIndex+10)].toggle()
                                         }label: {
                                             HStack{
@@ -2422,6 +2717,10 @@ struct SurveyView: View {
                                         }
                                         
                                         Button {
+                                            if (hobbie_count >= 10 && hobbies[(socialIndex+11)] == false) {
+                                                return
+                                            }
+                                            hobbies[(socialIndex+11)] ? (hobbie_count -= 1) : (hobbie_count += 1)
                                             hobbies[(socialIndex+11)].toggle()
                                         }label: {
                                             HStack{
