@@ -15,7 +15,7 @@ struct OtherUserProfileView: View {
     
     var body: some View {
         ZStack{
-            ScrollView {
+            ScrollView(showsIndicators: false) {
 
                 VStack{
                     WebImage(url: URL(string: vm.recipientProfile?.profileImageUrl ?? ""))

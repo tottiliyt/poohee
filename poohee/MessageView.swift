@@ -41,18 +41,18 @@ struct MessageView: View {
                     if !(vm.user?.new_match ?? false){
                         if self.vm.user?.matching == "On"{
                             Text("Hey \(vm.profile?.first_name ?? ""), we are working hard to find your next friend!")
-                                    .font(.system(size: 30, weight: .bold))
+                                    .font(.system(size: 25, weight: .bold))
                                     .padding()
                         } else {
                             VStack (alignment: .center){
                                 Text("Your matching is currently paused")
-                                    .font(.system(size: 30, weight: .bold))
+                                    .font(.system(size: 25, weight: .bold))
                                 Button(action: {
                                     vm.updateMatching()
                                 }, label: {
                                     Text("Resume")
                                         .foregroundColor(Color.black)
-                                        .font(.system(size: 30, weight: .bold))
+                                        .font(.system(size: 25, weight: .bold))
                                         .padding()
                                         .background(Color.white)
                                         .clipShape(RoundedRectangle(cornerRadius: 20))
@@ -64,7 +64,7 @@ struct MessageView: View {
                     } else {
                         VStack (alignment: .center){
                             Text("\(vm.profile?.first_name ?? ""), you have a new match!")
-                                .font(.system(size: 30, weight: .bold))
+                                .font(.system(size: 25, weight: .bold))
                             
                             Button(action: {
                                 withAnimation{
@@ -74,7 +74,7 @@ struct MessageView: View {
                                 
                                 Text("Check")
                                     .foregroundColor(Color.black)
-                                    .font(.system(size: 30, weight: .bold))
+                                    .font(.system(size: 25, weight: .bold))
                                     .padding()
                                     .frame(width: 175, height: 60)
                                     .background(Color.white)
@@ -112,7 +112,7 @@ struct MessageView: View {
     }
     
     private var messageQueue: some View {
-        ScrollView{
+        ScrollView(showsIndicators: false){
             VStack{
                 ForEach(vm.chats) {chat in
                     

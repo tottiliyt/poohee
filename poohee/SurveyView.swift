@@ -496,7 +496,7 @@ struct SurveyView: View {
                             .padding(.bottom)
                             .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                         
-                        ScrollView {
+                        ScrollView(showsIndicators: false) {
                             Group {
                                 Text("NAME")
                                     .foregroundColor(Color.primaryColor)
@@ -754,99 +754,101 @@ struct SurveyView: View {
                             .padding(.bottom, 20)
                             .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                         
-                        
-                        HStack {
-                            Text("CAREER INTERESTS")
-                                .foregroundColor(Color.primaryColor)
-                                .font(.system(size: 20))
-                        }.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                        
-                        
-                        careerSelector
+                        ScrollView {
+                            HStack {
+                                Text("CAREER INTERESTS")
+                                    .foregroundColor(Color.primaryColor)
+                                    .font(.system(size: 20))
+                            }.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                             
                             
-                        
-                        HStack {
-                            Text("RELIGIOUS AFFILIATION")
-                                .foregroundColor(Color.primaryColor)
-                                .font(.system(size: 20))
-                            
-                            Text("(optional)")
-                                .foregroundColor(Color.gray)
-                                .font(.system(size: 10))
-                                .padding(.top, 5)
-                        }.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                        
-                        DisclosureGroup("\(religious)", isExpanded: $religious_isExpanded) {
-                            ScrollView(showsIndicators: false) {
+                            careerSelector
                                 
-                                VStack {
-                                    ForEach(religious_option, id: \.self) {
-                                        religious in
-                                        Text("\(religious)")
-                                            .foregroundColor(Color.gray)
-                                        
-                                            .onTapGesture {
-                                                withAnimation{self.religious_isExpanded.toggle()}
-                                                self.religious = religious
-                                            }
-                                        
-                                    }
-                                }
-                            }.frame(height: 150)
-                        }
-                        .foregroundColor(Color.gray)
-                        .padding(.leading, 5)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 0)
-                                .stroke(Color.primaryColor, lineWidth: 1)
-                        )
-                        .buttonStyle(PlainButtonStyle()).accentColor(.clear).disabled(false)
-                        .onTapGesture {
-                            withAnimation{self.religious_isExpanded.toggle()}
-                        }
-                        .padding(.bottom, 5)
-                        
-                        HStack {
-                            Text("POLITICAL AFFILIATION")
-                                .foregroundColor(Color.primaryColor)
-                                .font(.system(size: 20))
-                            
-                            Text("(optional)")
-                                .foregroundColor(Color.gray)
-                                .font(.system(size: 10))
-                                .padding(.top, 5)
-                        }.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                        
-                        DisclosureGroup("\(political)", isExpanded: $political_isExpanded) {
-                            ScrollView(showsIndicators: false) {
                                 
-                                VStack {
-                                    ForEach(political_option, id: \.self) {
-                                        political in
-                                        Text("\(political)")
-                                            .foregroundColor(Color.gray)
-                                        
-                                            .onTapGesture {
-                                                withAnimation{self.political_isExpanded.toggle()}
-                                                self.political = political
-                                            }
-                                        
+                            
+                            HStack {
+                                Text("RELIGIOUS AFFILIATION")
+                                    .foregroundColor(Color.primaryColor)
+                                    .font(.system(size: 20))
+                                
+                                Text("(optional)")
+                                    .foregroundColor(Color.gray)
+                                    .font(.system(size: 10))
+                                    .padding(.top, 5)
+                            }.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                            
+                            DisclosureGroup("\(religious)", isExpanded: $religious_isExpanded) {
+                                ScrollView(showsIndicators: false) {
+                                    
+                                    VStack {
+                                        ForEach(religious_option, id: \.self) {
+                                            religious in
+                                            Text("\(religious)")
+                                                .foregroundColor(Color.gray)
+                                            
+                                                .onTapGesture {
+                                                    withAnimation{self.religious_isExpanded.toggle()}
+                                                    self.religious = religious
+                                                }
+                                            
+                                        }
                                     }
-                                }
-                            }.frame(height: 150)
+                                }.frame(height: 150)
+                            }
+                            .foregroundColor(Color.gray)
+                            .padding(.leading, 5)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 0)
+                                    .stroke(Color.primaryColor, lineWidth: 1)
+                            )
+                            .buttonStyle(PlainButtonStyle()).accentColor(.clear).disabled(false)
+                            .onTapGesture {
+                                withAnimation{self.religious_isExpanded.toggle()}
+                            }
+                            .padding(.bottom, 5)
+                            
+                            HStack {
+                                Text("POLITICAL AFFILIATION")
+                                    .foregroundColor(Color.primaryColor)
+                                    .font(.system(size: 20))
+                                
+                                Text("(optional)")
+                                    .foregroundColor(Color.gray)
+                                    .font(.system(size: 10))
+                                    .padding(.top, 5)
+                            }.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                            
+                            DisclosureGroup("\(political)", isExpanded: $political_isExpanded) {
+                                ScrollView(showsIndicators: false) {
+                                    
+                                    VStack {
+                                        ForEach(political_option, id: \.self) {
+                                            political in
+                                            Text("\(political)")
+                                                .foregroundColor(Color.gray)
+                                            
+                                                .onTapGesture {
+                                                    withAnimation{self.political_isExpanded.toggle()}
+                                                    self.political = political
+                                                }
+                                            
+                                        }
+                                    }
+                                }.frame(height: 150)
+                            }
+                            .foregroundColor(Color.gray)
+                            .padding(.leading, 5)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 0)
+                                    .stroke(Color.primaryColor, lineWidth: 1)
+                            )
+                            .buttonStyle(PlainButtonStyle()).accentColor(.clear).disabled(false)
+                            .onTapGesture {
+                                withAnimation{self.political_isExpanded.toggle()}
+                            }
+                            .padding(.bottom, 5)
                         }
-                        .foregroundColor(Color.gray)
-                        .padding(.leading, 5)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 0)
-                                .stroke(Color.primaryColor, lineWidth: 1)
-                        )
-                        .buttonStyle(PlainButtonStyle()).accentColor(.clear).disabled(false)
-                        .onTapGesture {
-                            withAnimation{self.political_isExpanded.toggle()}
-                        }
-                        .padding(.bottom, 5)
+                        
                         
                         ZStack{
                             Text("\n").foregroundColor(Color.white)
@@ -891,7 +893,7 @@ struct SurveyView: View {
                     VStack {
                         Text("Nice to Meet You, \(self.first)!")
                             .foregroundColor(Color.primaryColor)
-                            .font(.system(size: 36))
+                            .font(.system(size: 32))
                             .padding(.bottom)
                             .fixedSize(horizontal: false, vertical: true)
                             .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
@@ -900,41 +902,43 @@ struct SurveyView: View {
                         VStack(alignment:.leading, spacing: 20){
                             Text("Let’s now see who might share your unique sensibilities").foregroundColor(Color.gray)
                                 .font(.system(size: 24))
-                                .padding(.bottom)
+                                .padding(.vertical)
                                 .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                                 .fixedSize(horizontal: false, vertical: true)
+                                
                             
                             HStack{
                                 Text("If you").foregroundColor(Color.gray)
                                 Text("Agree").foregroundColor(Color.primaryColor)
                                 
-                            }.font(.system(size: 26))
+                                
+                            }.font(.system(size: 24))
                             
                             HStack{
                                 Spacer()
                                 Text("--->").foregroundColor(Color.primaryColor)
                                 Text("Swipe").foregroundColor(Color.gray)
                                 Text("Right!").foregroundColor(Color.primaryColor)
-                            }.font(.system(size: 26))
+                            }.font(.system(size: 24))
                             
                             HStack{
                                 Text("If you").foregroundColor(Color.gray)
                                 Text("Disagree").foregroundColor(Color.primaryColor)
-                            }.font(.system(size: 26))
+                            }.font(.system(size: 24))
                             
                             HStack{
                                 Spacer()
                                 Text("<---").foregroundColor(Color.primaryColor)
                                 Text("Swipe").foregroundColor(Color.gray)
                                 Text("Left!").foregroundColor(Color.primaryColor)
-                            }.font(.system(size: 26))
+                            }.font(.system(size: 24))
                             
                             
                         }
                         
                         Image("logo")
                             .resizable()
-                            .frame(width: 100, height: 100, alignment: .center)
+                            .frame(width: 80, height: 80, alignment: .center)
                             .padding(.vertical)
                         
                         Spacer()
@@ -947,7 +951,8 @@ struct SurveyView: View {
                                 .font(.system(size: 24))
                         }
                         .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing)
-                        
+                        .padding(.horizontal, -50)
+                        .padding()
                     }
                     .padding(.horizontal, 50)
                 }
@@ -2791,10 +2796,10 @@ struct SurveyView: View {
                         .resizable()
                         .frame(width: 150, height: 150, alignment: .center)
                         .padding(.top, 200)
-                        .padding(.bottom, 100)
+                        .padding(.bottom, UIScreen.main.bounds.height*0.1)
                     
                     Text("Find out when you get matches!").font(.system(size: 28)).foregroundColor(Color.primaryColor)
-                        .padding(.bottom, 50)
+                        .padding(.bottom, UIScreen.main.bounds.height*0.05)
                     
                     
                     Button {
@@ -2839,7 +2844,7 @@ struct SurveyView: View {
                             if let image = self.image {
                                 Image(uiImage:image)
                                     .resizable()
-                                    .frame(width: 180, height: 180)
+                                    .frame(width: UIScreen.main.bounds.height*0.15, height: UIScreen.main.bounds.height*0.15)
                                     .scaledToFill()
                                     .cornerRadius(90)
                             }
@@ -2850,7 +2855,7 @@ struct SurveyView: View {
                             }
                         }
                         
-                    }.padding(.top, 50)
+                    }.padding(.top, UIScreen.main.bounds.height*0.05)
                     
                     Text(self.first)
                         .font(.system(size: 36))
@@ -2901,30 +2906,40 @@ struct SurveyView: View {
                         
                         
                         Text("Sample Bio")
-                            .font(.system(size: 24, weight:.bold))
+                            .font(.system(size: 22, weight:.bold))
                             .foregroundColor(Color.gray)
                             .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                            .fixedSize(horizontal: false, vertical: true)
                         
                         HStack {
-                            Image("tangya_profile_pic")
-                                .resizable()
-                                .frame(width: 80, height: 80)
+                            
+                            VStack{
+                                Image("tangya_profile_pic")
+                                    .resizable()
+                                    .frame(width: UIScreen.main.bounds.height*0.08, height: UIScreen.main.bounds.height*0.08)
+                                Spacer()
+                            }
+
                             
                             Spacer()
                             
-                            Text("Tangya is a Junior studying in IS + Econ and daydreaming about the next start-up idea. Passionate in photography, scuba diving and coffee.")
-                                .font(.system(size: 14))
-                                .foregroundColor(Color.black)
+                            ScrollView {
+                                Text("Tangya is a Junior studying in IS + Econ and daydreaming about the next start-up idea. Passionate in photography, scuba diving and coffee.")
+                                    .font(.system(size: 14))
+                                    .foregroundColor(Color.black)
+                            }
                         }
                     }.padding(.vertical, 5)
                     
                     Spacer()
                     
+                    
                     Text(self.addProfileImageMsg)
                         .foregroundColor(Color.primaryColor)
                         .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing)
                         .font(.system(size: 14))
-                        .padding(.vertical)
+                    
+                    
                     
                     HStack{
                         Spacer()
@@ -2938,10 +2953,13 @@ struct SurveyView: View {
                                 .foregroundColor(.white)
                                 .font(.system(size: 24))
                                 .padding(.horizontal)
+                                .padding(.vertical, 5)
                                 .background(Color.primaryColor)
-                                .cornerRadius(18)
+                                .cornerRadius(12)
                         }
                     }
+                    .padding(.horizontal, -50)
+                    .padding()
                     
                     
                 }.padding(.horizontal, 50)

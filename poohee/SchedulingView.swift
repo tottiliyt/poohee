@@ -78,7 +78,7 @@ struct SchedulingView: View {
                 }
                 .padding(.top, 50)
                 
-                ScrollView {
+                ScrollView(showsIndicators: false) {
                     YolkBotMessages(similarities: vm.similarities, firstName: vm.chat.firstName)
                     
                     if vm.messages.count > 1{
