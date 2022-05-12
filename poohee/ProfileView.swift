@@ -328,6 +328,46 @@ struct ProfileView: View {
                                         }
                                     }
                             }
+                                
+                                HStack {
+                                    Text("Contact Us  ")
+                                        .foregroundColor(Color.primaryColor)
+                                        .font(.system(size: 20))
+                                    
+                                    Button {
+                                        let email = "support@yolkapps.com"
+                                        if let url = URL(string: "mailto:\(email)") {
+                                          if #available(iOS 10.0, *) {
+                                            UIApplication.shared.open(url)
+                                          } else {
+                                            UIApplication.shared.openURL(url)
+                                          }
+                                        }
+                                        
+                                    }label: {
+
+                                        Image("contact-mail").resizable().frame(width: 25, height:25)
+                                            
+                                    }
+                                    
+                                    Button {
+                                        UIApplication.shared.open(URL(string: "https://www.instagram.com/yolk.app/")!)
+                                    }label: {
+
+                                        Image("contact-instagram").resizable().frame(width: 25, height:25)
+                                            
+                                    }
+                                    
+                                    Button {
+                                        UIApplication.shared.open(URL(string: "https://www.yolkapps.com/")!)
+                                    }label: {
+
+                                        Image("contact-website").resizable().frame(width: 25, height:25)
+                                            
+                                    }
+                                    
+                                }.padding(.vertical)
+                                
                         }
                             .padding(.horizontal, 30)
                             .background(Color.white)

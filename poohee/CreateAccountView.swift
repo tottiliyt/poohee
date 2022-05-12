@@ -97,7 +97,6 @@ struct CreateAccountView: View {
                     VStack (){
                         
                         
-                        
                         Image("logo")
                             .resizable()
                             .frame(width: 250, height: 250, alignment: .center)
@@ -146,6 +145,8 @@ struct CreateAccountView: View {
                             
                         }
                         .padding(.bottom)
+                        
+                        Text("By clicking Send verification email, you agree to Yolk's [User Agreement](https://app.termly.io/document/eula/44f41692-0575-4c91-8b51-9af7afd751d3) and [Privacy Policy](https://app.termly.io/document/privacy-policy/9682ee46-348f-4fb4-9b2d-d10ee163b416)").font(.system(size: 12))
                         
                         
                         Button {
@@ -301,3 +302,5 @@ struct CreateAccountView_Previews: PreviewProvider {
         })
     }
 }
+
+
