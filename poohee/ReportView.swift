@@ -18,31 +18,45 @@ struct ReportView: View {
             
             VStack (alignment: .center, spacing: 8){
                 
-                Text("REPORT VIEW")
+                Text("REPORT")
                     .foregroundColor(Color.primaryColor)
                     .font(.system(size: 22))
                     .padding(.horizontal)
                 
-                Text("I didn't make a report function to submit to the backend bc Idk wat fields u guys would want")
-                    .foregroundColor(Color.primaryColor)
-                    .font(.system(size: 22))
-                    .padding(.horizontal)
-                    .padding(.bottom)
+                Text("you can report this chat to Yolk if you think it has any problem listed in the next page. We won't notify the account that you submitted this report.")
+                    .foregroundColor(Color.white)
+                    .font(.system(size: 16))
                 
                 
-                Button {
-                    show.toggle()
+                NavigationLink{
+                    ReportDetailView(vm:vm)
                 } label: {
-                    Text("Report")
-                        .font(.system(size: 25, weight: .semibold))
-                        .foregroundColor(Color.white)
-                        .padding()
-                        .frame(width: 200, height: 45)
-                        .background(Color.primaryColor)
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
                     
+                        Text("Report")
+                            .font(.system(size: 25, weight: .semibold))
+                            .foregroundColor(Color.white)
+                            .padding()
+                            .frame(width: 200, height: 45)
+                            .background(Color.primaryColor)
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                            
                 }
-                .padding(.bottom)
+                
+                Text("Cancel")
+                    .font(.system(size: 25, weight: .semibold))
+                    .foregroundColor(Color.primaryColor)
+                    .padding()
+                    .frame(width: 200, height: 45)
+                    .background(Color.white)
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .padding(.bottom)
+                    .onTapGesture{
+                        show.toggle()
+                    }
+                
+                    
+                
+                
                 
             }
             .padding(20)

@@ -350,6 +350,19 @@ class ChatViewModel: ObservableObject {
         send(text: "canceled", stage: -2)
     }
     
+    func report(problem: String){
+        let reportData = ["reported": self.recipientId, "reporter": self.uid, "problem": problem, "timestamp": Timestamp()] as [String : Any]
+        
+        FirebaseManager.shared.firestore.collection("reports").addDocument(data: reportData)
+            { err in
+            if let err = err {
+                print("info store error" + err.localizedDescription)
+                return
+            }
+        }
+        
+    }
+    
 }
 
 struct ChatView: View {
