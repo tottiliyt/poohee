@@ -11,57 +11,103 @@ import SwiftUI
 struct CancelView: View {
     
     @Binding var show : Bool
-    @Binding var canceled : Bool
     @ObservedObject var vm : ChatViewModel
     @State var selected = 0
     @State var done = false
-    
+    @State var blocking_mode : Bool
+    @Environment(\.presentationMode) var presentationMode
     
     
     var body: some View {
         ZStack (){
             
             VStack (alignment: .center, spacing: 8){
-                
-                Text("Are you sure that you want to cancel this meet up?")
-                    .foregroundColor(Color.primaryColor)
-                    .font(.system(size: 22))
-                    .padding(.horizontal)
-                
-                Text("You will not be able to reinitiate a meetup once you cancel")
-                    .foregroundColor(Color.primaryColor)
-                    .font(.system(size: 22))
-                    .padding(.horizontal)
+                if blocking_mode{
+                    
+                    VStack (alignment:.leading, spacing: 8){
+                        Text("Are you sure that you want to block \(self.vm.profile?.first_name ?? "")?")
+                            .foregroundColor(Color.primaryColor)
+                            .font(.system(size: 22))
+                            .padding(.horizontal)
+                        
+                        Text("Blocking is irreversible and you will not be able to further interact with the user")
+                            .foregroundColor(Color.primaryColor)
+                            .font(.system(size: 22))
+                            .padding(.horizontal)
+                            .padding(.bottom)
+                    }
+                    
+                    Button {
+                        vm.block()
+                    } label: {
+                        Text("Yes")
+                            .font(.system(size: 25, weight: .semibold))
+                            .foregroundColor(Color.red)
+                            .padding()
+                            .frame(width: 200, height: 45)
+                            .background(Color.buttonGray)
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                        
+                    }
+                    
+                    Button {
+                        show.toggle()
+                    } label: {
+                        Text("No")
+                            .font(.system(size: 25, weight: .semibold))
+                            .foregroundColor(Color.white)
+                            .padding()
+                            .frame(width: 200, height: 45)
+                            .background(Color.primaryColor)
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                        
+                    }
                     .padding(.bottom)
-                
-                Button {
-                    vm.send(text: "Unfortunately \(vm.profile?.first_name ?? "") has canceled the meet up. Sorry for the inconvenicence!", stage: -1)
+                } else{
+                    VStack (alignment:.leading, spacing: 8){
+                        Text("Are you sure that you want to cancel this meet up?")
+                            .foregroundColor(Color.primaryColor)
+                            .font(.system(size: 22))
+                            .padding(.horizontal)
+                        
+                        Text("You will not be able to reinitiate a meetup once you cancel")
+                            .foregroundColor(Color.primaryColor)
+                            .font(.system(size: 22))
+                            .padding(.horizontal)
+                            .padding(.bottom)
+                    }
                     
-                    show.toggle()
-                } label: {
-                    Text("Yes")
-                        .font(.system(size: 25, weight: .semibold))
-                        .foregroundColor(Color.red)
-                        .padding()
-                        .frame(width: 200, height: 45)
-                        .background(Color.buttonGray)
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
                     
+                    Button {
+                        vm.send(text: "Unfortunately \(vm.profile?.first_name ?? "") has canceled the meet up. Sorry for the inconvenicence!", stage: -1)
+                        
+                        show.toggle()
+                    } label: {
+                        Text("Yes")
+                            .font(.system(size: 25, weight: .semibold))
+                            .foregroundColor(Color.red)
+                            .padding()
+                            .frame(width: 200, height: 45)
+                            .background(Color.buttonGray)
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                        
+                    }
+                    
+                    Button {
+                        show.toggle()
+                    } label: {
+                        Text("No")
+                            .font(.system(size: 25, weight: .semibold))
+                            .foregroundColor(Color.white)
+                            .padding()
+                            .frame(width: 200, height: 45)
+                            .background(Color.primaryColor)
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                        
+                    }
+                    .padding(.bottom)
                 }
                 
-                Button {
-                    show.toggle()
-                } label: {
-                    Text("No")
-                        .font(.system(size: 25, weight: .semibold))
-                        .foregroundColor(Color.white)
-                        .padding()
-                        .frame(width: 200, height: 45)
-                        .background(Color.primaryColor)
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
-                    
-                }
-                .padding(.bottom)
                 
             }
             .padding(20)

@@ -16,7 +16,8 @@ struct SchedulingView: View {
     @State var scheduling = false
     @State var canceling = false
     @Binding var scheduled: Bool
-    @State var canceled = false
+    @State var reporting = false
+    
     @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
@@ -83,21 +84,6 @@ struct SchedulingView: View {
                     
                     if vm.messages.count > 1{
                         SingleMessageView(message: vm.messages[1], recipientId: vm.recipientId)
-                    } else if canceled {
-                        HStack{
-
-                            HStack{
-                                Text("Unfortunately \(vm.profile?.first_name ?? "") has canceled the meet up. Sorry for the inconvenicence!")
-                                    .foregroundColor(Color.white)
-                            }
-                            .padding()
-                            .background(Color.secondaryColor)
-                            .cornerRadius(10)
-                            
-                            Spacer()
-                        }
-                        .padding(.horizontal)
-                        .padding(.bottom, 8)
                     }
                 }
                 .background(Color.white)
@@ -105,7 +91,7 @@ struct SchedulingView: View {
                     cancelMatching = false
                 }
                 .overlay(
-                    CancelMatchingButton(show: $cancelMatching, canceling: $canceling)
+                    CancelMatchingButton(show: $cancelMatching, canceling: $canceling, reporting:$reporting, blocking_mode: false)
                 )
             
                 HStack{
@@ -113,7 +99,8 @@ struct SchedulingView: View {
                     
                     
                     Button{
-                        if vm.messages.count == 1 && !canceled {
+                        
+                        if vm.messages.count == 1{
                             cancelMatching.toggle()
                         }
                         
@@ -122,7 +109,7 @@ struct SchedulingView: View {
                     }
                     .padding(.trailing)
                     
-                    if vm.messages.count > 1 || canceled {
+                    if vm.messages.count > 1 {
                         Button{
                             
                         }label: {
@@ -176,7 +163,11 @@ struct SchedulingView: View {
             }
             
             if canceling{
-                CancelView(show: $canceling, canceled: $canceled, vm: vm)
+                CancelView(show: $canceling, vm: vm, blocking_mode: false)
+            }
+            
+            if reporting{
+                ReportView(show: $reporting, vm:vm)
             }
             
         }
@@ -257,6 +248,8 @@ struct YolkBotMessages: View {
 struct CancelMatchingButton: View {
     @Binding var show : Bool
     @Binding var canceling: Bool
+    @Binding var reporting:Bool
+    @State var blocking_mode:Bool
     
     var body: some View {
         if show {
@@ -264,23 +257,40 @@ struct CancelMatchingButton: View {
             VStack{
                 Spacer()
                 HStack{
-                    Button{
-                        canceling.toggle()
+                    VStack{
+                        Button{
+                            canceling.toggle()
+                            
+                        } label: {
+                            Text(blocking_mode ? "Block User" :"Cancel Meetup" )
+                            .foregroundColor(Color.white)
+                            .font(.system(size: 16))
+                            .padding()
+                            .frame(width: 150, height: 35)
+                            .background(Color.black)
+                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                        }
                         
-                    } label: {
-                        Text("Cancel This Meetup")
-                        .foregroundColor(Color.white)
-                        .font(.system(size: 16))
-                        .padding()
-                        .frame(width: 250, height: 40)
-                        .background(Color.black)
-                        .clipShape(RoundedRectangle(cornerRadius: 15))
+                        Button{
+                            reporting.toggle()
+                            
+                        } label: {
+                            Text("Report User")
+                            .foregroundColor(Color.white)
+                            .font(.system(size: 16))
+                            .padding()
+                            .frame(width: 150, height: 35)
+                            .background(Color.black)
+                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                        }
+                        
                     }
                     .padding()
                         .background(Color.primaryColor)
                         .clipShape(RoundedRectangle(cornerRadius: 20))
                         .shadow(radius: 5)
                     .padding()
+                    
                     
                     Spacer()
                 }

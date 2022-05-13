@@ -183,6 +183,8 @@ class ChatViewModel: ObservableObject {
         }
         
         persistRecentMessage(text: text, stage: stage)
+        
+        
         print(self.errorMessage)
                 
         
@@ -321,6 +323,33 @@ class ChatViewModel: ObservableObject {
 
     }
     
+    func block(){
+        let document = FirebaseManager.shared.firestore.collection("chats")
+            .document(self.uid)
+            .collection("with")
+            .document(self.recipientId)
+        
+        document.delete() { error in
+            if let error = error{
+                self.errorMessage = "Failed to delete chat: \(error)"
+            }
+        }
+        
+        
+        let recipientDocument = FirebaseManager.shared.firestore.collection("chats")
+            .document(self.recipientId)
+            .collection("with")
+            .document(self.uid)
+        
+        recipientDocument.delete() { error in
+            if let error = error{
+                self.errorMessage = "Failed to delete chat: \(error)"
+            }
+        }
+        
+        send(text: "canceled", stage: -2)
+    }
+    
 }
 
 struct ChatView: View {
@@ -348,6 +377,7 @@ struct ChatView: View {
                 .navigationBarHidden(true)
         } else if vm.chat.stage <= 0 {
             SchedulingView(vm:vm, scheduled: $scheduled)
+            //PostSchedulingView(vm: vm)
                 .navigationBarHidden(true)
         } else {
             PostSchedulingView(vm: vm)

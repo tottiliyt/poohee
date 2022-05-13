@@ -31,6 +31,7 @@
 		51C24AF828126405003DD485 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 51C24AF728126405003DD485 /* SDWebImageSwiftUI */; };
 		51CEC38027F7904100BA8267 /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51CEC37F27F7904100BA8267 /* MessageView.swift */; };
 		51CEC38927F7F22A00BA8267 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 51CEC38827F7F22900BA8267 /* GoogleService-Info.plist */; };
+		51DF5EEA282EB99E0041A462 /* ReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DF5EE9282EB99E0041A462 /* ReportView.swift */; };
 		51E8D23E281CE2BD001F92F3 /* OtherUserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E8D23D281CE2BD001F92F3 /* OtherUserProfileView.swift */; };
 		B944F0C327F15FCF00805A43 /* pooheeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B944F0C227F15FCF00805A43 /* pooheeApp.swift */; };
 		B944F0C527F15FCF00805A43 /* CreateAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B944F0C427F15FCF00805A43 /* CreateAccountView.swift */; };
@@ -66,6 +67,7 @@
 		51418EE028067C9600D19CBD /* InternalMatchingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalMatchingView.swift; sourceTree = "<group>"; };
 		51CEC37F27F7904100BA8267 /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
 		51CEC38827F7F22900BA8267 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		51DF5EE9282EB99E0041A462 /* ReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportView.swift; sourceTree = "<group>"; };
 		51E8D23D281CE2BD001F92F3 /* OtherUserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherUserProfileView.swift; sourceTree = "<group>"; };
 		B91397E5281061DA00676701 /* poohee.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = poohee.entitlements; sourceTree = "<group>"; };
 		B944F0BF27F15FCF00805A43 /* poohee.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = poohee.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -132,6 +134,7 @@
 				B9478A1B27F968360058FDFA /* pooheeRelease.entitlements */,
 				B9DBE8CB27F961F800F29992 /* Info.plist */,
 				B944F0C227F15FCF00805A43 /* pooheeApp.swift */,
+				51DF5EE9282EB99E0041A462 /* ReportView.swift */,
 				514075BC2828A05300D60EC3 /* TutorialView.swift */,
 				B944F0C427F15FCF00805A43 /* CreateAccountView.swift */,
 				51418EE028067C9600D19CBD /* InternalMatchingView.swift */,
@@ -286,6 +289,7 @@
 				51CEC38027F7904100BA8267 /* MessageView.swift in Sources */,
 				51418ECD27FFE43600D19CBD /* HomeView.swift in Sources */,
 				B9DBE8BC27F8FD0100F29992 /* SurveyView.swift in Sources */,
+				51DF5EEA282EB99E0041A462 /* ReportView.swift in Sources */,
 				51418EDB2803A01000D19CBD /* SchedulingView.swift in Sources */,
 				B96A1C8F27F8D30400DEBC48 /* WelcomeView.swift in Sources */,
 				B944F0C527F15FCF00805A43 /* CreateAccountView.swift in Sources */,

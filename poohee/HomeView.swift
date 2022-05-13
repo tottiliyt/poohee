@@ -162,8 +162,9 @@ class HomeViewModel: ObservableObject {
                     }
                     
                     
-                    self.chats.insert(.init(documentId: change.document.documentID,  data: change.document.data()), at: 0)
-                    
+                    if change.type != .removed{
+                        self.chats.insert(.init(documentId: change.document.documentID,  data: change.document.data()), at: 0)
+                    }
                 })
                 
             }

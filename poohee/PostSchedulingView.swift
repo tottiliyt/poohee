@@ -12,120 +12,147 @@ struct PostSchedulingView: View {
     @State var message = ""
     @ObservedObject var vm : ChatViewModel
     @Environment(\.presentationMode) var presentationMode
+    @State var canceling = false
+    @State var reporting = false
+    @State var cancelMatching = false
+    
     
     var body: some View {
-        
-        VStack{
-            ZStack{
-                
-                NavigationLink{
-                    OtherUserProfileView(vm: vm)
-                } label: {
+        ZStack{
+            VStack{
+                ZStack{
                     
-                    
-                        HStack{
-                            
-                            
-                            Spacer()
-                            
-                            WebImage(url: URL(string: vm.recipientProfile?.profileImageUrl ?? ""))
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 50, height: 50)
-                                .clipped()
-                                .cornerRadius(60)
-                                .overlay(RoundedRectangle(cornerRadius: 60)
-                                    .stroke(lineWidth: 2)
-                                    .foregroundColor(Color.primaryColor)
-                                )
-                                
-                            
+                    NavigationLink{
+                        OtherUserProfileView(vm: vm)
+                    } label: {
+                        
+                        
                             HStack{
-                                Text("\(vm.chat.firstName)")
-                                    .font(.system(size:25))
-                                    .foregroundColor(Color.black)
-                                Text(">")
-                                    .font(.system(size:25))
-                                    .foregroundColor(Color.gray)
+                                
+                                
+                                Spacer()
+                                
+                                WebImage(url: URL(string: vm.recipientProfile?.profileImageUrl ?? ""))
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 50, height: 50)
+                                    .clipped()
+                                    .cornerRadius(60)
+                                    .overlay(RoundedRectangle(cornerRadius: 60)
+                                        .stroke(lineWidth: 2)
+                                        .foregroundColor(Color.primaryColor)
+                                    )
+                                    
+                                
+                                HStack{
+                                    Text("\(vm.chat.firstName)")
+                                        .font(.system(size:25))
+                                        .foregroundColor(Color.black)
+                                    Text(">")
+                                        .font(.system(size:25))
+                                        .foregroundColor(Color.gray)
+                                }
+                                
+                                Spacer()
+                                
                             }
-                            
-                            Spacer()
-                            
-                        }
 
+                    }
+                    
+                    HStack{
+                        Button{
+                            presentationMode.wrappedValue.dismiss()
+                        }label:{
+                            Text("<<")
+                                .font(.system(size: 25, weight:.semibold))
+                                .foregroundColor(Color.gray)
+                                .padding()
+                        }
+                        Spacer()
+                    }
+                    
+                    
+                    
                 }
+                .padding(.top, 50)
                 
+                
+                
+                ScrollView {
+                    ScrollViewReader { scrollViewProxy in
+                        VStack {
+                            ForEach(vm.messages) { message in
+                                if message.stage == 0 {
+                                    YolkBotMessages(similarities: vm.similarities, firstName: vm.chat.firstName)
+                                } else {
+                                    SingleMessageView(message: message, recipientId: vm.recipientId)
+                                }
+                                
+                            }
+
+                            HStack{ Spacer() }
+                            .id("Empty")
+                        }
+                        .onReceive(vm.$count) { _ in
+                            withAnimation(.easeOut(duration: 0.5)) {
+                                scrollViewProxy.scrollTo("Empty", anchor: .bottom)
+                                print(vm.count)
+                            }
+                        }
+                    }
+                }
+                .background(Color.white)
+                .onTapGesture{
+                    hideKeyboard()
+                    cancelMatching = false
+                }
+                .overlay(
+                    CancelMatchingButton(show: $cancelMatching, canceling: $canceling, reporting:$reporting, blocking_mode: true)
+                )
+
                 HStack{
                     Button{
-                        presentationMode.wrappedValue.dismiss()
-                    }label:{
-                        Text("<<")
-                            .font(.system(size: 25, weight:.semibold))
-                            .foregroundColor(Color.gray)
-                            .padding()
+                        cancelMatching.toggle()
+                        
+                    } label: {
+                        Image("EggYellow")
                     }
-                    Spacer()
-                }
-                
-                
-                
-            }
-            .padding(.top, 50)
-            
-            
-            
-            ScrollView {
-                ScrollViewReader { scrollViewProxy in
-                    VStack {
-                        ForEach(vm.messages) { message in
-                            if message.stage == 0 {
-                                YolkBotMessages(similarities: vm.similarities, firstName: vm.chat.firstName)
-                            } else {
-                                SingleMessageView(message: message, recipientId: vm.recipientId)
-                            }
-                            
-                        }
-
-                        HStack{ Spacer() }
-                        .id("Empty")
+                    .padding(.leading,-10)
+                    
+                    TextEditor(text: $message)
+                        .padding(3.5)
+                        .frame(width: UIScreen.main.bounds.width*0.6, height: UIScreen.main.bounds.height*0.05, alignment: .leading)
+                        .overlay(RoundedRectangle(cornerRadius: 10.0).strokeBorder(Color.primaryColor, style: StrokeStyle(lineWidth: 2.0)))
+                        .padding(.trailing, 5)
+                    
+                    
+                    Button{
+                        vm.send(text: self.message, stage: 2)
+                        self.message = ""
+                    } label: {
+                        Text("Send")
+                            .foregroundColor(Color.primaryColor)
+                            .font(.system(size:20))
                     }
-                    .onReceive(vm.$count) { _ in
-                        withAnimation(.easeOut(duration: 0.5)) {
-                            scrollViewProxy.scrollTo("Empty", anchor: .bottom)
-                            print(vm.count)
-                        }
-                    }
+                    
                 }
+                .padding(.top, 5)
+                .padding(.bottom, 25)
             }
-            .background(Color.white)
-            .onTapGesture{
-                hideKeyboard()
+            .background(Color.chatGray)
+                .ignoresSafeArea(.container)
+            
+            if canceling{
+                CancelView(show: $canceling, vm: vm, blocking_mode: true)
             }
-
-            HStack{
-                TextEditor(text: $message)
-                    .padding(3.5)
-                    .frame(width: UIScreen.main.bounds.width*0.7, height: UIScreen.main.bounds.height*0.05, alignment: .leading)
-                    .overlay(RoundedRectangle(cornerRadius: 10.0).strokeBorder(Color.primaryColor, style: StrokeStyle(lineWidth: 2.0)))
-                    .padding(.trailing)
-                
-                
-                Button{
-                    vm.send(text: self.message, stage: 2)
-                    self.message = ""
-                } label: {
-                    Text("Send")
-                        .foregroundColor(Color.primaryColor)
-                        .font(.system(size:20))
-                }
-                
+            
+            if reporting{
+                ReportView(show: $reporting, vm:vm)
             }
-            .padding(.top, 5)
-            .padding(.bottom, 25)
-            .padding(.horizontal)
         }
-        .background(Color.chatGray)
-            .ignoresSafeArea(.container)
+        
+        
+        
         
     }
 }
@@ -191,6 +218,9 @@ struct SingleMessageView : View{
         }
     }
 }
+
+
+
 
 
 struct PostMatchView_Previews: PreviewProvider {
